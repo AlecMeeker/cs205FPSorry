@@ -23,11 +23,11 @@ public class Pawn {
 		System.out.println("Pawn created, color = " + this.color.toString());
 	}
 
-	public int getColorID() {
-	    return colorID;
+    public Color getColor() {
+        return color;
     }
-    public void setColorID(int colorIDin){
-	    this.colorID = colorIDin;
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public Block getCurrentBlock() {
