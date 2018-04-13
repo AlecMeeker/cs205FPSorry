@@ -1,4 +1,4 @@
-package Main.src;
+
 
 public class Board {
 
@@ -13,6 +13,11 @@ public class Board {
         for (i = 0; i < 60; i++) {
             if (i == 60){
                 outerRing[i].setNextBlock(outerRing[0]);
+                outerRing[0].setPreviousBlock(outerRing[i])
+            }
+            else {
+                outerRing[i].setNextBlock(outerRing[i+1]);
+                outerRing[i+1].setPreviousBlock(outerRing[i]);
             }
         }
     }

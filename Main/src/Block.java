@@ -1,5 +1,3 @@
-package Main.src;
-
 public class Block {
     Block id;
     Color color;
