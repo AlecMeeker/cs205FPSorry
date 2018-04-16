@@ -12,14 +12,17 @@ import java.util.*;
 
 public class BoardPanel extends JPanel {
 
-    private BufferedImage image;
+    private Image BoardImage;
     private ArrayList<JButton> Pawns;
 
+    private final static String imagePath = "/Main/imgs/sorry_board.jpg";
     public BoardPanel() {
-
+        int resaledWidth = this.getWidth();
+        int resaledHeight = this.getHeight();
         this.setLayout(null);
         try {
-            image = ImageIO.read(new File(System.getProperty("user.dir")+"/Main/imgs/sorry_900.jpg"));
+            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+imagePath));
+            BoardImage = basicImage.getScaledInstance(Constants.boardWidth, Constants.boardHeight, Image.SCALE_SMOOTH);
         } catch (IOException ex) {
             // handle exception...
             System.out.println("loading image failed");
@@ -29,7 +32,7 @@ public class BoardPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image, 0, 0, this); // see javadoc for more info on the parameters
+        g.drawImage(BoardImage, 0, 0, this); // see javadoc for more info on the parameters
 
     }
 }

@@ -11,6 +11,6 @@ public class LaunchGame {
                 System.getProperty("user.dir"));
 
         GameWindow gameWindow= new GameWindow();
-
+        gameWindow.setResizable(false); //set the gameWindow as fixed szie.
     }
 }
