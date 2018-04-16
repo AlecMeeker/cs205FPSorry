@@ -16,9 +16,9 @@ public class Pawn {
 		this.color = color;
 		distanceFromHome = 0;
 		isOut = false;
-		//set currentNode equal to the correct node based on the color
+		currentBlock = board.
 		isSafe = false;
-		//locationArray = {startBlock, startBlock, homeBlock}
+		locationArray = {currentBlock, startBlock, safeBlock}
 
 		System.out.println("Pawn created, color = " + this.color.toString());
 	}
@@ -74,9 +74,9 @@ public class Pawn {
     }
 
 
-    /*public void getBounced() {
+    public void getBounced() {
 	    currentBlock =
-    }*/
+
 	
 	
 }
