@@ -23,6 +23,10 @@ public class Pawn {
 		System.out.println("Pawn created, color = " + this.color.toString());
 	}
 
+	public Block getCurrentBlock() {
+	    return locationArray[0];
+    }
+
     public Color getColor() {
         return color;
     }
@@ -74,8 +78,6 @@ public class Pawn {
     }
 
 
-    public void getBounced() {
-	    currentBlock =
 
 	
 	

@@ -15,7 +15,19 @@ public class Player {
 	}
 
 	public List<Move> getMoveList(Card draw) {
+	    System.out.println("Generating possibilities")
 		List<Move> moveList = new List();
+		if (draw == SEVEN) {
+		    //create a moveList for each possible combination
+        }
+        else {
+		    for (Pawn p: pawnArray) {
+		        if (!p.isHome()) {
+		            moveList.add(new Move(p, p.getCurrentBlock(), draw));
+		            System.out.println("Move added to possibilities")
+                }
+            }
+        }
 
 	}
 	

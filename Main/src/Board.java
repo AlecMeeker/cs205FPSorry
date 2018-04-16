@@ -89,6 +89,11 @@ public class Board {
 
     }
 
+    public void place(Block whereTo, Pawn thisPawn) {
+        whereTo.place(thisPawn);
+    }
+}
+
     public Block getRedHome(){
         return HOME_ARRAY[0]; }
     public Block getBlueHome() {

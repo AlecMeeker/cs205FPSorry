@@ -40,7 +40,7 @@ public class Move {
                 for (int i = 0; i < draw.num,i++){
                     currentBlock = currentBlock.nextBlock();
                 }
-                currentBlock = block.trySpecialMove(thisPawn, currentBlock)
+                currentBlock = trySpecialMove(thisPawn, currentBlock);
 
 
                 break;
