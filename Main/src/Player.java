@@ -17,10 +17,6 @@ public class Player {
 	public List<Move> getMoveList(Card draw) {
 		List<Move> moveList = new List();
 
-		if (draw == SEVEN) {
-
-
-		}
 	}
 	
 }
