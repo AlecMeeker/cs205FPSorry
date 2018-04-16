@@ -5,6 +5,8 @@ public class Testing {
 		Deck testdeck=new Deck();
 
 		Player player1 = new Player(BLUE);
+		Board thisBoard = newBoard();
+		thisBoard.place(thisBoard.getRedHome(), new Pawn(RED));
 
 
 
