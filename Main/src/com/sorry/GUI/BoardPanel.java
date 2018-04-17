@@ -1,14 +1,16 @@
 package com.sorry.GUI;
 
-import java.awt.*;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.Graphics;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.util.*;
+
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import java.util.ArrayList;
 
 public class BoardPanel extends JPanel {
 

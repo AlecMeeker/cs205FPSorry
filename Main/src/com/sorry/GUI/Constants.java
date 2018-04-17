@@ -9,7 +9,8 @@ public final class Constants {   // this class use for define some constants for
     //board Constants
     public final static int boardWidth = 960;
     public final static int boardHeight = 960;
-
+    public final static int boardStartX = 5;
+    public final static int boardStartY = 5;
 
     public final static int pawnWidth = 58;
     public final static int pawnHeight = 58;
