@@ -19,8 +19,8 @@ public enum Card {
     ELEVEN(11,4, "Move 11 spaces forward, or switch the places of one of the player's own pawns and an opponent's pawn. A player that cannot move 11 spaces is not forced to switch and instead can forfeit the turn. An 11 cannot be used to switch a pawn that is in a Safety Zone."),
     TWELVE(12,4, "Move a pawn 12 spaces forward.");
 
-    final int num,numInDeck;
-    final String reminderText;
+    public final int num,numInDeck;
+    public final String reminderText;
 
     Card(int num,int numInDeck, String reminderText) {
         this.num = num;

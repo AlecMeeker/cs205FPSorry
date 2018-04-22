@@ -2,14 +2,14 @@ package Main.src;
 
 public class Pawn {
 
-	private Block currentBlock; //FIX THIS FOR BETTER POINTER TO MAP LOCATION
+	private int index; //FIX THIS FOR BETTER POINTER TO MAP LOCATION
 	private int distanceFromHome; //acts as relative progress check
     private boolean isOut; //is out of home
 	private boolean isSafe; //is in the safety zone at least
     private boolean isHome; //is home
 	private Color color; //integer representing the color of the player
 
-    public Block[] locationArray; //NEEDS TO BE UPDATED ONCE THE BOARD IS FINISHED
+    //public Block[] locationArray; //NEEDS TO BE UPDATED ONCE THE BOARD IS FINISHED
 
 	
 	Pawn(Color color) {
@@ -23,18 +23,18 @@ public class Pawn {
 		System.out.println("Pawn created, color = " + this.color.toString());
 	}
 
-	public int getColorID() {
-	    return colorID;
+	public Color getColor() {
+	    return color;
     }
-    public void setColorID(int colorIDin){
-	    this.colorID = colorIDin;
+    public void setColor(Color colorIDin){
+	    color = colorIDin;
     }
 
-    public Block getCurrentBlock() {
-        return currentBlock;
+    public int getIndex() {
+        return index;
     }
-    public void setCurrentBlock(Block currentBlock) {
-        this.currentBlock = currentBlock;
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public int getDistanceFromHome() {
@@ -51,13 +51,13 @@ public class Pawn {
         isHome = home;
     }
 
-    public Block getHomeLocation() {
-	    return locationArray[2];
-    }
+    //public Block getHomeLocation() {
+	//    return locationArray[2];
+    //}
 
-    public Block getStartLocation() {
-	    return locationArray[1];
-    }
+    //public Block getStartLocation() {
+	//    return locationArray[1];
+    //}
 
     public boolean isOut() {
         return isOut;
