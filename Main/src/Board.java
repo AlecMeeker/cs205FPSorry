@@ -16,6 +16,7 @@ public class Board {
 
     Board(){
         generateGameBoard();
+        generatePawns();
 
     }
 
@@ -90,6 +91,11 @@ public class Board {
             Block addto=new Block(coloradder.get(cntr2+1),blockType.HOME,-1,-1,prev);
             gameboard[crnt]=addto;
         }
+    }
+
+    private void generatePawns(){
+        ArrayList<Color> coloradder=new ArrayList<Color>(Arrays.asList(Color.values()));
+
     }
 
 }
