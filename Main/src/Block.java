@@ -1,19 +1,20 @@
 package Main.src;
 
+import Main.blockType;
+
 public class Block {
     Color SC;
-    Pawn[] onBlock;
-    int pawns;
+    //Pawn[] onBlock;
+    blockType type;
+    int[] pawnLocation;
+    int numPawns, sznext;
 
-    Block(Color inC, Pawn[] inp){
+    Block(Color inC, blockType bt,int szn){
         SC=inC;
-        onBlock=inp;
-        pawns=inp.length;
-    }
-
-    Block(){
-        SC=Color.NULL;
-        onBlock=null;
+        type=bt;
+        pawnLocation=new int[type.MaxPawns];
+        numPawns=0;
+        sznext=szn;
     }
 
     public void setColor(Color SC) {
@@ -21,13 +22,11 @@ public class Block {
     }
 
     public void addPawn(Pawn adp){
-        onBlock[pawns]=adp;
-        pawns++;
+
     }
 
     public void removePawn(Pawn nulpawn){
-        pawns--;
-        onBlock[pawns]=nulpawn;
+
     }
 
 }
