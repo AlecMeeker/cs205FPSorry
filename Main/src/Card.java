@@ -3,9 +3,6 @@
  * by alec
  */
 
-package Main.src;
-
-
 public enum Card {
     SORRY(0,4, "Take any one pawn from Start and move it directly to a square occupied by any opponent's pawn, sending that pawn back to its own Start. A Sorry! card cannot be used on an opponent's pawn in a Safety Zone. If there are no pawns on the player's Start, or no opponent's pawns on any squares outside Safety Zones, the turn is lost."),
     ONE(1,5, "Move a pawn from Start or move a pawn one space forward."),

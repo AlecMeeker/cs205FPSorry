@@ -2,29 +2,46 @@
 
 public class Pawn {
 
-	private Block currentBlock; //FIX THIS FOR BETTER POINTER TO MAP LOCATION
-	private int distanceFromHome; //acts as relative progress check
-    private boolean isOut; //is out of home
-	private boolean isSafe; //is in the safety zone at least
-    private boolean isHome; //is home
-	private Color color; //integer representing the color of the player
+    private Block currentBlock;
+    private int distanceFromHome; //acts as relative progress check
+    private boolean hasLeftStart; //is out of start
+    private boolean hasReachedSafeZone; //is in the safety zone at least
+    private boolean isFinished; //is home
+    private Color color; //integer representing the color of the player
 
-    public Block[] locationArray; //NEEDS TO BE UPDATED ONCE THE BOARD IS FINISHED
+    public Block[] locationArray;
 
-	
-	Pawn(Color color) {
-		this.color = color;
-		distanceFromHome = 0;
-		isOut = false;
-		currentBlock = board.
-		isSafe = false;
-		locationArray = {currentBlock, startBlock, safeBlock}
+    public Board thisBoard;
 
-		System.out.println("Pawn created, color = " + this.color.toString());
-	}
+    Pawn(Color color, Board inBoard) {
+        thisBoard = inBoard;
+        this.color = color;
+        distanceFromHome = 0;
+        hasLeftStart = false;
+        hasReachedSafeZone = false;
 
-	public Block getCurrentBlock() {
-	    return locationArray[0];
+        locationArray = new Block[3];
+        this.setTargets();
+
+        System.out.println("Pawn created, color = " + this.color.toString());
+    }
+
+    public void setTargets() {
+        System.out.println("Setting targets");
+        locationArray[1] = thisBoard.getStartLocation(color);
+        locationArray[2] = thisBoard.getGoalLocation(color);
+
+    }
+
+    /*
+    returns this pawn to its home location based on its color
+     */
+    public void getBounced() {
+        thisBoard.getStartLocation(this.color).place(this);
+    }
+
+    public Block getCurrentBlock() {
+        return locationArray[0];
     }
 
     public Color getColor() {
@@ -34,9 +51,7 @@ public class Pawn {
         this.color = color;
     }
 
-    public Block getCurrentBlock() {
-        return currentBlock;
-    }
+
     public void setCurrentBlock(Block currentBlock) {
         this.currentBlock = currentBlock;
     }
@@ -48,38 +63,34 @@ public class Pawn {
         this.distanceFromHome = distanceFromHome;
     }
 
-    public boolean isHome() {
-        return isHome;
+    public boolean isFinished() {
+        return isFinished;
     }
-    public void setHome(boolean home) { //Slightly confusing name - sets the isHome field
-        isHome = home;
+    public void setFinished(boolean home) { //Slightly confusing name - sets the isHome field
+        isFinished = home;
     }
 
     public Block getHomeLocation() {
-	    return locationArray[2];
+        return locationArray[2];
     }
 
     public Block getStartLocation() {
-	    return locationArray[1];
+        return locationArray[1];
     }
 
-    public boolean isOut() {
-        return isOut;
-    }
-    public void setOut(boolean out) {
-        isOut = out;
+    public boolean hasLeftStart() {
+        return hasLeftStart;
     }
 
-    public boolean isSafe() {
-        return isSafe;
-    }
-    public void setSafe(boolean safe) {
-        isSafe = safe;
+    public void setHasLeftStart(boolean hasLeftStart) {
+        this.hasLeftStart = hasLeftStart;
     }
 
+    public boolean isHasReachedSafeZone() {
+        return hasReachedSafeZone;
+    }
+    public void setHasReachedSafeZone(boolean hasReachedSafeZone) {
+        this.hasReachedSafeZone = hasReachedSafeZone;
+    }
 
-
-	
-	
 }
-
