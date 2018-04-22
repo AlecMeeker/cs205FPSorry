@@ -1,3 +1,4 @@
+
 /*
  Returns a move, containing fields used to rank relative quality of the move in various AI
   */
@@ -12,7 +13,11 @@ public class Move {
     public boolean gotHome;
     public boolean gotOut;
 
-    public Move(Pawn thisPawn, Card draw) {
+    /*
+    computes a move based purely on the integer number rather than the card itself
+    used in case you draw a 7, and split that into 1/6. The 1 doesn't count as a 1 to move out
+     */
+    public Move (Pawn thisPawn, int spaces) {
         this.p = thisPawn;
         bounced = false;
         whomBounced = null;
@@ -21,68 +26,40 @@ public class Move {
         gotHome = false;
         gotOut = false;
 
-        testMove(thisPawn, draw);
-    }
-
-    /*
-    computes a move based purely on the integer number rather than the card itself
-    used in case you draw a 7, and split that into 1/6. The 1 doesn't count as a 1 to move out
-     */
-    public Move (Pawn thisPawn, int spaces) {
-        bounced = false;
-        whomBounced = null;
-        slid = false;
-        gotSafe = false;
-        gotHome = false;
-        gotOut = false;
-
-        Block currentBlock = thisPawn.getCurrentBlock();
-        for (int i = 0; i < spaces; i++) {
-            currentBlock = currentBlock.getNextBlock(thisPawn.getColor());
-        }
-        currentBlock = trySpecialMove(thisPawn, currentBlock);
+        //Runs the block to see where it lands
+        Block currentBlock = move(spaces);
         blockReached = currentBlock;
     }
 
+    public Move (Pawn thisPawn, Pawn targetPawn) {
+        this.p = thisPawn;
+        bounced = true;
+        whomBounced = targetPawn;
+
+        blockReached = targetPawn.getCurrentBlock();
+    }
+
     /*
-    takes a pawn and the draw, then modifies all the fields to reflect how the move would play out
+    helper method to iterate through the board
      */
-    private void testMove(Pawn thisPawn, Card draw) {
-        Block currentBlock = thisPawn.getCurrentBlock();
-        switch (draw) {
-            case ONE:
-            case TWO: {
-                if (!thisPawn.hasLeftStart()) {
-                    //starting block will be the actual first block
-                    currentBlock = currentBlock.getNextBlock(thisPawn.getColor());
-                }
-                currentBlock = trySpecialMove(thisPawn, currentBlock);
-            }
-            case THREE:
-            case FIVE:
-            case EIGHT:
-            case TWELVE: {
-                for (int i = 0; i < draw.num; i++){
-                    currentBlock = currentBlock.getNextBlock(thisPawn.getColor());
-                }
-                currentBlock = trySpecialMove(thisPawn, currentBlock);
+    private Block move(int spaces) {
+        if (p.hasLeftStart() && !p.isFinished()) {
 
-
-                break;
+            Block currentBlock = p.getCurrentBlock();
+            if (spaces > 0) {
+                for (int i = 0 ; i < spaces; i ++) {
+                    currentBlock = currentBlock.getNextBlock(p.getColor());
+                }
             }
-            case FOUR:
-                for (int i = 0; i < draw.num; i++) {
+            else {
+                for (int i = 0; i < -spaces; i++) {
                     currentBlock = currentBlock.getPreviousBlock();
                 }
-                currentBlock = trySpecialMove(thisPawn, currentBlock);
-                break;
-            case SEVEN:
-            case TEN:
-            case ELEVEN:
-            case SORRY:
+            }
+            currentBlock = trySpecialMove(p, currentBlock);
+            return currentBlock;
         }
-
-        this.blockReached = currentBlock;
+        return p.getCurrentBlock();
     }
 
     /*
