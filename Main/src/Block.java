@@ -1,18 +1,20 @@
+import java.util.ArrayList;
+
 public class Block {
-    Block id;
+    int id;
     Color color;
     Block previousBlock, nextBlock;
     Block nextSafetyBlock;
 
-    public enum Slidability {START, MIDDLE, NOT};
+    public Slidiness slideStatus;
 
-    Slidability slideSstatus;
     ArrayList<Pawn> pawnsHere;
 
-    public Block(Color inColor, int id) {
+    public Block(Color inColor,  int id) {
+        pawnsHere = new ArrayList<>();
         this.color = inColor;
         this.id = id;
-        slideSstatus = NOT;
+        this.slideStatus = Slidiness.NOT;
     }
 
     //returns the first safety block if it's the right color and location
@@ -26,18 +28,14 @@ public class Block {
     }
 
     public Pawn getPawn() {
-        return pawnsHere[0];
+        return pawnsHere.get(0);
     }
 
-    public void setSlideSstatus(int i) {
-        switch (i){
-            case 0: slideSstatus = NOT;
-                break;
-            case 1: slideStatus = START;
-                break;
-            case 2: slideStatus = MIDDLE;
-                break;
-        }
+    public void setSlideStatus(Slidiness slideIn) {
+        this.slideStatus = slideIn;
+    }
+    public Slidiness getSlideStatus() {
+        return slideStatus;
     }
 
 
@@ -65,7 +63,7 @@ public class Block {
 
     public boolean place(Pawn pawn) {
         if (id != -1 && pawnsHere.size() != 0){
-            pawnsHere.get(0).getBounced();
+            //pawnsHere.get(0).getBounced();
             pawnsHere.remove(0);
             pawnsHere.add(pawn);
             return false;
