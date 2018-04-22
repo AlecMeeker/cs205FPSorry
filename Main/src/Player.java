@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class Player {
 
+    private int bounces;
     private Color color;
     private Board thisBoard;
     private ArrayList<Pawn> movablePawnList; //a list of the player's pawns that can be moved (not finished, not in start)
@@ -13,11 +14,17 @@ public class Player {
     ArrayList<ArrayList<Move>> potentialMovesList; //first arraylist at index 0 is potential moves for each pawn. second arraylist at index 1 is in case of 7, generate potential moves
 
     Player(Color inColor, Board thisBoard) {
+        homePawnList = new ArrayList<>();
+        movablePawnList = new ArrayList<>();
+        finishedPawnList = new ArrayList<>();
+
+        bounces = 0;
+
         this.thisBoard = thisBoard;
         this.color = inColor;
-
-        homePawnList.add(new Pawn(color, thisBoard));
-
+        for (int i = 0 ; i < 4; i++) {
+            homePawnList.add(new Pawn(color, thisBoard));
+        }
         System.out.println("Player created with color =  " + color.toString());
     }
 
@@ -140,8 +147,21 @@ public class Player {
                 break;
         }
     }
-}
 
+    public void enactMove(Move m) {
+        if (m.gotHome) {
+            finishedPawnList.add(m.p);
+        }
+        else if (m.gotOut) {
+            movablePawnList.add(m.p);
+        }
+        if (m.whomBounced.size() != 0) {
+            bounces += m.whomBounced.size();
+        }
+
+        m.enactMove();
+    }
+}
 
 
 

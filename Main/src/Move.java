@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 /*
  Returns a move, containing fields used to rank relative quality of the move in various AI
@@ -7,7 +8,7 @@ public class Move {
     public Pawn p;
     public Block blockReached;
     public boolean bounced; //did this move bounce a player
-    public Pawn whomBounced; //which player bounced (winning players are better targets)
+    public ArrayList<Pawn> whomBounced; //which player bounced (winning players are better targets)
     public boolean slid; //if went over a slide
     public boolean gotSafe; //if got
     public boolean gotHome;
@@ -34,7 +35,7 @@ public class Move {
     public Move (Pawn thisPawn, Pawn targetPawn) {
         this.p = thisPawn;
         bounced = true;
-        whomBounced = targetPawn;
+        whomBounced.add(targetPawn);
 
         blockReached = targetPawn.getCurrentBlock();
     }
@@ -67,6 +68,7 @@ public class Move {
      */
     private Block trySpecialMove(Pawn thisPawn, Block startBlock) {
         Block currentBlock = startBlock;
+
         //to test for sliding
         if (currentBlock.getSlideStatus() == Slidiness.START) {
             slid = true;
@@ -74,7 +76,7 @@ public class Move {
                 currentBlock = currentBlock.getNextBlock(thisPawn.getColor());
                 //see if it bounches any pawns along its slide
                 if (currentBlock.getPawn() != null) {
-                    //currentBlock.getPawn().getBounced();
+                    whomBounced.add(currentBlock.getPawn());
                     bounced = true;
                 }
             }
@@ -82,7 +84,7 @@ public class Move {
 
         //to test for bouncing
         if (currentBlock.getPawn() != null) {
-            whomBounced = currentBlock.getPawn();
+            whomBounced.add(currentBlock.getPawn());
             //currentBlock.getPawn().getBounced(); THIS IS JUST THE POTENTIAL MOVE, DOESN"T ACTUALLY BOUNCE IT HERE
             bounced = true;
         }
@@ -106,5 +108,18 @@ public class Move {
         return currentBlock;
 
 
+    }
+
+    /*
+    used to run the move the player has chosen
+     */
+    public void enactMove() {
+        p.setCurrentBlock(blockReached);
+        blockReached.place(p);
+
+        //for all those you have bounced in your path, send em home
+        for (Pawn p : whomBounced) {
+            p.getBounced();
+        }
     }
 }
