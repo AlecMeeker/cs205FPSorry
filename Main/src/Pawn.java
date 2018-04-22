@@ -1,8 +1,5 @@
-
-
 public class Pawn {
 
-    private Block currentBlock;
     private int distanceFromHome; //acts as relative progress check
     private boolean hasLeftStart; //is out of start
     private boolean hasReachedSafeZone; //is in the safety zone at least
@@ -16,7 +13,6 @@ public class Pawn {
     Pawn(Color color, Board inBoard) {
         thisBoard = inBoard;
         this.color = color;
-        distanceFromHome = 0;
         hasLeftStart = false;
         hasReachedSafeZone = false;
 
@@ -40,9 +36,21 @@ public class Pawn {
         thisBoard.getStartLocation(this.color).place(this);
     }
 
-    public Block getCurrentBlock() {
-        return locationArray[0];
+    public boolean canMoveThisFar(int spaces) {
+        Block iteratorBlock = getHomeLocation();
+        int i = 0;
+        while(iteratorBlock != getCurrentBlock()) {
+            iteratorBlock = (iteratorBlock.getPreviousBlock());
+            i++;
+        }
+        if (i < spaces) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
+
 
     public Color getColor() {
         return color;
@@ -51,9 +59,11 @@ public class Pawn {
         this.color = color;
     }
 
-
+    public Block getCurrentBlock() {
+        return locationArray[0];
+    }
     public void setCurrentBlock(Block currentBlock) {
-        this.currentBlock = currentBlock;
+        locationArray[0] = currentBlock;
     }
 
     public int getDistanceFromHome() {
@@ -94,3 +104,4 @@ public class Pawn {
     }
 
 }
+
