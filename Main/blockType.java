@@ -6,6 +6,7 @@ public enum blockType {
     STARTZONE(4,Slide.NOT),
     BOARD(1,Slide.NOT),
     SLIDESTART(1,Slide.START),
+    LEADTOSAFETY(1,Slide.MIDDLE),
     SLIDEMIDDLE(1,Slide.MIDDLE),
     SLIDEEND(1,Slide.END),
     SAFETY(1,Slide.NOT),
