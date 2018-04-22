@@ -6,6 +6,7 @@ public class Block {
     Color SC;
     //Pawn[] onBlock;
     blockType type;
+    //indices of pawns on the block
     int[] pawnLocation;
     int numPawns, sznext, next,prev;
 
@@ -24,12 +25,33 @@ public class Block {
         this.SC = SC;
     }
 
-    public void addPawn(Pawn adp){
+    public Color getSC() {
+        return SC;
+    }
+
+
+    public boolean addPawn(int adp){
+
+        if (numPawns<type.MaxPawns){
+            return false;
+        }else {
+            pawnLocation[numPawns]=adp;
+            numPawns++;
+            return true;
+        }
 
     }
 
-    public void removePawn(Pawn nulpawn){
-
+    public int removePawn(){
+        numPawns--;
+        if (numPawns==-1){
+            numPawns++;
+            return -1;
+        }else {
+            int retid=pawnLocation[numPawns];
+            pawnLocation[numPawns]=-1;
+            return retid;
+        }
     }
 
 }

@@ -96,6 +96,11 @@ public class Board {
     private void generatePawns(){
         ArrayList<Color> coloradder=new ArrayList<Color>(Arrays.asList(Color.values()));
 
+        for (int cntr=0;cntr<4;cntr++){
+            for (int cntr2=0;cntr2<4;cntr2++){
+                pieces[(4*cntr)+cntr2]=new Pawn(coloradder.get(cntr+1),cntr);
+            }
+        }
     }
 
 }
