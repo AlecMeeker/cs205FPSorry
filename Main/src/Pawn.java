@@ -1,3 +1,5 @@
+
+
 public class Pawn {
 
     private int distanceFromHome; //acts as relative progress check
@@ -34,6 +36,7 @@ public class Pawn {
      */
     public void getBounced() {
         thisBoard.getStartLocation(this.color).place(this);
+        setCurrentBlock(thisBoard.getStartLocation(this.color));
     }
 
     public boolean canMoveThisFar(int spaces) {
