@@ -23,6 +23,12 @@ public final class Constants {   // this class use for define some constants for
     public final static int gameLogoStartX = 64;
     public final static int gameLogoStartY = 64;
 
+    public final static int cardWidth = 148;
+    public final static int cardHeight = 238;
+    public final static int cardStartX = 538;
+    public final static int cardStartY = 353;
+
+
     //window size
     public final static int windowWidth = 1200;
     public final static int windowHeight = 1020;

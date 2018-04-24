@@ -8,7 +8,7 @@ public class Player {
 	
 	Player(Color inColor) {
 		this.color = inColor;
-		pawnArray = new Pawn[]{new Pawn(color), new Pawn(color), new Pawn(color), new Pawn(color)};
+		//pawnArray = new Pawn[]{new Pawn(color), new Pawn(color), new Pawn(color), new Pawn(color)};
 		
 		System.out.println("Player created with color =  " + color.toString());
 		

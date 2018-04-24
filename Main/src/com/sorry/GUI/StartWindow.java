@@ -51,7 +51,7 @@ public class StartWindow extends JFrame {
         this.setTitle("Sorry! Sweet avenge board game.");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //this.pack(); // pack the window
-        this.setVisible(true);
+        //this.setVisible(true);
     }
 
     private void initGuiComponents(){

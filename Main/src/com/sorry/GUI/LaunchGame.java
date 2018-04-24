@@ -7,9 +7,9 @@ public class LaunchGame {
         System.out.println("Working Directory = " +
                 System.getProperty("user.dir"));
 
-        StartWindow startWindow = StartWindow.getInstance();
-        startWindow.setVisible(true);
-//        GameWindow gw = GameWindow.getInstance();
-//        gw.setVisible(true);
+//        StartWindow startWindow = StartWindow.getInstance();
+//        startWindow.setVisible(true);
+        GameWindow gw = GameWindow.getInstance();
+        gw.setVisible(true);
     }
 }

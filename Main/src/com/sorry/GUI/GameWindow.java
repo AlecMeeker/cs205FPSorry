@@ -35,18 +35,18 @@ public class GameWindow extends JFrame{
     private ArrayList<JLabel> pawns;
     private JButton movePawnBtn;
     private JButton drawCardBtn;
-
+    private JLabel drawedCard;
 
     //Testing Pawn movement Variables
     private int stepLength = 60;
     private int numberOfPawns = 16;
     public static int safetyZoneSize = 5;
     public static int moveSteps = 1;
-    private String pawnImagePath= "/Main/imgs/";
+    private String ImagePath= "/Main/imgs/";
     private String [] colorName = {"blue","yellow","green","red"};
     public static int count;
     private static JLabel seletedLabel = null;
-
+    
 
     //Try to store the block position of board panel
     private  Map<String, Point> blockToBoardPosition;  //java.awt.point
@@ -114,11 +114,11 @@ public class GameWindow extends JFrame{
 
         for(int i = 0; i < this.colorName.length;i++) {
             for(int j = 0; j < this.numberOfPawns/4; j++){
-                this.pawns.add(loadPawns(this.pawnImagePath, this.colorName[i]));  //load different color pawn
+                this.pawns.add(loadPawns(this.ImagePath, this.colorName[i]));  //load different color pawn
             }
         }
 
-        this.testPawn = loadPawns(this.pawnImagePath, "red");
+        this.testPawn = loadPawns(this.ImagePath, "red");
         //Initial other variables
         blockToBoardPosition = new HashMap<String, Point>();
         initBlockToBoardPosition();
@@ -245,7 +245,7 @@ public class GameWindow extends JFrame{
         this.add(boardPanel);
 
         testPawn.setBounds(Constants.pawnStartX, Constants.pawnStartX, Constants.pawnWidth, Constants.pawnHeight); //init the pawns position
-        boardPanel.add(testPawn);
+        //boardPanel.add(testPawn);
 
         //put pawns on start position
         for(int i = 0; i < colorName.length; i++){
@@ -256,6 +256,9 @@ public class GameWindow extends JFrame{
             }
         }
 
+        drawedCard = new JLabel();
+        drawedCard.setBounds(Constants.cardStartX,Constants.cardStartY, Constants.cardWidth,Constants.cardHeight);
+        boardPanel.add(drawedCard);
 
         movePawnBtn.setBounds(1000, 800, 100, 40);
         this.add(movePawnBtn);
@@ -306,10 +309,23 @@ public class GameWindow extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
                     Card curCard = deck.draw();
-                    System.out.println(curCard.num);
-                    if(curCard == Card.EIGHT){
-                        ;
+                    try {
+                        Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+curCard.imgName));
+
+                        basicImage = basicImage.getScaledInstance(Constants.cardWidth, Constants.cardHeight, Image.SCALE_SMOOTH);
+                        ImageIcon cardImg = new ImageIcon(basicImage);
+                        drawedCard.setIcon(cardImg);
+                        System.out.println(System.getProperty("user.dir")+ImagePath+curCard.imgName);
+                    } catch (Exception ex) {
+                        // handle exception...
+                        System.out.println("loadCards failed \n" + ex.toString());
                     }
+
+//                    if(drawedCard != null){
+//                        drawedCard.setBounds(Constants.cardStartX,Constants.cardStartY, Constants.cardWidth,Constants.cardHeight);
+//                        boardPanel.add(drawedCard);
+//                        System.out.println("load");
+//                    }
             }
         });
 
@@ -373,7 +389,6 @@ public class GameWindow extends JFrame{
                     }
                 }
                 seletedLabel = null;
-
             }
 
             @Override
