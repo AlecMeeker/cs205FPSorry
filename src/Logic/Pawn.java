@@ -97,7 +97,6 @@ public class Pawn {
     public void move(Block targetBlock) {
         Block origin = this.getCurrentBlock();
 
-        this.setCurrentBlock(targetBlock);
         if (targetBlock == this.getStartLocation()) {
             this.myPlayer.movablePawnList.remove(this);
             this.myPlayer.startPawnList.add(this);

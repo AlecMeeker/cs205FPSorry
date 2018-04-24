@@ -35,21 +35,30 @@ public class Game {
             name3 = generateName();
         }
 
+        Color yourColor = Color.RED;
+        Color firstColor = generateColor();
+        Color secondColor = generateColor();
+        Color thirdColor = generateColor();
+
+        while (firstColor == youColor) {
+            firstColor = generateColor();
+        }
+        while (secondColor == firstColor || secondColor == youColor) {
+            secondColor = generateColor();
+        }
+        while (thirdColor == firstColor || thirdColor == secondColor || thirdColor == youColor) {
+            thirdColor = generateColor();
+        }
+
 
         switch(AI_PLAYERS) {
             case 3:
-                //FOR TESTING ONLY
-                Color firstColor = Color.BLUE;
                 boolean firstSmart = true, firstCruel = false;
                 players.add(new AI(firstColor, gameBoard, firstSmart, firstCruel, name1));
             case 2:
-                //TESTING ONLY
-                Color secondColor = Color.GREEN;
                 boolean secondSmart = false, secondCruel = true;
                 players.add(new AI(secondColor, gameBoard, secondSmart, secondCruel, name2));
             case 1:
-                //TESTING ONLY
-                Color thirdColor = Color.YELLOW;
                 boolean thirdSmart = true, thirdCruel = true;
                 players.add(new AI(thirdColor, gameBoard, thirdSmart, thirdCruel, name3));
         }
@@ -121,4 +130,22 @@ public class Game {
 
         return nameList.get(nameIndex);
     }
+
+    public static Color generateColor() {
+        int cIndex = (int) (Math.random() * 4);
+        switch (cIndex) {
+            case 0:
+                return Color.RED;
+            case 1:
+                return Color.BLUE;
+            case 2:
+                return Color.GREEN;
+            case 3:
+                return Color.YELLOW;
+            default:
+                return Color.NULL;
+        }
+    }
 }
+
+

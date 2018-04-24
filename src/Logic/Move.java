@@ -160,10 +160,7 @@ public class Move {
         //for all those you have bounced in your path, send em home
         if (whomBounced.size() != 0) {
             for (Pawn pp : whomBounced) {
-                Block formerBlock = p.getCurrentBlock();
                 pp.getBounced();
-                formerBlock.removePawn();
-
             }
         }
 
