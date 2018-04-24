@@ -23,7 +23,7 @@ public class Pawn {
 		locationArray = new Block[3];
 		this.setTargets();
 
-		System.out.println("Pawn created, color = " + this.color.toString());
+		System.out.println(color.toString().toLowerCase() + " pawn added.");
 	}
 
 	public void setTargets() {

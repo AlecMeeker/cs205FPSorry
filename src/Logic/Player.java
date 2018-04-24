@@ -10,6 +10,7 @@ public class Player {
 	protected int bounces;
 	protected Color color;
 	protected Board thisBoard;
+	String name;
 
 	protected ArrayList<Pawn> movablePawnList; //a list of the player's pawns that can be moved (not finished, not in start)
     protected ArrayList<Pawn> startPawnList; //a list of pawns still in home
@@ -18,6 +19,7 @@ public class Player {
 	ArrayList<ArrayList<Move>> potentialMovesList; //first arraylist at index 0 is potential moves for each pawn. second arraylist at index 1 is in case of 7, generate potential moves
 	
 	protected Player(Color inColor, Board thisBoard) {
+
 		startPawnList = new ArrayList<>();
 		movablePawnList = new ArrayList<>();
 		finishedPawnList = new ArrayList<>();
@@ -29,10 +31,15 @@ public class Player {
 		for (int i = 0 ; i < 4; i++) {
 			startPawnList.add(new Pawn(color, thisBoard, this));
 		}
-		System.out.println("Player created with color =  " + color.toString());
 	}
 
 
+	public String getName() {
+		if (this.name == null) {
+			return "Josh";
+		}
+		return this.name;
+	}
 
 	//helper function
 	private Card draw() {

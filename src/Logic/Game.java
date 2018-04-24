@@ -14,7 +14,7 @@ public class Game {
 
         //get # of AI players and stats
 
-        int AI_PLAYERS = 2; //change this once you meet with junziao TESTING ONLY TESTING ONLY
+        int AI_PLAYERS = 3; //change this once you meet with junziao TESTING ONLY TESTING ONLY
 
         //USE THIS FOR TESTING ONLY
         String name = "test";
@@ -42,6 +42,10 @@ public class Game {
                 players.add(new AI(thirdColor, gameBoard, thirdSmart, thirdCruel));
         }
 
+        ArrayList<Player> allPlayers = new ArrayList<>();
+        allPlayers.add(you);
+        allPlayers.addAll(players);
+
         int currentMove = 0;
         Player currentPlayer;
 
@@ -49,7 +53,7 @@ public class Game {
         System.out.println("*****************GAME BEGIN**********************");
         System.out.println("*************************************************");
         while (whilePlaying) {
-            currentPlayer = players.get(currentMove%2);
+            currentPlayer = players.get(currentMove%(players.size()));
             whilePlaying = currentPlayer.play();
 
             currentMove++;

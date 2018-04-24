@@ -6,6 +6,7 @@ public class HumanPlayer extends Player {
     public HumanPlayer(String name, Color inColor, Board inBoard) {
         super(inColor, inBoard);
         this.name = name;
+        System.out.println(name + " entered the arena for Team " + inColor.toString() + "!\n");
     }
 
     @Override

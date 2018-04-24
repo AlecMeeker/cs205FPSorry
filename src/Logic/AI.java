@@ -10,9 +10,11 @@ public class AI extends Player {
 
     public AI(Color inColor, Board inBoard, boolean isSmart, boolean isCruel) {
         super(inColor, inBoard);
+        name = generateName();
+        System.out.println(name + " entered the arena for Team " + inColor.toString() + "!\n");
+
         smart = isSmart;
         cruel = isCruel;
-        name = generateName();
     }
 
     @Override
