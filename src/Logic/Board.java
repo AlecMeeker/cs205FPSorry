@@ -16,6 +16,7 @@ public class Board {
     Creates a board of 60 squares, with some safety zones and homes, and links them all, then adds slides
      */
     public Board() {
+        everyBlock = new ArrayList<>();
 
         thisDeck = new Deck();
         outerRing = new Block[60];
@@ -79,8 +80,6 @@ public class Board {
         everyBlock.addAll(Arrays.asList(greenSafeZone));
         everyBlock.addAll(Arrays.asList(yellowSafeZone));
         everyBlock.addAll(Arrays.asList(START_ARRAY));
-
-
 
     }
 
