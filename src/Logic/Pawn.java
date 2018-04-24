@@ -145,5 +145,9 @@ public class Pawn {
         this.hasReachedSafeZone = hasReachedSafeZone;
     }
 
+    public void select() {
+        this.selected = true;
+    }
+
 }
 
