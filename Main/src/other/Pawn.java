@@ -12,8 +12,9 @@ public class Pawn {
     //public Block[] locationArray; //NEEDS TO BE UPDATED ONCE THE BOARD IS FINISHED
 
 	
-	Pawn(Color color) {
+	Pawn(Color color,int id) {
 		this.color = color;
+		index=id;
 		distanceFromHome = 0;
 		isOut = false;
 		//set currentNode equal to the correct node based on the color
