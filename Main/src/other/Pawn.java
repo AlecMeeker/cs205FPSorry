@@ -1,4 +1,4 @@
-package Main.src;
+package other;
 
 public class Pawn {
 

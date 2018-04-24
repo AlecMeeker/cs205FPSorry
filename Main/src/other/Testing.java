@@ -1,4 +1,4 @@
-package Main.src;
+package other;
 
 public class Testing {
 
@@ -6,7 +6,7 @@ public class Testing {
 		//Player jim = new Player(2);
 		Deck testdeck=new Deck();
 
-		Player player1 = new Player(BLUE);
+		//Player player1 = new Player(BLUE);
 
 
 

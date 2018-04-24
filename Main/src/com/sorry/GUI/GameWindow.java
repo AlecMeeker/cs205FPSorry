@@ -29,11 +29,13 @@ public class GameWindow extends JFrame{
     private static volatile GameWindow instance = null;
     private static Object mutex = new Object();
 
+    //GUI components
     private BoardPanel boardPanel;
     private JLabel testPawn;
     private ArrayList<JLabel> pawns;
     private JButton movePawnBtn;
     private JButton drawCardBtn;
+
 
     //Testing Pawn movement Variables
     private int stepLength = 60;

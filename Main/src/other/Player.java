@@ -1,4 +1,4 @@
-package Main.src;
+package other;
 
 
 public class Player {
@@ -14,14 +14,14 @@ public class Player {
 		
 	}
 
-	public List<Move> getMoveList(Card draw) {
-		List<Move> moveList = new List();
-
-		if (draw == SEVEN) {
-
-
-		}
-	}
+//	public List<Move> getMoveList(Card draw) {
+//		List<Move> moveList = new ArrayList();
+//
+//		if (draw == SEVEN) {
+//
+//
+//		}
+//	}
 	
 }
 
