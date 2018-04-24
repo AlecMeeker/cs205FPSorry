@@ -15,6 +15,7 @@ public class Move {
     public boolean gotSafe; //if got
     public boolean gotHome;
     public boolean leftStart;
+    public boolean sorry;
     public int frontPawns; //pawns within 10 of the block reached. represents possible targets for later bounces
     public int backPawns; //pawns behind this pawn, representing future potential danger
     public Block origin;
@@ -40,6 +41,7 @@ public class Move {
     }
 
     public Move (Pawn thisPawn, Pawn targetPawn) {
+        origin = thisPawn.getCurrentBlock();
         this.p = thisPawn;
         whomBounced = new ArrayList<>();
         bounced = true;
@@ -104,11 +106,6 @@ public class Move {
             gotHome = true;
         }
 
-        //test for got out
-        Block startLocation = thisPawn.getStartLocation();
-        Block rightOutsideStart = thisPawn.getStartLocation().getNextBlock(Color.NULL);
-        Block shouldBeStart = origin;
-        Block nextFromOrigin = origin.getNextBlock(Color.NULL);
         if (origin == thisPawn.getStartLocation() && currentBlock != origin) {
             leftStart = true;
         }
@@ -157,21 +154,30 @@ public class Move {
     used to run the move the player has chosen
      */
     public void enactMove() {
-        p.setCurrentBlock(blockReached);
-        blockReached.place(p);
+        p.move(blockReached);
 
         //for all those you have bounced in your path, send em home
         if (whomBounced.size() != 0) {
             for (Pawn p : whomBounced) {
+                Block formerBlock = p.getCurrentBlock();
                 p.getBounced();
+                formerBlock.removePawn();
+
             }
         }
 
-        if (leftStart) {
-            System.out.println(p.toString() + " left " + p.getColor().toString().toLowerCase() + " start.\n");
+        //report cool or important stuff
+        if (slid) {
+            System.out.println(p.myPlayer.getName() + "'s pawn chutes down the path.");
+        }
+        else if (leftStart) {
+            System.out.println(p.myPlayer.getName() + "'s pawn begins its solemn journey.\n");
+        }
+        else if (gotSafe) {
+            System.out.println(p.myPlayer.getName() + "'s pawn has reached safety, but can it find what it needs to win?.");
         }
         else {
-            System.out.println(p.toString() + " moved to " + blockReached.toString() + "\n");
+            System.out.println(p.myPlayer.getName() + "'s pawn moved from id:" + origin.id + " to " + blockReached.id + "\n");
         }
     }
 }

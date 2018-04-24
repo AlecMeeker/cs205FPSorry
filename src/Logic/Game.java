@@ -53,10 +53,21 @@ public class Game {
         System.out.println("*****************GAME BEGIN**********************");
         System.out.println("*************************************************");
         while (whilePlaying) {
+
+            //to show where all the pawns are of course
+            for (int i = 0; i < 60; i++) {
+                if (gameBoard.outerRing[i].getPawn() != null) {
+                    System.out.print(i + ": " + gameBoard.outerRing[i].getPawn().getColor().toString().toLowerCase() + "; ");
+                }
+            }
+            System.out.println();
+
             currentPlayer = players.get(currentMove%(players.size()));
             whilePlaying = currentPlayer.play();
 
             currentMove++;
+
+
         }
 
 

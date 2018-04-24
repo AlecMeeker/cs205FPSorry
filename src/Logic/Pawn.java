@@ -38,13 +38,9 @@ public class Pawn {
     returns this pawn to its home location based on its color
      */
     public void getBounced() {
-	    thisBoard.getStartLocation(this.color).place(this);
-	    setCurrentBlock(thisBoard.getStartLocation(this.color));
+	    this.move(thisBoard.getStartLocation(color));
 
-	    myPlayer.movablePawnList.remove(this);
-	    myPlayer.startPawnList.add(this);
-
-	    System.out.println(this.toString() + " got bounced home! lol");
+	    System.out.println(myPlayer.getName() + "'s pawn got bounced home lol");
     }
 
     public boolean canMoveHere(int spaces) {
@@ -96,6 +92,14 @@ public class Pawn {
         }
 
         return steps;
+    }
+
+    public void move(Block targetBlock) {
+        Block origin = this.getCurrentBlock();
+
+        this.setCurrentBlock(targetBlock);
+        origin.removePawn();
+        targetBlock.place(this);
     }
 
     public boolean isFinished() {

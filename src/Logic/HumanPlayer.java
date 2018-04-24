@@ -21,4 +21,8 @@ public class HumanPlayer extends Player {
         }
         return true;
     }
+
+    public String getName() {
+        return name;
+    }
 }

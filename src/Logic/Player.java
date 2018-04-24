@@ -4,7 +4,7 @@ import javafx.util.Pair;
 
 import java.util.ArrayList;
 
-public class Player {
+public abstract class Player {
 	protected Card currentDraw;
 
 	protected int bounces;
@@ -31,14 +31,6 @@ public class Player {
 		for (int i = 0 ; i < 4; i++) {
 			startPawnList.add(new Pawn(color, thisBoard, this));
 		}
-	}
-
-
-	public String getName() {
-		if (this.name == null) {
-			return "Josh";
-		}
-		return this.name;
 	}
 
 	//helper function
@@ -203,10 +195,17 @@ public class Player {
 	}
 
 
+	/*
+	helper class that puts the pawns in the correct buckets based on the move
+	 */
 	public void shiftPawns(Move moveIn) {
 		if (moveIn.gotHome) {
 			movablePawnList.remove(moveIn.p);
 			finishedPawnList.add(moveIn.p);
+		}
+		if (moveIn.sorry) {
+			startPawnList.remove(moveIn.p);
+			movablePawnList.add(moveIn.p);
 		}
 		if (moveIn.leftStart) {
 			startPawnList.remove(moveIn.p);
@@ -214,9 +213,9 @@ public class Player {
 		}
 	}
 
-	public boolean play() {
-		return true;
-	}
+	public abstract boolean play();
+
+	public abstract String getName();
 
 
 

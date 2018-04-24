@@ -78,4 +78,13 @@ public class Block {
             return true;
         }
     }
+
+    public boolean removePawn() {
+        if (pawnsHere.size() != 0) {
+            pawnsHere.clear();;
+            return true;
+        }
+        return false;
+    }
+
 }

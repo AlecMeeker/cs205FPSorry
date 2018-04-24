@@ -20,6 +20,9 @@ public class AI extends Player {
     @Override
     public boolean play() {
         System.out.println("It's " + name + "'s turn.");
+
+        System.out.println("pawns in start: " + startPawnList.size() + "; pawns movable: " + movablePawnList.size() + "; pawns finished: " + finishedPawnList.size());
+
         currentDraw = thisBoard.thisDeck.draw();
         generateMoves();
         if (smart) {
@@ -58,6 +61,8 @@ public class AI extends Player {
         if (m.bounced) {
             for (int i = 0; i < m.whomBounced.size(); i++) {
                 moveRating += 2 * crueltyMultiplier;
+                moveRating += m.whomBounced.get(i).myPlayer.movablePawnList.size(); //targets players who have a lot of movable pawns first-off
+                moveRating += ( 65 - m.whomBounced.get(i).getDistanceFromHome() / 65); //targets pawns that are closest to their goal,
             }
         }
 
@@ -69,6 +74,8 @@ public class AI extends Player {
         if (m.slid) {
             moveRating += 1;
         }
+
+
 
         return moveRating;
     }
@@ -139,21 +146,33 @@ public class AI extends Player {
     public String generateName() {
         ArrayList<String> nameList = new ArrayList<>();
         nameList.add("Alexei");
+        nameList.add("Artyom");
+        nameList.add("Alyosha");
         nameList.add("Anatoly");
         nameList.add("Boris");
         nameList.add("Vasily");
         nameList.add("Vladislav");
         nameList.add("Vitaly");
+        nameList.add("Vladimir");
         nameList.add("Dmitry");
         nameList.add("Ivan");
+        nameList.add("Leonid");
+        nameList.add("Mikhail");
+        nameList.add("Georgy");
         nameList.add("Konstantin");
         nameList.add("Nikita");
+        nameList.add("Rasputin");
         nameList.add("Pyotr");
         nameList.add("Sergei");
+        nameList.add("Stanislav");
         nameList.add("Yuri");
 
         int nameIndex = (int)(Math.random() * nameList.size());
 
         return nameList.get(nameIndex);
+    }
+
+    public String getName() {
+        return name;
     }
 }
