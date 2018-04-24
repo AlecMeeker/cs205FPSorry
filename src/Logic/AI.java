@@ -8,9 +8,9 @@ public class AI extends Player {
     public Boolean cruel;
     public String name;
 
-    public AI(Color inColor, Board inBoard, boolean isSmart, boolean isCruel) {
+    public AI(Color inColor, Board inBoard, boolean isSmart, boolean isCruel, String name) {
         super(inColor, inBoard);
-        name = generateName();
+        this.name = name;
         System.out.println(name + " entered the arena for Team " + inColor.toString() + "!\n");
 
         smart = isSmart;
@@ -19,9 +19,18 @@ public class AI extends Player {
 
     @Override
     public boolean play() {
-        System.out.println("It's " + name + "'s turn.");
+        System.out.println("It's " + name + "'s turn (" + color.toString().toLowerCase() + ")");
 
         System.out.println("pawns in start: " + startPawnList.size() + "; pawns movable: " + movablePawnList.size() + "; pawns finished: " + finishedPawnList.size());
+        System.out.print("StartList: ");
+        for (Pawn p : startPawnList) {
+            System.out.print(p.getCurrentBlock().id + " ");
+        }
+        System.out.print("\nMovableList: ");
+        for (Pawn p : movablePawnList) {
+            System.out.print(p.getCurrentBlock().id + " ");
+        }
+        System.out.print("\n");
 
         currentDraw = thisBoard.thisDeck.draw();
         generateMoves();
@@ -140,36 +149,6 @@ public class AI extends Player {
         thisMove.enactMove();
         shiftPawns(thisMove);
 
-    }
-
-
-    public String generateName() {
-        ArrayList<String> nameList = new ArrayList<>();
-        nameList.add("Alexei");
-        nameList.add("Artyom");
-        nameList.add("Alyosha");
-        nameList.add("Anatoly");
-        nameList.add("Boris");
-        nameList.add("Vasily");
-        nameList.add("Vladislav");
-        nameList.add("Vitaly");
-        nameList.add("Vladimir");
-        nameList.add("Dmitry");
-        nameList.add("Ivan");
-        nameList.add("Leonid");
-        nameList.add("Mikhail");
-        nameList.add("Georgy");
-        nameList.add("Konstantin");
-        nameList.add("Nikita");
-        nameList.add("Rasputin");
-        nameList.add("Pyotr");
-        nameList.add("Sergei");
-        nameList.add("Stanislav");
-        nameList.add("Yuri");
-
-        int nameIndex = (int)(Math.random() * nameList.size());
-
-        return nameList.get(nameIndex);
     }
 
     public String getName() {

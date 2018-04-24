@@ -24,22 +24,34 @@ public class Game {
         //turn this off to pit AI against each other
         //players.add(you);
 
+        String name1 = generateName();
+        String name2 = generateName();
+        String name3 = generateName();
+
+        while (name2 == name1) {
+            name2 = generateName();
+        }
+        while (name3 == name2 || name3 == name1) {
+            name3 = generateName();
+        }
+
+
         switch(AI_PLAYERS) {
             case 3:
                 //FOR TESTING ONLY
                 Color firstColor = Color.BLUE;
                 boolean firstSmart = true, firstCruel = false;
-                players.add(new AI(firstColor, gameBoard, firstSmart, firstCruel));
+                players.add(new AI(firstColor, gameBoard, firstSmart, firstCruel, name1));
             case 2:
                 //TESTING ONLY
                 Color secondColor = Color.GREEN;
                 boolean secondSmart = false, secondCruel = true;
-                players.add(new AI(secondColor, gameBoard, secondSmart, secondCruel));
+                players.add(new AI(secondColor, gameBoard, secondSmart, secondCruel, name2));
             case 1:
                 //TESTING ONLY
                 Color thirdColor = Color.YELLOW;
                 boolean thirdSmart = true, thirdCruel = true;
-                players.add(new AI(thirdColor, gameBoard, thirdSmart, thirdCruel));
+                players.add(new AI(thirdColor, gameBoard, thirdSmart, thirdCruel, name3));
         }
 
         ArrayList<Player> allPlayers = new ArrayList<>();
@@ -76,4 +88,37 @@ public class Game {
 
     }
 
+    public static String generateName() {
+        ArrayList<String> nameList = new ArrayList<>();
+        nameList.add("Alexei");
+        nameList.add("Artyom");
+        nameList.add("Alyosha");
+        nameList.add("Anatoly");
+        nameList.add("Boris");
+        nameList.add("Vasily");
+        nameList.add("Vladislav");
+        nameList.add("Vitaly");
+        nameList.add("Vladimir");
+        nameList.add("Dmitry");
+        nameList.add("Ivan");
+        nameList.add("Leonid");
+        nameList.add("Mikhail");
+        nameList.add("Georgy");
+        nameList.add("Konstantin");
+        nameList.add("Nikita");
+        nameList.add("Rasputin");
+        nameList.add("Pyotr");
+        nameList.add("Sergei");
+        nameList.add("Stanislav");
+        nameList.add("Yuri");
+        nameList.add("Vladimir Putin himself");
+        nameList.add("Guccifer2.0");
+        nameList.add("Fancy Bear");
+        nameList.add("Julian Assange");
+        nameList.add("Anonymous");
+
+        int nameIndex = (int)(Math.random() * nameList.size());
+
+        return nameList.get(nameIndex);
+    }
 }

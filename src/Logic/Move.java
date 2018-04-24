@@ -45,9 +45,9 @@ public class Move {
         this.p = thisPawn;
         whomBounced = new ArrayList<>();
         bounced = true;
-        whomBounced.add(targetPawn);
 
         blockReached = targetPawn.getCurrentBlock();
+        blockReached = trySpecialMove(thisPawn, blockReached);
     }
 
     /*
@@ -108,6 +108,7 @@ public class Move {
 
         if (origin == thisPawn.getStartLocation() && currentBlock != origin) {
             leftStart = true;
+
         }
 
         //returns the block that the pawn ultimately could land on
@@ -158,13 +159,14 @@ public class Move {
 
         //for all those you have bounced in your path, send em home
         if (whomBounced.size() != 0) {
-            for (Pawn p : whomBounced) {
+            for (Pawn pp : whomBounced) {
                 Block formerBlock = p.getCurrentBlock();
-                p.getBounced();
+                pp.getBounced();
                 formerBlock.removePawn();
 
             }
         }
+
 
         //report cool or important stuff
         if (slid) {

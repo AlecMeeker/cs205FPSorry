@@ -98,8 +98,19 @@ public class Pawn {
         Block origin = this.getCurrentBlock();
 
         this.setCurrentBlock(targetBlock);
+        if (targetBlock == this.getStartLocation()) {
+            this.myPlayer.movablePawnList.remove(this);
+            this.myPlayer.startPawnList.add(this);
+        }
+
+        else if (targetBlock == this.getHomeLocation()) {
+            this.myPlayer.movablePawnList.remove(this);
+            this.myPlayer.finishedPawnList.add(this);
+        }
+
         origin.removePawn();
         targetBlock.place(this);
+        this.setCurrentBlock(targetBlock);
     }
 
     public boolean isFinished() {
