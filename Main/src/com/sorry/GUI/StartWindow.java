@@ -79,10 +79,8 @@ public class StartWindow extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-
-//                GameWindow gw = GameWindow.getInstance();
-//                gw.setVisible(true);
                 newGameDialog();
+
             }
         });
     }
@@ -92,18 +90,28 @@ public class StartWindow extends JFrame {
         String[] players = {
                 "2","3","4"
         };
-
         JComboBox<String> numPlayers = new JComboBox<String>(players);
 
-        String [] aiBehaviors = {"Dumb","Smart","Nice","Cruel"};
+        String [] playerColors = {"blue","yellow","green","red"};
 
-        JComboBox<String> computerDifficulties = new JComboBox<String>(aiBehaviors);
+        JComboBox<String> playerColorSelect = new JComboBox<String>(playerColors);
+
+        String [] aiBehaviors = {"Dumb & Nice","Dumb & Cruel","Smart & Nice","Smart & Cruel"};
+        JComboBox<String> computerDifficulties1 = new JComboBox<String>(aiBehaviors);
+        JComboBox<String> computerDifficulties2 = new JComboBox<String>(aiBehaviors);
+        JComboBox<String> computerDifficulties3 = new JComboBox<String>(aiBehaviors);
 
         final JComponent[] inputs = new JComponent[] {
                 new JLabel("Number of Players"),
                 numPlayers,
+                new JLabel("Player Color"),
+                playerColorSelect,
                 new JLabel("Computer 1"),
-                computerDifficulties,
+                computerDifficulties1,
+                new JLabel("Computer 2"),
+                computerDifficulties2,
+                new JLabel("Computer 3"),
+                computerDifficulties3,
 
         };
         Object[] possibilities = {"ham", "spam", "yam"};
@@ -111,10 +119,14 @@ public class StartWindow extends JFrame {
         //JOptionPane.showInputDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
         int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
-//            System.out.println("You entered " +
-//                    firstName.getText() + ", " +
-//                    lastName.getText() + ", " +
-//                    password.getText());
+            System.out.println("You entered " +
+                    numPlayers.getSelectedItem().toString() + ", " +
+                    playerColorSelect.getSelectedItem().toString() + ", " +
+                    computerDifficulties1.getSelectedItem().toString() + ", " +
+                    computerDifficulties2.getSelectedItem().toString() + ", " +
+                    computerDifficulties3.getSelectedItem().toString());
+                GameWindow gw = GameWindow.getInstance();
+                gw.setVisible(true);
         } else {
             System.out.println("User canceled / closed the dialog, result = " + result);
         }

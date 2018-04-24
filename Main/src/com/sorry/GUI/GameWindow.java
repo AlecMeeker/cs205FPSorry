@@ -54,6 +54,7 @@ public class GameWindow extends JFrame{
 
     //some constants member
     public static Deck deck = new Deck();
+    private StartWindow startWindow = StartWindow.getInstance();
 
     private GameWindow(){
 
@@ -85,6 +86,16 @@ public class GameWindow extends JFrame{
         //Setting the window
         this.setSize(Constants.windowWidth,Constants.windowHeight);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                startWindow.setVisible(true);
+            }
+            @Override
+            public void windowActivated(java.awt.event.WindowEvent windowEvent){
+                startWindow.setVisible(false);
+            }
+        });
 
         //this.pack(); // pack the window
         this.setVisible(true);
@@ -239,16 +250,12 @@ public class GameWindow extends JFrame{
         //put pawns on start position
         for(int i = 0; i < colorName.length; i++){
             for(int j = 0; j < pawns.size()/4; j++){
-                Point curP = blockToBoardPosition.get(colorName[i]+"Home"+j);
+                Point curP = blockToBoardPosition.get(colorName[i]+"Start"+j);
                 pawns.get(i*4+j).setBounds(curP.x, curP.y, Constants.pawnWidth, Constants.pawnHeight);
                 boardPanel.add(pawns.get(i*4+j));
             }
         }
 
-//        for(int i = 0; i < pawns.size(); i++){
-//            pawns.get(i).setBounds(redStartPosition[i].x, redStartPosition[i].y, Constants.pawnWidth, Constants.pawnHeight);
-//            boardPanel.add(pawns.get(i));
-//        }
 
         movePawnBtn.setBounds(1000, 800, 100, 40);
         this.add(movePawnBtn);
@@ -263,14 +270,6 @@ public class GameWindow extends JFrame{
         movePawnBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                ArrayList<Point> safetyZones = new ArrayList<Point>();
-
-                for(int j  = 0; j < colorName.length;j++){
-                    for(int i  = 0; i < safetyZoneSize; i++){
-                        safetyZones.add(blockToBoardPosition.get(colorName[j]+"SafetyZone" + i));
-                    }
-                }
 
                 for(int i = 0; i < moveSteps;i++) {
                     Point pt = testPawn.getLocation();
@@ -307,19 +306,32 @@ public class GameWindow extends JFrame{
             public void actionPerformed(ActionEvent e) {
 
                     Card curCard = deck.draw();
-                    System.out.println( curCard.num);
-
-
+                    System.out.println(curCard.num);
+                    if(curCard == Card.EIGHT){
+                        ;
+                    }
             }
         });
 
+        //add mouse click event to pawns JLabel.
+
+        //test kick boolean variable
+        boolean canKick = true;
         for(int i = 0; i < pawns.size(); i++){
 
             pawns.get(i).addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    seletedLabel = (JLabel)e.getComponent();
-                    System.out.println("( "+seletedLabel.getX()+" , "+seletedLabel.getY()+" )");
+                    if(seletedLabel == null){
+                        seletedLabel = (JLabel)e.getComponent();
+                        System.out.println("( "+seletedLabel.getX()+" , "+seletedLabel.getY()+" )");
+                    }
+                    else if(seletedLabel != (JLabel)e.getComponent() && canKick){
+                        Point startPoint = blockToBoardPosition.get("blueStart0");
+                        System.out.println("startPoint: "+startPoint.x+" , "+startPoint.y);
+                        JLabel temP = (JLabel) e.getComponent();
+                        temP.setLocation(startPoint.x,startPoint.y);
+                    }
                 }
 
                 @Override
@@ -359,11 +371,8 @@ public class GameWindow extends JFrame{
                         System.out.println("seletedLabel pos: "+pos.x+" , "+pos.y);
                         break;
                     }
-                    else{
-
-                    }
                 }
-
+                seletedLabel = null;
 
             }
 
