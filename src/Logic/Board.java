@@ -1,9 +1,12 @@
+package Logic;
+
+
 public class Board {
 
-    private Block[] outerRing;
-    //List<Block> board;
-    private Block[] blueSafeZone, redSafeZone, yellowSafeZone, greenSafeZone, START_ARRAY;
-    public Deck thisDeck;
+     public Block[] outerRing;
+     //List<Block> board;
+     private Block[] blueSafeZone, redSafeZone, yellowSafeZone, greenSafeZone, START_ARRAY;
+     public Deck thisDeck;
 
     /*
     Creates a board of 60 squares, with some safety zones and homes, and links them all, then adds slides
@@ -23,18 +26,22 @@ public class Board {
                 case 2:
                     outerRing[i] = new Block(Color.RED, i);
                     outerRing[i].setNextSafetyBlock(redSafeZone[0]);
+                    redSafeZone[0].setPreviousBlock(outerRing[i]);
                     break;
                 case 17:
                     outerRing[i] = new Block(Color.BLUE, i);
                     outerRing[i].setNextSafetyBlock(blueSafeZone[0]);
+                    blueSafeZone[0].setPreviousBlock(outerRing[i]);
                     break;
                 case 32:
                     outerRing[i] = new Block(Color.YELLOW, i);
                     outerRing[i].setNextSafetyBlock(yellowSafeZone[0]);
+                    yellowSafeZone[0].setPreviousBlock(outerRing[i]);
                     break;
                 case 47:
                     outerRing[i] = new Block(Color.GREEN, i);
                     outerRing[i].setNextSafetyBlock(greenSafeZone[0]);
+                    greenSafeZone[0].setPreviousBlock(outerRing[i]);
                     break;
                 default:
                     outerRing[i] = new Block(Color.NULL, i);
@@ -99,6 +106,7 @@ public class Board {
 
     }
 
+
     public Block getStartLocation(Color color) {
         switch (color) {
             case RED: return START_ARRAY[0];
@@ -136,16 +144,16 @@ public class Board {
         return START_ARRAY[3]; }
 
     public Block getRedGoal() {
-        return redSafeZone[5];
-    }
+            return redSafeZone[5];
+        }
     public Block getBlueGoal() {
-        return blueSafeZone[5];
-    }
+            return blueSafeZone[5];
+        }
     public Block getYellowGoal() {
-        return yellowSafeZone[5];
-    }
+            return yellowSafeZone[5];
+        }
     public Block getGreenGoal() {
-        return greenSafeZone[5];
-    }
+            return greenSafeZone[5];
+        }
 
 }

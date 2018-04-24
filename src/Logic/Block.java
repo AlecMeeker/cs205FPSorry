@@ -1,3 +1,5 @@
+package Logic;
+
 import java.util.ArrayList;
 
 public class Block {
@@ -28,6 +30,9 @@ public class Block {
     }
 
     public Pawn getPawn() {
+        if (pawnsHere.size() == 0) {
+            return null;
+        }
         return pawnsHere.get(0);
     }
 

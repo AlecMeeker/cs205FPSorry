@@ -1,4 +1,4 @@
-/**
+package Logic; /**
  * the deck
  * by Alec
  * */
@@ -46,6 +46,8 @@ public class Deck {
             shuffle();
             TCindex=0;
         }
+        Card draw = getTC();
+        System.out.println(draw.toString() + " was drawn.");
         return getTC();
     }
 
@@ -67,6 +69,7 @@ public class Deck {
 
     // generates all cards for the deck
     private void generateDeck(){
+        System.out.println("Deck generated");
         ArrayList<Card> starter=new ArrayList<Card>(Arrays.asList(Card.values()));
         int i=0;
         for (int ic=0;ic<starter.size();ic++){

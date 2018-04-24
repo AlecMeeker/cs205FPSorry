@@ -1,7 +1,12 @@
+package Logic;
+
 /**
  * the card enum
  * by alec
  */
+
+
+
 
 public enum Card {
     SORRY(0,4, "Take any one pawn from Start and move it directly to a square occupied by any opponent's pawn, sending that pawn back to its own Start. A Sorry! card cannot be used on an opponent's pawn in a Safety Zone. If there are no pawns on the player's Start, or no opponent's pawns on any squares outside Safety Zones, the turn is lost."),
@@ -16,7 +21,7 @@ public enum Card {
     ELEVEN(11,4, "Move 11 spaces forward, or switch the places of one of the player's own pawns and an opponent's pawn. A player that cannot move 11 spaces is not forced to switch and instead can forfeit the turn. An 11 cannot be used to switch a pawn that is in a Safety Zone."),
     TWELVE(12,4, "Move a pawn 12 spaces forward.");
 
-    final int num,numInDeck;
+    public final int num,numInDeck;
     final String reminderText;
 
     Card(int num,int numInDeck, String reminderText) {
@@ -24,4 +29,5 @@ public enum Card {
         this.numInDeck=numInDeck;
         this.reminderText = reminderText;
     }
+
 }
