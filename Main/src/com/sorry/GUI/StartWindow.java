@@ -1,7 +1,5 @@
 package com.sorry.GUI;
 
-import utils.TransparencyUtil;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -17,10 +15,10 @@ public class StartWindow extends JFrame {
 
     //gui components
     private JButton newGameBtn;
-    private JPanel gameLogo;
+    private JLabel gameLogo;
 
     //
-    private String gameLogoImgPath= "/Main/imgs/";
+    private String gameLogoImgPath= "/Main/imgs/sorry_start.jpg";
 
     private StartWindow(){
         initWindow();
@@ -50,6 +48,7 @@ public class StartWindow extends JFrame {
         this.setLayout(null);
         //Setting the window
         this.setSize(Constants.windowWidth,Constants.windowHeight);
+        this.setTitle("Sorry! Sweet avenge board game.");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //this.pack(); // pack the window
         this.setVisible(true);
@@ -58,10 +57,10 @@ public class StartWindow extends JFrame {
     private void initGuiComponents(){
         newGameBtn = new JButton("New Game");
         try {
-            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+gameLogoImgPath+"_pawn.jpg"));
-            basicImage = TransparencyUtil.makeColorTransparent(basicImage,java.awt.Color.WHITE);
-            Image BoardImage = basicImage.getScaledInstance(Constants.pawnWidth, Constants.pawnHeight, Image.SCALE_SMOOTH);
-            ImageIcon pawnImage = new ImageIcon(BoardImage);
+            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+gameLogoImgPath));
+            basicImage = basicImage.getScaledInstance(Constants.gameLogoWidth, Constants.gameLogoHeight, Image.SCALE_SMOOTH);
+            ImageIcon gameLogoimg = new ImageIcon(basicImage);
+            gameLogo = new JLabel(gameLogoimg);
         } catch (Exception ex) {
             // handle exception...
             System.out.println("loadPawns failed \n" + ex.toString());
@@ -71,7 +70,8 @@ public class StartWindow extends JFrame {
     private void setGuiComponents(){
         newGameBtn.setBounds(960, 200, 120, 40);
         this.add(newGameBtn);
-
+        gameLogo.setBounds(Constants.gameLogoStartX,Constants.gameLogoStartY,Constants.gameLogoWidth,Constants.gameLogoHeight);
+        this.add(gameLogo);
     }
 
     private void addEventListenerToComponents(){

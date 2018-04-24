@@ -18,6 +18,10 @@ public final class Constants {   // this class use for define some constants for
     public final static int pawnStartX = 1;
     public final static int pawnStartY = 1;
 
+    public final static int gameLogoWidth = 768;
+    public final static int gameLogoHeight = 768;
+    public final static int gameLogoStartX = 64;
+    public final static int gameLogoStartY = 64;
 
     //window size
     public final static int windowWidth = 1200;

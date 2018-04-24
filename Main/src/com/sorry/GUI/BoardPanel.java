@@ -1,15 +1,10 @@
 package com.sorry.GUI;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.Graphics;
-
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
-
-import javax.swing.JPanel;
-import javax.swing.JButton;
 import java.util.ArrayList;
 
 public class BoardPanel extends JPanel {
@@ -19,8 +14,7 @@ public class BoardPanel extends JPanel {
 
     private final static String imagePath = "/Main/imgs/sorry_board.jpg";
     public BoardPanel() {
-        int resaledWidth = this.getWidth();
-        int resaledHeight = this.getHeight();
+
         this.setLayout(null);
         try {
             Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+imagePath));
