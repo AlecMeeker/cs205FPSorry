@@ -2,15 +2,17 @@ package com.sorry.GUI;
 
 
 // import internal class of project.
-import Util.TransparencyUtil;
+import other.Card;
 import other.Deck;
-import other.*;
+import utils.TransparencyUtil;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +43,8 @@ public class GameWindow extends JFrame{
     private String pawnImagePath= "/Main/imgs/";
     private String [] colorName = {"blue","yellow","green","red"};
     public static int count;
+    private static JLabel seletedLabel = null;
+
 
     //Try to store the block position of board panel
     private  Map<String, Point> blockToBoardPosition;  //java.awt.point
@@ -68,8 +72,6 @@ public class GameWindow extends JFrame{
     }
 
     private void initWindow(){
-
-
 
         //Gui Components config
         initGuiComponents();
@@ -158,10 +160,10 @@ public class GameWindow extends JFrame{
         }
 
         //Pawn Start positions
-        Point [] blueStartPosition = {new Point(211 , 81),new Point(211 , 141),new Point(271 , 81),new Point(271 , 141)};
-        Point [] yellowStartPosition = {new Point(821,211),new Point(821,271),new Point(761,271),new Point(761,211)};
-        Point [] greenStartPosition = {new Point(631 , 821),new Point(631 , 761),new Point(691 , 761),new Point(691 , 821)};
-        Point [] redStartPosition = {new Point(81 , 631),new Point(81 , 691),new Point(141 , 691),new Point(141 , 631)};
+        Point [] blueStartPosition = {new Point(211 , 81),new Point(211 , 141),new Point(271 , 141),new Point(271 , 81)};
+        Point [] yellowStartPosition = {new Point(761,211),new Point(761,271),new Point(821,271),new Point(821,211)};
+        Point [] greenStartPosition = {new Point(691 , 821),new Point(691 , 761),new Point(631 , 761),new Point(631, 821)};
+        Point [] redStartPosition = {new Point(81 , 691),new Point(81 , 631),new Point(141 , 631),new Point(141 , 691)};
 
         ArrayList<Point []> tempArr = new ArrayList<Point []>();
         tempArr.add(blueStartPosition);
@@ -188,7 +190,30 @@ public class GameWindow extends JFrame{
             blockToBoardPosition.put("redSafetyZone"+i, new Point(redSZ.x + this.stepLength * (i+1),redSZ.y));
         }
 
+        Point endBlueSZ = blockToBoardPosition.get("blueSafetyZone4");
+        Point endYellowSZ = blockToBoardPosition.get("yellowSafetyZone4");
+        Point endGreenSZ = blockToBoardPosition.get("greenSafetyZone4");
+        Point endRedSZ = blockToBoardPosition.get("redSafetyZone4");
 
+        Point[] blueHomePositions =  {new Point(endBlueSZ.x - 30,endBlueSZ.y + 140),new Point(endBlueSZ.x + 30,endBlueSZ.y + 140)
+                                    ,new Point(endBlueSZ.x + 30,endBlueSZ.y + 80),new Point(endBlueSZ.x - 30,endBlueSZ.y + 80)};
+        Point[] yellowHomePositions =  {new Point(endYellowSZ.x - 140,endYellowSZ.y - 30),new Point(endYellowSZ.x - 140,endYellowSZ.y + 30)
+                                    ,new Point(endYellowSZ.x - 80,endYellowSZ.y + 30),new Point(endYellowSZ.x - 80,endYellowSZ.y - 30)};
+        Point[] greenHomePositions =  {new Point(endGreenSZ.x + 30,endGreenSZ.y - 140),new Point(endGreenSZ.x - 30,endGreenSZ.y - 140)
+                                    ,new Point(endGreenSZ.x - 30,endGreenSZ.y - 80),new Point(endGreenSZ.x + 30,endGreenSZ.y - 80)};
+        Point[] redHomePositions =  {new Point(endRedSZ.x + 140,endRedSZ.y - 30),new Point(endRedSZ.x + 140,endRedSZ.y + 30)
+                ,new Point(endRedSZ.x + 80,endRedSZ.y + 30),new Point(endRedSZ.x + 80,endRedSZ.y - 30)};
+
+        tempArr = new ArrayList<Point []>();
+        tempArr.add(blueHomePositions);
+        tempArr.add(yellowHomePositions);
+        tempArr.add(greenHomePositions);
+        tempArr.add(redHomePositions);
+
+        for(int i = 0; i < tempArr.size(); i++){
+            for(int j = 0; j < tempArr.get(i).length;j++)
+                blockToBoardPosition.put(this.colorName[i] + "Home" + j, tempArr.get(i)[j]);
+        }
 //        for(Map.Entry<String, Point> entry : blockToBoardPosition.entrySet()) {
 //            String key = entry.getKey();
 //            Point point = entry.getValue();
@@ -197,6 +222,7 @@ public class GameWindow extends JFrame{
 //            // In your case, another loop.
 //            System.out.printf("{%s : (%d,%d)}\n",key,point.x,point.y);
 //        }
+
     }
 
     private void setGuiComponentsPosition(){
@@ -207,11 +233,11 @@ public class GameWindow extends JFrame{
 
         testPawn.setBounds(Constants.pawnStartX, Constants.pawnStartX, Constants.pawnWidth, Constants.pawnHeight); //init the pawns position
         boardPanel.add(testPawn);
-        //test put pawn on start code
 
+        //put pawns on start position
         for(int i = 0; i < colorName.length; i++){
             for(int j = 0; j < pawns.size()/4; j++){
-                Point curP = blockToBoardPosition.get(colorName[i]+"Start"+j);
+                Point curP = blockToBoardPosition.get(colorName[i]+"Home"+j);
                 pawns.get(i*4+j).setBounds(curP.x, curP.y, Constants.pawnWidth, Constants.pawnHeight);
                 boardPanel.add(pawns.get(i*4+j));
             }
@@ -249,7 +275,8 @@ public class GameWindow extends JFrame{
                     int x = pt.x;
                     int y = pt.y;
 
-//                    testPawn.setLocation(121 , 61);
+                    testPawn.setLocation(91 , 381);
+                    testPawn.setLocation(151 , 441);
 //                    testPawn.setLocation(91 , 381);
                     //System.out.print("(" + x + ", " + y + ")");
 
@@ -277,12 +304,90 @@ public class GameWindow extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                    for(int i = 0; i < 45;i ++){
                     Card curCard = deck.draw();
+                    System.out.println( curCard.num);
 
-                    System.out.println(i+" : "+curCard.toString());
-                    }
+
             }
         });
+
+        for(int i = 0; i < pawns.size(); i++){
+
+            pawns.get(i).addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    seletedLabel = (JLabel)e.getComponent();
+                    System.out.println("( "+seletedLabel.getX()+" , "+seletedLabel.getY()+" )");
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
+
+        }
+
+        boardPanel.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //move the pieces to the high light point.
+                System.out.println("mouse pos: "+e.getX()+" , "+e.getY());
+                for (Point pos : blockToBoardPosition.values()) {
+                    // ...
+                    if( e.getX() - pos.x > 0 && e.getY() - pos.y > 0
+                            && e.getX() - pos.x < 60 && e.getY() - pos.y < 60
+                            && seletedLabel != null){
+                        seletedLabel.setLocation(pos.x,pos.y);
+                        System.out.println("seletedLabel pos: "+pos.x+" , "+pos.y);
+                        break;
+                    }
+                    else{
+
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
     }
+
+
+
 }
