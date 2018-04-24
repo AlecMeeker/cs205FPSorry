@@ -8,6 +8,9 @@ public class Block {
     Block previousBlock, nextBlock;
     Block nextSafetyBlock;
 
+    public Boolean highlighted;
+    public Boolean selected;
+
     public Slidiness slideStatus;
 
     ArrayList<Pawn> pawnsHere;

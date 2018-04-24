@@ -1,12 +1,16 @@
 package Logic;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Board {
 
      public Block[] outerRing;
      //List<Block> board;
      private Block[] blueSafeZone, redSafeZone, yellowSafeZone, greenSafeZone, START_ARRAY;
      public Deck thisDeck;
+     public ArrayList<Block> everyBlock;
 
     /*
     Creates a board of 60 squares, with some safety zones and homes, and links them all, then adds slides
@@ -68,6 +72,16 @@ public class Board {
         for (int i = 1; i < 60; i += 15) {
             this.generateSlides(i);
         }
+
+        everyBlock.addAll(Arrays.asList(outerRing));
+        everyBlock.addAll(Arrays.asList(redSafeZone));
+        everyBlock.addAll(Arrays.asList(blueSafeZone));
+        everyBlock.addAll(Arrays.asList(greenSafeZone));
+        everyBlock.addAll(Arrays.asList(yellowSafeZone));
+        everyBlock.addAll(Arrays.asList(START_ARRAY));
+
+
+
     }
 
     //creates a safety zone of length 6 that are all linked and the appropriate color

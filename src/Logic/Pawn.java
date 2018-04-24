@@ -9,6 +9,9 @@ public class Pawn {
 	private Color color; //integer representing the color of the player
     public Player myPlayer;
 
+    public Boolean highlighted;
+    public Boolean selected;
+
     public Block[] locationArray;
 
     public Board thisBoard;

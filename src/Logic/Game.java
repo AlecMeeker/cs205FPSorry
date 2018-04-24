@@ -3,8 +3,10 @@ package Logic;
 import java.util.ArrayList;
 
 public class Game {
+    public Player currentPlayer;
+    public ArrayList<Pawn> everyPawn;
 
-    public static void playGame() {
+    public void playGame() {
         Board gameBoard = new Board();
         ArrayList<Player> players = new ArrayList<>();
 
@@ -67,14 +69,21 @@ public class Game {
         allPlayers.add(you);
         allPlayers.addAll(players);
 
+        for (Player p : players) {
+            everyPawn.addAll(p.startPawnList);
+            everyPawn.addAll(p.movablePawnList);
+            everyPawn.addAll(p.finishedPawnList);
+        }
+
         int currentMove = 0;
-        Player currentPlayer;
 
         System.out.println("*************************************************");
         System.out.println("*****************GAME BEGIN**********************");
         System.out.println("*************************************************");
         while (whilePlaying) {
 
+
+            System.out.print("Turn " + currentMove + "\n");
             //to show where all the pawns are of course
             for (int i = 0; i < 60; i++) {
                 if (gameBoard.outerRing[i].getPawn() != null) {
