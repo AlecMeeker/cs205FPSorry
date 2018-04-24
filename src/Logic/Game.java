@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Game {
 
-    public static void main(String[] args) {
+    public static void playGame() {
         Board gameBoard = new Board();
         ArrayList<Player> players = new ArrayList<>();
 
