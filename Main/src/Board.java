@@ -20,27 +20,22 @@ public class Board {
 
     }
 
+    public void newGame(){
+        //set pawns to home
+    }
+
+    public void load(String encoded){
+        //s for saved game, 16 sets of 00-87 for pawn positions,set of 45 hex 0-B for deck order, number 00-45 for top card, z for end of save
+        char[] savedState=encoded.toCharArray();
+
+    }
     private void generateGameBoard(){
         int cntr=0;
         ArrayList<Color> coloradder=new ArrayList<Color>(Arrays.asList(Color.values()));
 
         // start blocks
         for (cntr=0;cntr<4;cntr++){
-            int nx=0;
-            switch (cntr){
-                case 0:
-                   nx=8;
-                   break;
-                case 1:
-                    nx=23;
-                    break;
-                case 2:
-                    nx=38;
-                    break;
-                case 3:
-                    nx=53;
-                    break;
-            }
+            int nx=(15*cntr)+8;
             Block addto=new Block(coloradder.get(cntr+1), blockType.STARTZONE,-1,nx,-1);
 
             gameboard[cntr]=addto;
