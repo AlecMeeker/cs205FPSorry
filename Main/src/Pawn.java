@@ -2,7 +2,7 @@ package Main.src;
 
 public class Pawn {
 
-	private int index; //FIX THIS FOR BETTER POINTER TO MAP LOCATION
+	private int index; //location in gameboard
 	private int distanceFromHome; //acts as relative progress check
     private boolean isOut; //is out of home
 	private boolean isSafe; //is in the safety zone at least
@@ -36,6 +36,7 @@ public class Pawn {
     }
     public void setIndex(int index) {
         this.index = index;
+        //update distance from home
     }
 
     public int getDistanceFromHome() {

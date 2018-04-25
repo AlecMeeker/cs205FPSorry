@@ -39,6 +39,28 @@ public class Deck {
         return DECKSIZE-(TCindex+1);
     }
 
+    //load state
+    public void loadStats(String input){
+        char[] savedState=input.toCharArray();
+        int[] places=new int[DECKSIZE];
+        for (int i=0;i<savedState.length;i++){
+            places[i]=Integer.parseInt(Character.toString(savedState[i]),16);
+        }
+        generateDeck();
+
+        Card[] tempdeck=new Card[DECKSIZE];
+        for (int i=0;i<DECKSIZE;i++){
+            tempdeck[i]=deck[0];
+            int j=0;
+            while (tempdeck[i].num!=places[i]){
+                tempdeck[i]=deck[j];
+                j++;
+            }
+        }
+
+    }
+
+
     // draw a single card
     public Card draw(){
         TCindex++;
@@ -77,6 +99,9 @@ public class Deck {
         }
     }
 
+    public void setDeckorder(String input){
+
+    }
 
     // testing main function
     public static void main(String[] args){

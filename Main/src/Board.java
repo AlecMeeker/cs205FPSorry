@@ -1,9 +1,13 @@
 package Main.src;
 
 import Main.blockType;
+import Main.sql.ConnectDB;
 
+
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Board {
     Pawn nullPawn;// for all instances there is no pawn
@@ -11,24 +15,69 @@ public class Board {
     Block[] gameboard=new Block[88];
     //pawns, 0-3 you 4-7 ai1 8-11 ai2 12-15 ai3
     Pawn[] pieces=new Pawn[16];
+    // deck
+    Deck cards;
     // player color
     Color PCcolor;
+    // for statistics purposes
+    int gameID;
+
 
     Board(){
         generateGameBoard();
         generatePawns();
+        cards=new Deck();
 
     }
 
     public void newGame(){
         //set pawns to home
+        // generate game id
     }
 
-    public void load(String encoded){
-        //s for saved game, 16 sets of 00-87 for pawn positions,set of 45 hex 0-B for deck order, number 00-45 for top card, z for end of save
-        char[] savedState=encoded.toCharArray();
+    public void loadAdjuster(int identer){
+        String encoded=ConnectDB.loadGameData(gameID);
+        //16 sets of 00-87 for pawn positions each followed by an s,set of 45 hex 0-B for deck order, number 00-45 for top card, z for end of save
+        //char[] savedState=encoded.toCharArray();
+        //StringTokenizer ss=new StringTokenizer(encoded,"s");
+        String[] data=encoded.split("s");
+        //int i=1;
+        for (int i=0;i<16;i++){
+            pieces[i].setIndex(Integer.parseInt(data[i]));
+        }
+        cards.loadStats(data[data.length-1]);
 
     }
+
+    public String savePrimer(){
+        String savestate="";
+        for (int i=0;i<pieces.length;i++){
+            savestate+=convertPlace(pieces[i].getIndex());
+            savestate+="s";
+        }
+
+        for (int i=0;i<45;i++){
+            savestate+=Integer.toHexString(cards.deck[i].num);
+
+        }
+        savestate+=convertPlace(cards.getTCindex());
+
+        ConnectDB.saveGameData(gameID,savestate);
+        return savestate;
+    }
+
+    public String convertPlace(int in){
+        String ret="";
+        if (in==0){
+            ret="00";
+        }else if(in<10){
+            ret="0"+Integer.toString(in);
+        }else {
+            ret=Integer.toString(in);
+        }
+        return ret;
+    }
+
     private void generateGameBoard(){
         int cntr=0;
         ArrayList<Color> coloradder=new ArrayList<Color>(Arrays.asList(Color.values()));
