@@ -3,7 +3,6 @@ package Logic;
 public class Pawn {
 
 	private int distanceFromHome; //acts as relative progress check
-    private boolean hasLeftStart; //is out of start
 	private boolean hasReachedSafeZone; //is in the safety zone at least
     private boolean isFinished; //is home
 	private Color color; //integer representing the color of the player
@@ -16,22 +15,38 @@ public class Pawn {
 
     public Board thisBoard;
 	
-	Pawn(Color color, Board inBoard, Player inPlayer) {
+	public Pawn(Board inBoard, Player inPlayer) {
 	    thisBoard = inBoard;
-		this.color = color;
+		this.color = inPlayer.color;
 		this.myPlayer = inPlayer;
-		hasLeftStart = false;
 		hasReachedSafeZone = false;
 
 		locationArray = new Block[3];
+		locationArray[0] = inBoard.getStartLocation(color);
 		this.setTargets();
 
 		System.out.println(color.toString().toLowerCase() + " pawn added.");
 	}
 
+	public Pawn(Board inBoard, Player inPlayer, Block currentBlock) {
+	    thisBoard = inBoard;
+	    this.color = inPlayer.color;
+	    this.myPlayer = inPlayer;
+
+	    this.setCurrentBlock(currentBlock);
+	    if (currentBlock == inBoard.getStartLocation(this.color)) {
+	        hasReachedSafeZone = false;
+	        isFinished = false;
+        }
+        else if (currentBlock == locationArray[2]) {
+	        isFinished = true;
+	        hasReachedSafeZone = true;
+        }
+    }
+
 	public void setTargets() {
 	    System.out.println("Setting targets");
-	    locationArray[0] = thisBoard.getStartLocation(color);
+
 	    locationArray[1] = thisBoard.getStartLocation(color);
 	    locationArray[2] = thisBoard.getGoalLocation(color);
 
@@ -84,7 +99,7 @@ public class Pawn {
     }
 
     public int getDistanceFromHome() {
-        if (!hasLeftStart) {
+        if (!hasLeftStart()) {
             return 65;
         }
         Block iteratorBlock = getCurrentBlock();
@@ -127,15 +142,7 @@ public class Pawn {
     }
 
     public Block getStartLocation() {
-	    return locationArray[1];
-    }
-
-    public boolean hasLeftStart() {
-        return hasLeftStart;
-    }
-
-    public void setHasLeftStart(boolean hasLeftStart) {
-        this.hasLeftStart = hasLeftStart;
+        return locationArray[1];
     }
 
     public boolean isHasReachedSafeZone() {
@@ -147,6 +154,15 @@ public class Pawn {
 
     public void select() {
         this.selected = true;
+    }
+
+    public boolean hasLeftStart() {
+        if (this.getCurrentBlock() == locationArray[1]) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
 }

@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 public class Game {
     public Player currentPlayer;
+
     public ArrayList<Pawn> everyPawn;
+    public int currentMove;
+    public ArrayList<Player> allPlayers;
 
     public void playGame() {
         Board gameBoard = new Board();
@@ -65,9 +68,11 @@ public class Game {
                 players.add(new AI(thirdColor, gameBoard, thirdSmart, thirdCruel, name3));
         }
 
-        ArrayList<Player> allPlayers = new ArrayList<>();
+        allPlayers = new ArrayList<>();
         allPlayers.add(you);
         allPlayers.addAll(players);
+
+        everyPawn = new ArrayList<>();
 
         for (Player p : players) {
             everyPawn.addAll(p.startPawnList);
@@ -75,7 +80,7 @@ public class Game {
             everyPawn.addAll(p.finishedPawnList);
         }
 
-        int currentMove = 0;
+        currentMove = 0;
 
         System.out.println("*************************************************");
         System.out.println("*****************GAME BEGIN**********************");
@@ -99,11 +104,16 @@ public class Game {
 
 
         }
+    }
 
+    public void saveGame() {
+        String saveState = "";
+        for (Player p : allPlayers) {
+            saveState += p.startPawnList.size() + ";";
+            for (Pawn myPawn : p.movablePawnList) {
 
-
-
-
+            }
+        }
     }
 
     public static String generateName() {
@@ -154,6 +164,12 @@ public class Game {
             default:
                 return Color.NULL;
         }
+    }
+
+    public void loadState(String inState) {
+
+
+
     }
 }
 

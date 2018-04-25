@@ -3,6 +3,7 @@ package Logic;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Player {
 	protected Card currentDraw;
@@ -16,7 +17,7 @@ public abstract class Player {
     protected ArrayList<Pawn> startPawnList; //a list of pawns still in home
 	protected ArrayList<Pawn> finishedPawnList; //a list of pawns who have won
 
-	ArrayList<ArrayList<Move>> potentialMovesList; //first arraylist at index 0 is potential moves for each pawn. second arraylist at index 1 is in case of 7, generate potential moves
+	public ArrayList<ArrayList<Move>> potentialMovesList; //first arraylist at index 0 is potential moves for each pawn. second arraylist at index 1 is in case of 7, generate potential moves
 	
 	protected Player(Color inColor, Board thisBoard) {
 
@@ -29,8 +30,30 @@ public abstract class Player {
 		this.thisBoard = thisBoard;
 		this.color = inColor;
 		for (int i = 0 ; i < 4; i++) {
-			startPawnList.add(new Pawn(color, thisBoard, this));
+			startPawnList.add(new Pawn(thisBoard, this));
 		}
+	}
+
+	/*
+	generates a pawn at a given location. Used to load a game
+	 */
+	protected Player(Color inColor, int startListSize, int finishedListSize, List<Integer> ids) {
+		startPawnList = new ArrayList<>();
+		for (int i = 0; i < startListSize; i++) {
+			startPawnList.add(new Pawn(thisBoard, this));
+		}
+		for (int j = 0; j < finishedListSize; j++) {
+			finishedPawnList.add(new Pawn(thisBoard, this, thisBoard.getGoalLocation(color)));
+		}
+		for (Integer id : ids) {
+			if (id >= 0) {
+				movablePawnList.add(new Pawn(thisBoard, this, thisBoard.outerRing[id]));
+			}
+			else {
+				movablePawnList.add(new Pawn(thisBoard, this, thisBoard.getSafeBlock(id, color)));
+			}
+		}
+
 	}
 
 	//helper function

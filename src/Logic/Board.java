@@ -8,7 +8,7 @@ public class Board {
 
      public Block[] outerRing;
      //List<Block> board;
-     private Block[] blueSafeZone, redSafeZone, yellowSafeZone, greenSafeZone, START_ARRAY;
+     public Block[] blueSafeZone, redSafeZone, yellowSafeZone, greenSafeZone, START_ARRAY;
      public Deck thisDeck;
      public ArrayList<Block> everyBlock;
 
@@ -144,6 +144,16 @@ public class Board {
      */
     public void place(Block whereTo, Pawn thisPawn) {
         whereTo.place(thisPawn);
+    }
+
+    public Block getSafeBlock(int id, Color color) {
+        switch (color) {
+            case RED: return redSafeZone[-id];
+            case BLUE: return blueSafeZone[-id];
+            case YELLOW: return yellowSafeZone[-id];
+            case GREEN: return greenSafeZone[-id];
+        }
+        return null;
     }
 
 
