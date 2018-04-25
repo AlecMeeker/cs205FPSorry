@@ -1,4 +1,4 @@
-package com.sorry.GUI;
+package GUI;
 
 //import java class
 import javax.swing.*;

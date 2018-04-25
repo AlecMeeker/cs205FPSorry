@@ -1,4 +1,4 @@
-package com.sorry.GUI;
+package GUI;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;

@@ -1,4 +1,4 @@
 package Main.src;
 import java.util.*;
 
-public enum Color {NULL,BLUE,YELLOW,GREEN,RED}
+public enum Color {NULL,RED,BLUE,GREEN,YELLOW}
