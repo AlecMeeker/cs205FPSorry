@@ -19,7 +19,7 @@ public class Game {
 
         //get # of AI players and stats
 
-        int AI_PLAYERS = 2; //change this once you meet with junziao TESTING ONLY TESTING ONLY
+        int AI_PLAYERS = 3; //change this once you meet with junziao TESTING ONLY TESTING ONLY
 
         //USE THIS FOR TESTING ONLY
         String name = "test";

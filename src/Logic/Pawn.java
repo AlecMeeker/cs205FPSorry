@@ -69,6 +69,10 @@ public class Pawn {
                 targetBlock = targetBlock.getNextBlock(color);
                 moveSpaces--;
             }
+            while (moveSpaces < 0) {
+                targetBlock = targetBlock.getPreviousBlock();
+                moveSpaces++;
+            }
             if (targetBlock.getPawn() != null && targetBlock.getPawn().getColor() == color && !targetBlock.isHome) {
                 return false;
             }
