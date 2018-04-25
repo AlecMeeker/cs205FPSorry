@@ -2,8 +2,8 @@ package com.sorry.GUI;
 
 
 // import internal class of project.
-import other.Card;
-import other.Deck;
+import Logic.Card;
+import Logic.Deck;
 import utils.TransparencyUtil;
 
 import javax.imageio.ImageIO;
@@ -256,9 +256,7 @@ public class GameWindow extends JFrame{
             }
         }
 
-        drawedCard = new JLabel();
-        drawedCard.setBounds(Constants.cardStartX,Constants.cardStartY, Constants.cardWidth,Constants.cardHeight);
-        boardPanel.add(drawedCard);
+
 
         movePawnBtn.setBounds(1000, 800, 100, 40);
         this.add(movePawnBtn);
@@ -281,25 +279,7 @@ public class GameWindow extends JFrame{
 
                     testPawn.setLocation(91 , 381);
                     testPawn.setLocation(151 , 441);
-//                    testPawn.setLocation(91 , 381);
-                    //System.out.print("(" + x + ", " + y + ")");
 
-//                    count = count % safetyZones.size();
-//
-//                    testPawn.setLocation(safetyZones.get(count).x , safetyZones.get(count).y);
-//
-//                    count ++;
-
-
-//                    if (x < 850 && y < 50) {
-//                        testPawn.setLocation(x + stepLength, y);
-//                    } else if (x > 850 && y < 850) {
-//                        testPawn.setLocation(x, y + stepLength );
-//                    } else if (x > 50 && y > 850) {
-//                        testPawn.setLocation(x - stepLength, y);
-//                    } else if (x < 50 && y > 50) {
-//                        testPawn.setLocation(x, y - stepLength);
-//                    }
                 }
             }
         });
@@ -314,18 +294,21 @@ public class GameWindow extends JFrame{
 
                         basicImage = basicImage.getScaledInstance(Constants.cardWidth, Constants.cardHeight, Image.SCALE_SMOOTH);
                         ImageIcon cardImg = new ImageIcon(basicImage);
-                        drawedCard.setIcon(cardImg);
+                        if(drawedCard == null){
+                            drawedCard = new JLabel(cardImg);
+                        }
+                        else{
+                            drawedCard.setIcon(cardImg);
+                        }
                         System.out.println(System.getProperty("user.dir")+ImagePath+curCard.imgName);
                     } catch (Exception ex) {
                         // handle exception...
                         System.out.println("loadCards failed \n" + ex.toString());
                     }
 
-//                    if(drawedCard != null){
-//                        drawedCard.setBounds(Constants.cardStartX,Constants.cardStartY, Constants.cardWidth,Constants.cardHeight);
-//                        boardPanel.add(drawedCard);
-//                        System.out.println("load");
-//                    }
+                boardPanel.add(drawedCard);
+                drawedCard.setBounds(Constants.cardStartX,Constants.cardStartY, Constants.cardWidth,Constants.cardHeight);
+
             }
         });
 

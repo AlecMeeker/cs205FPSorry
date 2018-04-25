@@ -3,7 +3,7 @@
  * by alec
  */
 
-package other;
+package Logic;
 
 
 public enum Card {

@@ -3,7 +3,7 @@
  * by Alec
  * */
 
-package other;
+package Logic;
 
 import java.util.ArrayList;
 import java.util.Arrays;

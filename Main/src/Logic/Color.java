@@ -1,4 +1,3 @@
-package other;
-import java.util.*;
+package Logic;
 
 public enum Color {NULL,RED,BLUE,YELLOW,GREEN}

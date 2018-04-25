@@ -1,4 +1,4 @@
-package other;
+package Logic;
 
 public class Testing {
 
