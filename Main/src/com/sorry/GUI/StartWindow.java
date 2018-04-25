@@ -15,11 +15,14 @@ public class StartWindow extends JFrame {
 
     //gui components
     private JButton newGameBtn;
+    private JButton loadGameBtn;
     private JLabel gameLogo;
 
-    //
+    //some
     private String gameLogoImgPath= "/Main/imgs/sorry_start.jpg";
 
+    //
+    private int numPlayer;
     private StartWindow(){
         initWindow();
     }
@@ -56,6 +59,7 @@ public class StartWindow extends JFrame {
 
     private void initGuiComponents(){
         newGameBtn = new JButton("New Game");
+        loadGameBtn = new JButton("Load Game");
         try {
             Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+gameLogoImgPath));
             basicImage = basicImage.getScaledInstance(Constants.gameLogoWidth, Constants.gameLogoHeight, Image.SCALE_SMOOTH);
@@ -68,8 +72,10 @@ public class StartWindow extends JFrame {
     }
 
     private void setGuiComponents(){
-        newGameBtn.setBounds(960, 200, 120, 40);
+        newGameBtn.setBounds(930, 240, 120, 40);
         this.add(newGameBtn);
+        loadGameBtn.setBounds(930, 320, 120, 40);
+        this.add(loadGameBtn);
         gameLogo.setBounds(Constants.gameLogoStartX,Constants.gameLogoStartY,Constants.gameLogoWidth,Constants.gameLogoHeight);
         this.add(gameLogo);
     }
@@ -83,6 +89,14 @@ public class StartWindow extends JFrame {
 
             }
         });
+        loadGameBtn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
     }
 
     private void newGameDialog(){
@@ -126,7 +140,10 @@ public class StartWindow extends JFrame {
                     computerDifficulties2.getSelectedItem().toString() + ", " +
                     computerDifficulties3.getSelectedItem().toString());
                 GameWindow gw = GameWindow.getInstance();
+                gw.setNumOfPlayers(Integer.getInteger(numPlayers.getSelectedItem().toString()));
                 gw.setVisible(true);
+
+
         } else {
             System.out.println("User canceled / closed the dialog, result = " + result);
         }

@@ -1,9 +1,10 @@
 package com.sorry.GUI;
 
-
 // import internal class of project.
+import Logic.Board;
 import Logic.Card;
 import Logic.Deck;
+import Logic.Block;
 import utils.TransparencyUtil;
 
 import javax.imageio.ImageIO;
@@ -19,11 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 //import java class
-
-
-
 public class GameWindow extends JFrame{
-
 
     //Singleton
     private static volatile GameWindow instance = null;
@@ -36,6 +33,8 @@ public class GameWindow extends JFrame{
     private JButton movePawnBtn;
     private JButton drawCardBtn;
     private JLabel drawedCard;
+    private ArrayList<JLabel> numOfPawnsOnStart;
+    private ArrayList<JLabel> numOfPawnsOnHome;
 
     //Testing Pawn movement Variables
     private int stepLength = 60;
@@ -43,21 +42,33 @@ public class GameWindow extends JFrame{
     public static int safetyZoneSize = 5;
     public static int moveSteps = 1;
     private String ImagePath= "/Main/imgs/";
-    private String [] colorName = {"blue","yellow","green","red"};
+    private String [] colorName = {"red","blue","yellow","green"};
     public static int count;
     private static JLabel seletedLabel = null;
-    
 
+    public int getNumOfPlayers() {
+        return numOfPlayers;
+    }
+
+    public void setNumOfPlayers(int numOfPlayers) {
+        this.numOfPlayers = numOfPlayers;
+    }
+
+    private int numOfPlayers;
+
+    //BackEnd stuff.
+    private Board board;
+    private Card curCard;
+    private ArrayList<Block> allBlocks;
     //Try to store the block position of board panel
-    private  Map<String, Point> blockToBoardPosition;  //java.awt.point
-    private Map<String, Point> pawnStartPosition;
+    private Map<String, Point> blockToBoardPosition;  //java.awt.point
+    private Map<Block, Point> boardToBackend;
 
     //some constants member
     public static Deck deck = new Deck();
     private StartWindow startWindow = StartWindow.getInstance();
 
     private GameWindow(){
-
         initWindow();
     }
 
@@ -79,6 +90,11 @@ public class GameWindow extends JFrame{
         //Gui Components config
         initGuiComponents();
         setGuiComponentsPosition();
+
+        //initBackEnd;
+        initBackEnd();
+
+        //add motion
         addEventListenerToComponents();
 
         //Set layout
@@ -101,7 +117,6 @@ public class GameWindow extends JFrame{
         this.setVisible(true);
         this.setResizable(false);
 
-
     }
 
     private void initGuiComponents(){
@@ -109,15 +124,20 @@ public class GameWindow extends JFrame{
         this.boardPanel = new BoardPanel();
         this.movePawnBtn = new JButton("Move");
         this.drawCardBtn = new JButton("Draw Card");
-        this.pawns = new ArrayList<JLabel>();
-
+        this.pawns = new ArrayList<>();
+        numOfPawnsOnStart = new ArrayList<>();
+        numOfPawnsOnHome = new ArrayList<>();
 
         for(int i = 0; i < this.colorName.length;i++) {
             for(int j = 0; j < this.numberOfPawns/4; j++){
                 this.pawns.add(loadPawns(this.ImagePath, this.colorName[i]));  //load different color pawn
             }
+            numOfPawnsOnStart.add(new JLabel());
+            numOfPawnsOnHome.add(new JLabel());
         }
-
+        for(int i = 0; i < this.colorName.length;i++) {
+            
+        }
         this.testPawn = loadPawns(this.ImagePath, "red");
         //Initial other variables
         blockToBoardPosition = new HashMap<String, Point>();
@@ -173,28 +193,27 @@ public class GameWindow extends JFrame{
         }
 
         //Pawn Start positions
-        Point [] blueStartPosition = {new Point(211 , 81),new Point(211 , 141),new Point(271 , 141),new Point(271 , 81)};
-        Point [] yellowStartPosition = {new Point(761,211),new Point(761,271),new Point(821,271),new Point(821,211)};
-        Point [] greenStartPosition = {new Point(691 , 821),new Point(691 , 761),new Point(631 , 761),new Point(631, 821)};
-        Point [] redStartPosition = {new Point(81 , 691),new Point(81 , 631),new Point(141 , 631),new Point(141 , 691)};
+        Point  blueStartPosition = new Point(241 , 111);
+        Point yellowStartPosition = new Point(791,241);
+        Point greenStartPosition = new Point(661 , 791);
+        Point redStartPosition = new Point(111 , 661);
 
-        ArrayList<Point []> tempArr = new ArrayList<Point []>();
+        ArrayList<Point> tempArr = new ArrayList<>();
+        tempArr.add(redStartPosition);
         tempArr.add(blueStartPosition);
         tempArr.add(yellowStartPosition);
         tempArr.add(greenStartPosition);
-        tempArr.add(redStartPosition);
 
         for(int i = 0; i < tempArr.size(); i++){
-            for(int j = 0; j < tempArr.get(i).length;j++)
-                blockToBoardPosition.put(this.colorName[i] + "Start" + j, tempArr.get(i)[j]);
+                blockToBoardPosition.put(this.colorName[i] + "Start", tempArr.get(i));
         }
 
         //Safety zone positions
+        Point redSZ = blockToBoardPosition.get("block2" );
+        Point blueSZ = blockToBoardPosition.get("block17" );
+        Point yellowSZ = blockToBoardPosition.get("block32" );
+        Point greenSZ = blockToBoardPosition.get("block47" );
 
-        Point blueSZ = blockToBoardPosition.get("block2" );
-        Point yellowSZ = blockToBoardPosition.get("block17" );
-        Point greenSZ = blockToBoardPosition.get("block32" );
-        Point redSZ = blockToBoardPosition.get("block47" );
 
         for(int i = 0;i < this.safetyZoneSize; i++){
             blockToBoardPosition.put("blueSafetyZone"+i, new Point(blueSZ.x,blueSZ.y + this.stepLength * (i+1)));
@@ -208,25 +227,16 @@ public class GameWindow extends JFrame{
         Point endGreenSZ = blockToBoardPosition.get("greenSafetyZone4");
         Point endRedSZ = blockToBoardPosition.get("redSafetyZone4");
 
-        Point[] blueHomePositions =  {new Point(endBlueSZ.x - 30,endBlueSZ.y + 140),new Point(endBlueSZ.x + 30,endBlueSZ.y + 140)
-                                    ,new Point(endBlueSZ.x + 30,endBlueSZ.y + 80),new Point(endBlueSZ.x - 30,endBlueSZ.y + 80)};
-        Point[] yellowHomePositions =  {new Point(endYellowSZ.x - 140,endYellowSZ.y - 30),new Point(endYellowSZ.x - 140,endYellowSZ.y + 30)
-                                    ,new Point(endYellowSZ.x - 80,endYellowSZ.y + 30),new Point(endYellowSZ.x - 80,endYellowSZ.y - 30)};
-        Point[] greenHomePositions =  {new Point(endGreenSZ.x + 30,endGreenSZ.y - 140),new Point(endGreenSZ.x - 30,endGreenSZ.y - 140)
-                                    ,new Point(endGreenSZ.x - 30,endGreenSZ.y - 80),new Point(endGreenSZ.x + 30,endGreenSZ.y - 80)};
-        Point[] redHomePositions =  {new Point(endRedSZ.x + 140,endRedSZ.y - 30),new Point(endRedSZ.x + 140,endRedSZ.y + 30)
-                ,new Point(endRedSZ.x + 80,endRedSZ.y + 30),new Point(endRedSZ.x + 80,endRedSZ.y - 30)};
+        Point blueHomePositions =  new Point(endBlueSZ.x,endBlueSZ.y + 110);
+        Point yellowHomePositions =  new Point(endYellowSZ.x - 110,endYellowSZ.y);
+        Point greenHomePositions =  new Point(endGreenSZ.x ,endGreenSZ.y - 110);
+        Point redHomePositions =  new Point(endRedSZ.x + 110,endRedSZ.y );
 
-        tempArr = new ArrayList<Point []>();
-        tempArr.add(blueHomePositions);
-        tempArr.add(yellowHomePositions);
-        tempArr.add(greenHomePositions);
-        tempArr.add(redHomePositions);
+        blockToBoardPosition.put("blueSafetyZone5", blueHomePositions);
+        blockToBoardPosition.put("yellowSafetyZone5", yellowHomePositions);
+        blockToBoardPosition.put("greenSafetyZone5", greenHomePositions);
+        blockToBoardPosition.put("redSafetyZone5", redHomePositions);
 
-        for(int i = 0; i < tempArr.size(); i++){
-            for(int j = 0; j < tempArr.get(i).length;j++)
-                blockToBoardPosition.put(this.colorName[i] + "Home" + j, tempArr.get(i)[j]);
-        }
 //        for(Map.Entry<String, Point> entry : blockToBoardPosition.entrySet()) {
 //            String key = entry.getKey();
 //            Point point = entry.getValue();
@@ -244,19 +254,17 @@ public class GameWindow extends JFrame{
         boardPanel.setBounds(Constants.boardStartX,Constants.boardStartY,Constants.boardWidth,Constants.boardHeight); // 5,5,960,960
         this.add(boardPanel);
 
-        testPawn.setBounds(Constants.pawnStartX, Constants.pawnStartX, Constants.pawnWidth, Constants.pawnHeight); //init the pawns position
-        //boardPanel.add(testPawn);
+        testPawn.setBounds(Constants.pawnStartX, Constants.pawnStartY, Constants.pawnWidth, Constants.pawnHeight); //init the pawns position
+        boardPanel.add(testPawn);
 
         //put pawns on start position
         for(int i = 0; i < colorName.length; i++){
             for(int j = 0; j < pawns.size()/4; j++){
-                Point curP = blockToBoardPosition.get(colorName[i]+"Start"+j);
+                Point curP = blockToBoardPosition.get(colorName[i]+"SafetyZone5");
                 pawns.get(i*4+j).setBounds(curP.x, curP.y, Constants.pawnWidth, Constants.pawnHeight);
                 boardPanel.add(pawns.get(i*4+j));
             }
         }
-
-
 
         movePawnBtn.setBounds(1000, 800, 100, 40);
         this.add(movePawnBtn);
@@ -280,6 +288,18 @@ public class GameWindow extends JFrame{
                     testPawn.setLocation(91 , 381);
                     testPawn.setLocation(151 , 441);
 
+                    if (x < 50 && y > 50) {
+                        testPawn.setLocation(x, y - stepLength);
+                    }  else if (x < 850 && y < 50) {
+                        testPawn.setLocation(x + stepLength, y);
+                    } else if (x > 850 && y < 850) {
+                        testPawn.setLocation(x, y + stepLength );
+                    } else if (x > 50 && y > 850) {
+                        testPawn.setLocation(x - stepLength, y);
+                    }
+
+
+
                 }
             }
         });
@@ -288,7 +308,7 @@ public class GameWindow extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                    Card curCard = deck.draw();
+                    curCard = deck.draw();
                     try {
                         Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+curCard.imgName));
 
@@ -315,7 +335,7 @@ public class GameWindow extends JFrame{
         //add mouse click event to pawns JLabel.
 
         //test kick boolean variable
-        boolean canKick = true;
+        // How to move the pawn
         for(int i = 0; i < pawns.size(); i++){
 
             pawns.get(i).addMouseListener(new MouseListener() {
@@ -323,14 +343,18 @@ public class GameWindow extends JFrame{
                 public void mouseClicked(MouseEvent e) {
                     if(seletedLabel == null){
                         seletedLabel = (JLabel)e.getComponent();
+                        if(curCard != null){
+
+                        }
                         System.out.println("( "+seletedLabel.getX()+" , "+seletedLabel.getY()+" )");
                     }
-                    else if(seletedLabel != (JLabel)e.getComponent() && canKick){
-                        Point startPoint = blockToBoardPosition.get("blueStart0");
-                        System.out.println("startPoint: "+startPoint.x+" , "+startPoint.y);
-                        JLabel temP = (JLabel) e.getComponent();
-                        temP.setLocation(startPoint.x,startPoint.y);
-                    }
+
+//                    else if(seletedLabel != (JLabel)e.getComponent() && canKick){
+//                        Point startPoint = blockToBoardPosition.get("blueStart0");
+//                        System.out.println("startPoint: "+startPoint.x+" , "+startPoint.y);
+//                        JLabel temP = (JLabel) e.getComponent();
+//                        temP.setLocation(startPoint.x,startPoint.y);
+//                    }
                 }
 
                 @Override
@@ -397,6 +421,58 @@ public class GameWindow extends JFrame{
 
     }
 
+    private void  initBackEnd(){
+        linkBlockToBackEnd();
+    }
 
+    //Connect Backend Function
+    private void linkBlockToBackEnd(){
+        board = new Board();
+        allBlocks = board.everyBlock;
+        boardToBackend = new HashMap<>();
+        for(int i = 0; i < allBlocks.size(); i++){
+
+            //0-59 outerRing, 60 - 66 redSafetyZone
+            if(i < 60){
+                boardToBackend.put(allBlocks.get(i),blockToBoardPosition.get("block"+i));
+            }
+            if(60<= i && i < 66){
+                boardToBackend.put(allBlocks.get(i),blockToBoardPosition.get("redSafetyZone"+(i-60)));
+            }
+
+            if(66<= i && i < 72){
+                boardToBackend.put(allBlocks.get(i),blockToBoardPosition.get("blueSafetyZone"+(i-66)));
+            }
+
+            if(72<= i && i < 78){
+                boardToBackend.put(allBlocks.get(i),blockToBoardPosition.get("greenSafetyZone"+(i-72)));
+            }
+            if(78<= i && i < 84){
+                boardToBackend.put(allBlocks.get(i),blockToBoardPosition.get("yellowSafetyZone"+(i-78)));
+            }
+            String [] tempColor = {"red","blue","yellow","green"};
+
+            if(84 <= i && i <88){
+                boardToBackend.put(allBlocks.get(i),blockToBoardPosition.get(tempColor[i-84]+"Start"));
+            }
+
+        }
+//        int j = 0;
+//        for(Map.Entry<Block, Point> entry : boardToBackend.entrySet()) {
+//            Block key = entry.getKey();
+//            Point point = entry.getValue();
+//
+//            // do what you have to do here
+//            // In your case, another loop.
+//            System.out.print("{"+ key.getColor() + key.getId() +":");
+//            System.out.printf(" (%d,%d)}\n" ,point.x,point.y);
+//            j += 1;
+//        }
+//        System.out.println("blocks: "+j);
+    }
+
+    public void playGame(){
+
+    }
 
 }
