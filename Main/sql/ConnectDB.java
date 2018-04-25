@@ -7,13 +7,23 @@ package Main.sql;
 
 //need to add this as a dependency to make it work
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Set;
 
-import Main.src.*;
+import Main.src.Color;
+
+import javax.swing.*;
 
 
 public class ConnectDB {
@@ -126,7 +136,7 @@ public class ConnectDB {
      *                  player number start, AI1 number start, AI2 number start, AI3 number start,
      *                  player number home, AI1 number home, AI2 number home, AI3 number home,
      */
-    public static String[] getGameInfo(int gameID) {
+    public static String[][] getGameInfo(int gameID) {
         //define query and parameters
         String query = "SELECT * FROM tblGames WHERE pmkGameID = ?";
         String params[] = new String[1];
@@ -139,10 +149,56 @@ public class ConnectDB {
             e.printStackTrace();
         }
 
-        String stats[] = new String[22];
+        String stats[][] = null;
         if (dataArr != null) {
-            for (int i = 0; i < stats.length; i++) {
-                stats[i] = dataArr.get(0).getAsJsonObject().get(Integer.toString(i)).getAsString();
+            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size()/2];
+            Set<String> keyset = dataArr.get(0).getAsJsonObject().keySet();
+            int k = 0;
+            for (String key : keyset) {
+                if (key.length() > 2) {
+                    stats[0][k] = key.substring(3);
+                    k++;
+                }
+            }
+            for (int i = 0; i < stats[1].length; i++) {
+                stats[1][i] = dataArr.get(0).getAsJsonObject().get(Integer.toString(i)).getAsString();
+            }
+        }
+        return stats;
+    }
+
+    /**
+     * This method gets info for all games stored in the database
+     * @return  An array that contains column headers and all of the info from the database
+     */
+    public static String[][] getAllGameInfo() {
+        //define query and parameters
+        String query = "SELECT * FROM tblGames";
+        String params[] = null;
+
+        JsonArray dataArr = null;
+        try {
+            dataArr = sendQuery(query, params, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        String stats[][] = null;
+        if (dataArr != null) {
+            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size()/2];
+            Set<String> keyset = dataArr.get(0).getAsJsonObject().keySet();
+            int k = 0;
+            for (String key : keyset) {
+                if (key.length() > 2) {
+                    stats[0][k] = key.substring(3);
+                    k++;
+                }
+            }
+            for (int i = 0; i < stats.length-1; i++) {
+                for (int j = 0; j < stats[i].length; j++) {
+                    stats[i+1][j] = dataArr.get(i).getAsJsonObject().get(Integer.toString(j)).getAsString();
+                }
             }
         }
         return stats;
@@ -550,5 +606,15 @@ public class ConnectDB {
             isSaved = (dataArr.get(0).getAsJsonObject().get("0").getAsInt() == 1);
         }
         return isSaved;
+    }
+
+    /**
+     * Converts the 2D array into JTable
+     * @param data  2D string array where first row is the column headers
+     * @return      JTable from array
+     */
+    public static JTable getAsJTable(String[][] data) {
+        JTable table = new JTable(Arrays.copyOfRange(data, 1, data.length), data[0]);
+        return table;
     }
 }

@@ -2,6 +2,9 @@ package Main.sql;
 
 import Main.src.Color;
 
+import javax.swing.*;
+import java.awt.print.PrinterException;
+
 public class DBTesting {
     public static void main(String[] args) {
         int gameID = ConnectDB.insertGameData("Alex", 10, 12, Color.GREEN, Color.NULL, "Nice/Smart", "NULL", "NULL", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -14,10 +17,15 @@ public class DBTesting {
         for (int i = 0; i < stats.length; i++) {
             System.out.println(stats[i]);
         }
-        String info[] = ConnectDB.getGameInfo(28);
+        String info[][] = ConnectDB.getAllGameInfo();
         System.out.println("Info: ");
         for (int i = 0; i < info.length; i++) {
-            System.out.println(info[i]);
+            for (int j = 0; j < info[i].length; j++) {
+                System.out.print(info[i][j]);
+                System.out.print("  ");
+            }
+            System.out.println();
         }
+        JTable table = ConnectDB.getAsJTable(info);
     }
 }
