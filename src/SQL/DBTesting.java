@@ -1,6 +1,6 @@
-package Main.sql;
+package SQL;
 
-import Main.src.Color;
+import Logic.Color;
 
 public class DBTesting {
     public static void main(String[] args) {

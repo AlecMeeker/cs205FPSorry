@@ -1,4 +1,4 @@
-package Main.sql;
+package SQL;
 /*
   Class created by Alex Grech IV
   Class provides methods for connecting to and querying the database
@@ -7,13 +7,19 @@ package Main.sql;
 
 //need to add this as a dependency to make it work
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import Main.src.*;
+import Logic.Color;
 
 
 public class ConnectDB {

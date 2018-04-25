@@ -1,4 +1,4 @@
-package Util;
+package utils;
 
 import java.awt.Color;
 import java.awt.Image;
