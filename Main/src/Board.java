@@ -45,7 +45,7 @@ public class Board {
         for (int i=0;i<16;i++){
             pieces[i].setIndex(Integer.parseInt(data[i]));
         }
-        cards.loadStats(data[data.length-1]);
+        cards.loadStats(data[data.length-2],Integer.parseInt(data[data.length-1]));
 
     }
 
@@ -60,6 +60,7 @@ public class Board {
             savestate+=Integer.toHexString(cards.deck[i].num);
 
         }
+        savestate+="s";
         savestate+=convertPlace(cards.getTCindex());
 
         ConnectDB.saveGameData(gameID,savestate);

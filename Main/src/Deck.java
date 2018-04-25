@@ -40,9 +40,9 @@ public class Deck {
     }
 
     //load state
-    public void loadStats(String input){
+    public void loadStats(String input,int tci){
         char[] savedState=input.toCharArray();
-        int[] places=new int[DECKSIZE];
+        int[] places=new int[savedState.length];
         for (int i=0;i<savedState.length;i++){
             places[i]=Integer.parseInt(Character.toString(savedState[i]),16);
         }
@@ -57,6 +57,8 @@ public class Deck {
                 j++;
             }
         }
+        deck=tempdeck;
+        TCindex=tci;//savedState[savedState.length-1];
 
     }
 
