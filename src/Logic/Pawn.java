@@ -145,9 +145,13 @@ public class Pawn {
         return locationArray[1];
     }
 
-    public boolean isHasReachedSafeZone() {
-        return hasReachedSafeZone;
+    public boolean hasReachedSafeZone() {
+        if (getCurrentBlock() == thisBoard.getSafeBlock(getCurrentBlock().id, color)){
+            return  true;
+        }
+        return false;
     }
+
     public void setHasReachedSafeZone(boolean hasReachedSafeZone) {
         this.hasReachedSafeZone = hasReachedSafeZone;
     }

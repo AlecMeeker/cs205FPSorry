@@ -147,11 +147,17 @@ public class Board {
     }
 
     public Block getSafeBlock(int id, Color color) {
-        switch (color) {
-            case RED: return redSafeZone[-id];
-            case BLUE: return blueSafeZone[-id];
-            case YELLOW: return yellowSafeZone[-id];
-            case GREEN: return greenSafeZone[-id];
+        if (id < 1 || id > -6) {
+            switch (color) {
+                case RED:
+                    return redSafeZone[-id];
+                case BLUE:
+                    return blueSafeZone[-id];
+                case YELLOW:
+                    return yellowSafeZone[-id];
+                case GREEN:
+                    return greenSafeZone[-id];
+            }
         }
         return null;
     }

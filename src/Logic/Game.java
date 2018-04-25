@@ -19,7 +19,7 @@ public class Game {
 
         //get # of AI players and stats
 
-        int AI_PLAYERS = 3; //change this once you meet with junziao TESTING ONLY TESTING ONLY
+        int AI_PLAYERS = 2; //change this once you meet with junziao TESTING ONLY TESTING ONLY
 
         //USE THIS FOR TESTING ONLY
         String name = "test";
@@ -58,13 +58,13 @@ public class Game {
 
         switch(AI_PLAYERS) {
             case 3:
-                boolean firstSmart = true, firstCruel = false;
+                boolean firstSmart = false, firstCruel = false;
                 players.add(new AI(firstColor, gameBoard, firstSmart, firstCruel, name1));
             case 2:
-                boolean secondSmart = false, secondCruel = true;
+                boolean secondSmart = true, secondCruel = false;
                 players.add(new AI(secondColor, gameBoard, secondSmart, secondCruel, name2));
             case 1:
-                boolean thirdSmart = true, thirdCruel = true;
+                boolean thirdSmart = true, thirdCruel = false;
                 players.add(new AI(thirdColor, gameBoard, thirdSmart, thirdCruel, name3));
         }
 
@@ -89,13 +89,21 @@ public class Game {
 
 
             System.out.print("Turn " + currentMove + "\n");
+            System.out.print("All pawns: ");
+
+            String safe = " ";
+            for (Pawn p : everyPawn) {
+
+                System.out.print(p.getCurrentBlock().id + safe);
+            }
+            System.out.print("\nOuterRing: ");
             //to show where all the pawns are of course
             for (int i = 0; i < 60; i++) {
                 if (gameBoard.outerRing[i].getPawn() != null) {
                     System.out.print(i + ": " + gameBoard.outerRing[i].getPawn().getColor().toString().toLowerCase() + "; ");
                 }
             }
-            System.out.println();
+            System.out.println("\n*****************");
 
             currentPlayer = players.get(currentMove%(players.size()));
             whilePlaying = currentPlayer.play();

@@ -35,7 +35,7 @@ public abstract class Player {
 	}
 
 	/*
-	generates a pawn at a given location. Used to load a game
+	generates a player with pawns at given locations. Used to load a game
 	 */
 	protected Player(Color inColor, int startListSize, int finishedListSize, List<Integer> ids) {
 		startPawnList = new ArrayList<>();
@@ -53,7 +53,6 @@ public abstract class Player {
 				movablePawnList.add(new Pawn(thisBoard, this, thisBoard.getSafeBlock(id, color)));
 			}
 		}
-
 	}
 
 	//helper function
@@ -222,10 +221,7 @@ public abstract class Player {
 	helper class that puts the pawns in the correct buckets based on the move
 	 */
 	public void shiftPawns(Move moveIn) {
-		if (moveIn.gotHome) {
-			movablePawnList.remove(moveIn.p);
-			finishedPawnList.add(moveIn.p);
-		}
+	
 		if (moveIn.sorry) {
 			startPawnList.remove(moveIn.p);
 			movablePawnList.add(moveIn.p);
@@ -247,6 +243,14 @@ public abstract class Player {
 				m.blockReached.highlighted = true;
 			}
 		}
+	}
+
+	public int getPawnsInHome() {
+		return finishedPawnList.size();
+	}
+
+	public int getPawnsInStart() {
+		return startPawnList.size();
 	}
 
 
