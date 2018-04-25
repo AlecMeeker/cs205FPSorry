@@ -4,33 +4,36 @@ public class Pawn {
 
 	private int distanceFromHome; //acts as relative progress check
     private boolean hasLeftStart; //is out of start
-	private boolean hasReachedSafeZone; //is in the safety zone at least
+    private boolean hasReachedSafeZone; //is in the safety zone at least
     private boolean isFinished; //is home
-	private Color color; //integer representing the color of the player
+    private Color color; //integer representing the color of the player
     public Player myPlayer;
+
+    public Boolean highlighted;
+    public Boolean selected;
 
     public Block[] locationArray;
 
     public Board thisBoard;
-	
-	Pawn(Color color, Board inBoard, Player inPlayer) {
-	    thisBoard = inBoard;
-		this.color = color;
-		this.myPlayer = inPlayer;
-		hasLeftStart = false;
-		hasReachedSafeZone = false;
 
-		locationArray = new Block[3];
-		this.setTargets();
+    Pawn(Color color, Board inBoard, Player inPlayer) {
+        thisBoard = inBoard;
+        this.color = color;
+        this.myPlayer = inPlayer;
+        hasLeftStart = false;
+        hasReachedSafeZone = false;
 
-		System.out.println(color.toString().toLowerCase() + " pawn added.");
-	}
+        locationArray = new Block[3];
+        this.setTargets();
 
-	public void setTargets() {
-	    System.out.println("Setting targets");
-	    locationArray[0] = thisBoard.getStartLocation(color);
-	    locationArray[1] = thisBoard.getStartLocation(color);
-	    locationArray[2] = thisBoard.getGoalLocation(color);
+        System.out.println(color.toString().toLowerCase() + " pawn added.");
+    }
+
+    public void setTargets() {
+        System.out.println("Setting targets");
+        locationArray[0] = thisBoard.getStartLocation(color);
+        locationArray[1] = thisBoard.getStartLocation(color);
+        locationArray[2] = thisBoard.getGoalLocation(color);
 
     }
 
@@ -38,9 +41,9 @@ public class Pawn {
     returns this pawn to its home location based on its color
      */
     public void getBounced() {
-	    this.move(thisBoard.getStartLocation(color));
+        this.move(thisBoard.getStartLocation(color));
 
-	    System.out.println(myPlayer.getName() + "'s pawn got bounced home lol");
+        System.out.println(myPlayer.getName() + "'s pawn got bounced home lol");
     }
 
     public boolean canMoveHere(int spaces) {
@@ -121,11 +124,11 @@ public class Pawn {
     }
 
     public Block getHomeLocation() {
-	    return locationArray[2];
+        return locationArray[2];
     }
 
     public Block getStartLocation() {
-	    return locationArray[1];
+        return locationArray[1];
     }
 
     public boolean hasLeftStart() {
@@ -141,6 +144,10 @@ public class Pawn {
     }
     public void setHasReachedSafeZone(boolean hasReachedSafeZone) {
         this.hasReachedSafeZone = hasReachedSafeZone;
+    }
+
+    public void select() {
+        this.selected = true;
     }
 
 }

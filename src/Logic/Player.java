@@ -10,14 +10,14 @@ public abstract class Player {
 	protected int bounces;
 	protected Color color;
 	protected Board thisBoard;
-	String name;
+	protected String name;
 
 	protected ArrayList<Pawn> movablePawnList; //a list of the player's pawns that can be moved (not finished, not in start)
     protected ArrayList<Pawn> startPawnList; //a list of pawns still in home
 	protected ArrayList<Pawn> finishedPawnList; //a list of pawns who have won
 
 	ArrayList<ArrayList<Move>> potentialMovesList; //first arraylist at index 0 is potential moves for each pawn. second arraylist at index 1 is in case of 7, generate potential moves
-	
+
 	protected Player(Color inColor, Board thisBoard) {
 
 		startPawnList = new ArrayList<>();
@@ -217,6 +217,14 @@ public abstract class Player {
 
 	public abstract String getName();
 
+	public void refreshHighlight() {
+		for (Move m : potentialMovesList.get(0)) {
+			m.p.highlighted = true;
+			if (m.p.selected) {
+				m.blockReached.highlighted = true;
+			}
+		}
+	}
 
 
 }

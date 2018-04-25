@@ -12,7 +12,7 @@ public class BoardPanel extends JPanel {
     private Image BoardImage;
     private ArrayList<JButton> Pawns;
 
-    private final static String imagePath = "/Main/imgs/sorry_board.jpg";
+    private final static String imagePath = "/imgs/sorry_board.jpg";
     public BoardPanel() {
 
         this.setLayout(null);

@@ -3,6 +3,7 @@ package Logic;
 import java.util.ArrayList;
 
 public class Game {
+    public static ArrayList<Pawn> everyPawn;
 
     public static void playGame() {
         Board gameBoard = new Board();
@@ -35,21 +36,30 @@ public class Game {
             name3 = generateName();
         }
 
+        Color yourColor = Color.RED;
+        Color firstColor = generateColor();
+        Color secondColor = generateColor();
+        Color thirdColor = generateColor();
+
+        while (firstColor == youColor) {
+            firstColor = generateColor();
+        }
+        while (secondColor == firstColor || secondColor == youColor) {
+            secondColor = generateColor();
+        }
+        while (thirdColor == firstColor || thirdColor == secondColor || thirdColor == youColor) {
+            thirdColor = generateColor();
+        }
+
 
         switch(AI_PLAYERS) {
             case 3:
-                //FOR TESTING ONLY
-                Color firstColor = Color.BLUE;
                 boolean firstSmart = true, firstCruel = false;
                 players.add(new AI(firstColor, gameBoard, firstSmart, firstCruel, name1));
             case 2:
-                //TESTING ONLY
-                Color secondColor = Color.GREEN;
                 boolean secondSmart = false, secondCruel = true;
                 players.add(new AI(secondColor, gameBoard, secondSmart, secondCruel, name2));
             case 1:
-                //TESTING ONLY
-                Color thirdColor = Color.YELLOW;
                 boolean thirdSmart = true, thirdCruel = true;
                 players.add(new AI(thirdColor, gameBoard, thirdSmart, thirdCruel, name3));
         }
@@ -57,6 +67,12 @@ public class Game {
         ArrayList<Player> allPlayers = new ArrayList<>();
         allPlayers.add(you);
         allPlayers.addAll(players);
+
+        for (Player p : players) {
+            everyPawn.addAll(p.startPawnList);
+            everyPawn.addAll(p.movablePawnList);
+            everyPawn.addAll(p.finishedPawnList);
+        }
 
         int currentMove = 0;
         Player currentPlayer;
@@ -66,6 +82,8 @@ public class Game {
         System.out.println("*************************************************");
         while (whilePlaying) {
 
+
+            System.out.print("Turn " + currentMove + "\n");
             //to show where all the pawns are of course
             for (int i = 0; i < 60; i++) {
                 if (gameBoard.outerRing[i].getPawn() != null) {
@@ -120,5 +138,21 @@ public class Game {
         int nameIndex = (int)(Math.random() * nameList.size());
 
         return nameList.get(nameIndex);
+    }
+
+    public static Color generateColor() {
+        int cIndex = (int) (Math.random() * 4);
+        switch (cIndex) {
+            case 0:
+                return Color.RED;
+            case 1:
+                return Color.BLUE;
+            case 2:
+                return Color.GREEN;
+            case 3:
+                return Color.YELLOW;
+            default:
+                return Color.NULL;
+        }
     }
 }

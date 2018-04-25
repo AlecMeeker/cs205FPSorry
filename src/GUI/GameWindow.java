@@ -2,8 +2,6 @@ package GUI;
 
 
 // import internal class of project.
-import Logic.Card;
-import Logic.Deck;
 import utils.TransparencyUtil;
 
 import javax.imageio.ImageIO;
@@ -19,8 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 //import java class
-
-
+import Logic.Deck;
+import Logic.Card;
 
 public class GameWindow extends JFrame{
 
@@ -42,7 +40,7 @@ public class GameWindow extends JFrame{
     private int numberOfPawns = 16;
     public static int safetyZoneSize = 5;
     public static int moveSteps = 1;
-    private String ImagePath= "/Main/imgs/";
+    private String ImagePath= "/imgs/";
     private String [] colorName = {"blue","yellow","green","red"};
     public static int count;
     private static JLabel seletedLabel = null;

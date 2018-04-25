@@ -1,4 +1,5 @@
-package Logic; /**
+package Logic;
+/**
  * the deck
  * by Alec
  * */

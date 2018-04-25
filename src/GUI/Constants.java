@@ -1,4 +1,4 @@
-package com.sorry.GUI;
+package GUI;
 
 public final class Constants {   // this class use for define some constants for GUI
 

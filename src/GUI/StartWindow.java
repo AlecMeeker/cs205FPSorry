@@ -1,4 +1,4 @@
-package com.sorry.GUI;
+package GUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,7 +18,7 @@ public class StartWindow extends JFrame {
     private JLabel gameLogo;
 
     //
-    private String gameLogoImgPath= "/Main/imgs/sorry_start.jpg";
+    private String gameLogoImgPath= "/imgs/sorry_start.jpg";
 
     private StartWindow(){
         initWindow();
