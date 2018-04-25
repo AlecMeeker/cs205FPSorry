@@ -2,7 +2,6 @@ package Logic;
 
 public class Pawn {
 
-	private int distanceFromHome; //acts as relative progress check
 	private boolean hasReachedSafeZone; //is in the safety zone at least
     private boolean isFinished; //is home
 	private Color color; //integer representing the color of the player
@@ -65,12 +64,12 @@ public class Pawn {
 
         if (getDistanceFromHome() >= spaces) {
             int moveSpaces = spaces;
-            Block targetBlock = getCurrentBlock();
+            Block targetBlock = this.getCurrentBlock();
             while (moveSpaces > 0) {
                 targetBlock = targetBlock.getNextBlock(color);
                 moveSpaces--;
             }
-            if (targetBlock.getPawn() != null && targetBlock.getPawn().getColor() == color) {
+            if (targetBlock.getPawn() != null && targetBlock.getPawn().getColor() == color && !targetBlock.isHome) {
                 return false;
             }
             else {
@@ -112,6 +111,9 @@ public class Pawn {
         return steps;
     }
 
+    /*
+    changes all of the fields of the pertinent blocks
+     */
     public void move(Block targetBlock) {
         Block origin = this.getCurrentBlock();
 

@@ -64,7 +64,7 @@ public class Board {
         }
         //this sets up and links the start blocks
         //stored [0] BLUE [1] RED [2] YELLOW [3] GREEN
-        START_ARRAY = new Block[]{new Block(Color.RED, -1, false), new Block(Color.BLUE, -1, false), new Block(Color.YELLOW, -1, false), new Block(Color.GREEN, -1, false)};
+        START_ARRAY = new Block[]{new Block(Color.RED, -10, false), new Block(Color.BLUE, -10, false), new Block(Color.YELLOW, -10, false), new Block(Color.GREEN, -10, false)};
         for (int z = 0; z < START_ARRAY.length; z++) {
             START_ARRAY[z].setNextBlock(outerRing[4 + (15*z)]);
         }
@@ -88,9 +88,9 @@ public class Board {
         System.out.println("Safety zone " + safetyColor.toString() + " generated.");
         Block[] newSafetyZone = new Block[6];
         for (int i = 0; i < 5; i++) {
-            newSafetyZone[i] = new Block(safetyColor, -i, false);
+            newSafetyZone[i] = new Block(safetyColor, -(i +1), false);
         }
-        newSafetyZone[5] = new Block(safetyColor, -5, true);
+        newSafetyZone[5] = new Block(safetyColor, -6, true);
         for (int i = 0; i < 5; i++) {
             linkBlocks(newSafetyZone[i], newSafetyZone[i+1]);
         }

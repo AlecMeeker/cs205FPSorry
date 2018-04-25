@@ -19,6 +19,7 @@ public class Block {
 
     public Block(Color inColor,  int id, boolean isHome) {
         pawnsHere = new ArrayList<>();
+        this.isHome = isHome;
         this.color = inColor;
         this.id = id;
         this.slideStatus = Slidiness.NOT;
@@ -72,7 +73,7 @@ public class Block {
     }
 
     public boolean place(Pawn pawn) {
-        if ((id != -1 || !isHome) && pawnsHere.size() != 0 ){
+        if ((id != -10 || !isHome) && pawnsHere.size() != 0 ){
             //pawnsHere.get(0).getBounced();
             pawnsHere.remove(0);
             pawnsHere.add(pawn);
