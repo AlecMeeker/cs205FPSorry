@@ -1,16 +1,19 @@
 package Logic;
 
 
+import sql.ConnectDB;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Board {
 
-     public Block[] outerRing;
-     //List<Block> board;
-     public Block[] blueSafeZone, redSafeZone, yellowSafeZone, greenSafeZone, START_ARRAY;
-     public Deck thisDeck;
-     public ArrayList<Block> everyBlock;
+    public Block[] outerRing;
+    //List<Block> board;
+    public Block[] blueSafeZone, redSafeZone, yellowSafeZone, greenSafeZone, START_ARRAY;
+    public Deck thisDeck;
+    public ArrayList<Block> everyBlock;
+    public Pawn[] pieces;
 
     /*
     Creates a board of 60 squares, with some safety zones and homes, and links them all, then adds slides
@@ -174,16 +177,49 @@ public class Board {
         return START_ARRAY[3]; }
 
     public Block getRedGoal() {
-            return redSafeZone[5];
-        }
+        return redSafeZone[5];
+    }
     public Block getBlueGoal() {
-            return blueSafeZone[5];
-        }
+        return blueSafeZone[5];
+    }
     public Block getYellowGoal() {
-            return yellowSafeZone[5];
-        }
+        return yellowSafeZone[5];
+    }
     public Block getGreenGoal() {
-            return greenSafeZone[5];
-        }
+        return greenSafeZone[5];
+    }
+
+
+//    public void loadAdjuster(int identer){
+//        String encoded=ConnectDB.loadGameData(gameID);
+//        //16 sets of 00-87 for pawn positions each followed by an s,set of 45 hex 0-B for deck order, number 00-45 for top card, z for end of save
+//        //char[] savedState=encoded.toCharArray();
+//        //StringTokenizer ss=new StringTokenizer(encoded,"s");
+//        String[] data=encoded.split("s");
+//        //int i=1;
+//        for (int i=0;i<16;i++){
+//            pieces[i].setIndex(Integer.parseInt(data[i]));
+//        }
+//        cards.loadStats(data[data.length-2],Integer.parseInt(data[data.length-1]));
+//
+//    }
+//
+//    public String savePrimer(){
+//        String savestate="";
+//        for (int i=0;i<pieces.length;i++){
+//            savestate+=convertPlace(pieces[i].getIndex());
+//            savestate+="s";
+//        }
+//
+//        for (int i=0;i<45;i++){
+//            savestate+=Integer.toHexString(cards.deck[i].num);
+//
+//        }
+//        savestate+="s";
+//        savestate+=convertPlace(cards.getTCindex());
+//
+//        ConnectDB.saveGameData(gameID,savestate);
+//        return savestate;
+//    }
 
 }

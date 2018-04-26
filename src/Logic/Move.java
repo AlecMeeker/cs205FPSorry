@@ -163,6 +163,7 @@ public class Move {
         if (whomBounced.size() != 0) {
             for (Pawn pp : whomBounced) {
                 pp.getBounced();
+                p.myPlayer.bounces++;
             }
         }
 

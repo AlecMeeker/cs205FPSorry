@@ -14,11 +14,14 @@ public abstract class Player {
 	protected String name;
 
 	protected ArrayList<Pawn> movablePawnList; //a list of the player's pawns that can be moved (not finished, not in start)
-    protected ArrayList<Pawn> startPawnList; //a list of pawns still in home
+	protected ArrayList<Pawn> startPawnList; //a list of pawns still in home
 	protected ArrayList<Pawn> finishedPawnList; //a list of pawns who have won
 
 	public ArrayList<ArrayList<Move>> potentialMovesList; //first arraylist at index 0 is potential moves for each pawn. second arraylist at index 1 is in case of 7, generate potential moves
-	
+
+	/*
+	Normal constructor, creates a new player with all default starting locations
+	 */
 	protected Player(Color inColor, Board thisBoard) {
 
 		startPawnList = new ArrayList<>();
@@ -55,15 +58,16 @@ public abstract class Player {
 		}
 	}
 
-	//helper function
-	private Card draw() {
-		return thisBoard.thisDeck.draw();
-	}
-
+	/*
+	orders the pawns by how close they are to home. the first pawn should be the first moved
+	 */
 	public void rankPawns() {
 		movablePawnList = rankPawns(movablePawnList);
 	}
 
+	/*
+	recursive function (nice job me!) that ranks the pawns
+	 */
 	protected ArrayList<Pawn> rankPawns(ArrayList<Pawn> thisList) {
 		if (thisList.size() != 0) {
 
@@ -90,7 +94,7 @@ public abstract class Player {
 	}
 
 	/*
-	Handles the actual drawing and generating moves based off of a draw. When the draw button is pressed (or auto pressed by AI), generateMoves()
+	 populates the potentialMovesList with
 	 */
 	public void generateMoves() {
 		this.generateMoveList(currentDraw);
@@ -105,9 +109,9 @@ public abstract class Player {
 		potentialMovesList = new ArrayList<>();
 		potentialMovesList.add(new ArrayList<Move>());
 		potentialMovesList.add(new ArrayList<Move>());
-	    System.out.println("...generating possibilities...");
+		System.out.println("...generating possibilities...");
 
-	    switch(draw) {
+		switch(draw) {
 			case ONE:
 			case TWO:
 				for (Pawn p : startPawnList) {
@@ -221,7 +225,7 @@ public abstract class Player {
 	helper class that puts the pawns in the correct buckets based on the move
 	 */
 	public void shiftPawns(Move moveIn) {
-	
+
 		if (moveIn.sorry) {
 			startPawnList.remove(moveIn.p);
 			movablePawnList.add(moveIn.p);

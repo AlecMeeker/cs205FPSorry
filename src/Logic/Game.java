@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class Game {
     public Player currentPlayer;
 
+    public boolean whilePlaying;
+
     public ArrayList<Pawn> everyPawn;
     public int currentMove;
     public ArrayList<Player> allPlayers;
@@ -13,7 +15,7 @@ public class Game {
         Board gameBoard = new Board();
         ArrayList<Player> players = new ArrayList<>();
 
-        boolean whilePlaying = true;
+        whilePlaying = true;
 
         //DISPLAY GAME
 
@@ -24,7 +26,7 @@ public class Game {
         //USE THIS FOR TESTING ONLY
         String name = "test";
         Color youColor = Color.RED;
-        HumanPlayer you = new HumanPlayer(name, youColor, gameBoard);
+        HumanPlayer you = new HumanPlayer(name, youColor, gameBoard, this);
 
         //turn this off to pit AI against each other
         //players.add(you);
@@ -175,8 +177,9 @@ public class Game {
     }
 
     public void loadState(String inState) {
-
-
+    }
+    public void quitGame() {
+        whilePlaying = false;
 
     }
 }

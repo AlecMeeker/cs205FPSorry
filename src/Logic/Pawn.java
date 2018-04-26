@@ -2,9 +2,9 @@ package Logic;
 
 public class Pawn {
 
-	private boolean hasReachedSafeZone; //is in the safety zone at least
+    private boolean hasReachedSafeZone; //is in the safety zone at least
     private boolean isFinished; //is home
-	private Color color; //integer representing the color of the player
+    private Color color; //integer representing the color of the player
     public Player myPlayer;
 
     public Boolean highlighted;
@@ -13,41 +13,42 @@ public class Pawn {
     public Block[] locationArray;
 
     public Board thisBoard;
-	
-	public Pawn(Board inBoard, Player inPlayer) {
-	    thisBoard = inBoard;
-		this.color = inPlayer.color;
-		this.myPlayer = inPlayer;
-		hasReachedSafeZone = false;
 
-		locationArray = new Block[3];
-		locationArray[0] = inBoard.getStartLocation(color);
-		this.setTargets();
+    public Pawn(Board inBoard, Player inPlayer) {
+        thisBoard = inBoard;
+        this.color = inPlayer.color;
+        this.myPlayer = inPlayer;
+        hasReachedSafeZone = false;
 
-		System.out.println(color.toString().toLowerCase() + " pawn added.");
-	}
+        locationArray = new Block[3];
+        locationArray[0] = inBoard.getStartLocation(color);
+        this.setTargets();
 
-	public Pawn(Board inBoard, Player inPlayer, Block currentBlock) {
-	    thisBoard = inBoard;
-	    this.color = inPlayer.color;
-	    this.myPlayer = inPlayer;
+        System.out.println(color.toString().toLowerCase() + " pawn added.");
 
-	    this.setCurrentBlock(currentBlock);
-	    if (currentBlock == inBoard.getStartLocation(this.color)) {
-	        hasReachedSafeZone = false;
-	        isFinished = false;
+    }
+
+    public Pawn(Board inBoard, Player inPlayer, Block currentBlock) {
+        thisBoard = inBoard;
+        this.color = inPlayer.color;
+        this.myPlayer = inPlayer;
+
+        this.setCurrentBlock(currentBlock);
+        if (currentBlock == inBoard.getStartLocation(this.color)) {
+            hasReachedSafeZone = false;
+            isFinished = false;
         }
         else if (currentBlock == locationArray[2]) {
-	        isFinished = true;
-	        hasReachedSafeZone = true;
+            isFinished = true;
+            hasReachedSafeZone = true;
         }
     }
 
-	public void setTargets() {
-	    System.out.println("Setting targets");
+    public void setTargets() {
+        System.out.println("Setting targets");
 
-	    locationArray[1] = thisBoard.getStartLocation(color);
-	    locationArray[2] = thisBoard.getGoalLocation(color);
+        locationArray[1] = thisBoard.getStartLocation(color);
+        locationArray[2] = thisBoard.getGoalLocation(color);
 
     }
 
@@ -55,9 +56,9 @@ public class Pawn {
     returns this pawn to its home location based on its color
      */
     public void getBounced() {
-	    this.move(thisBoard.getStartLocation(color));
+        this.move(thisBoard.getStartLocation(color));
 
-	    System.out.println(myPlayer.getName() + "'s pawn got bounced home lol");
+        System.out.println(myPlayer.getName() + "'s pawn got bounced home lol");
     }
 
     public boolean canMoveHere(int spaces) {
@@ -144,7 +145,7 @@ public class Pawn {
     }
 
     public Block getHomeLocation() {
-	    return locationArray[2];
+        return locationArray[2];
     }
 
     public Block getStartLocation() {

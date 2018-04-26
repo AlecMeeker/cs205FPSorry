@@ -1,9 +1,9 @@
-package Logic; /**
+/**
  * the deck
  * by Alec
  * */
 
-
+package Logic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +39,30 @@ public class Deck {
         return DECKSIZE-(TCindex+1);
     }
 
+    //load state
+    public void loadStats(String input,int tci){
+        char[] savedState=input.toCharArray();
+        int[] places=new int[savedState.length];
+        for (int i=0;i<savedState.length;i++){
+            places[i]=Integer.parseInt(Character.toString(savedState[i]),16);
+        }
+        generateDeck();
+
+        Card[] tempdeck=new Card[DECKSIZE];
+        for (int i=0;i<DECKSIZE;i++){
+            tempdeck[i]=deck[0];
+            int j=0;
+            while (tempdeck[i].num!=places[i]){
+                tempdeck[i]=deck[j];
+                j++;
+            }
+        }
+        deck=tempdeck;
+        TCindex=tci;//savedState[savedState.length-1];
+
+    }
+
+
     // draw a single card
     public Card draw(){
         TCindex++;
@@ -46,8 +70,6 @@ public class Deck {
             shuffle();
             TCindex=0;
         }
-        Card draw = getTC();
-        System.out.println(draw.toString() + " was drawn.");
         return getTC();
     }
 
@@ -69,7 +91,6 @@ public class Deck {
 
     // generates all cards for the deck
     private void generateDeck(){
-        System.out.println("Deck generated");
         ArrayList<Card> starter=new ArrayList<Card>(Arrays.asList(Card.values()));
         int i=0;
         for (int ic=0;ic<starter.size();ic++){
@@ -80,6 +101,9 @@ public class Deck {
         }
     }
 
+    public void setDeckorder(String input){
+
+    }
 
     // testing main function
     public static void main(String[] args){
@@ -88,4 +112,3 @@ public class Deck {
     }
 
 }
-
