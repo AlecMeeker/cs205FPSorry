@@ -36,10 +36,9 @@ public abstract class Player {
 
 	public ArrayList<ArrayList<Move>> potentialMovesList; //first arraylist at index 0 is potential moves for each pawn. second arraylist at index 1 is in case of 7, generate potential moves
 
-	/*
-	Normal constructor, creates a new player with all default starting locations
+	/**
+	 * Normal constructor, creates a new player with all default starting locations
 	 */
-
 	public Player(){
 
 	}
@@ -58,8 +57,12 @@ public abstract class Player {
 		}
 	}
 
-	/*
-	generates a player with pawns at given locations. Used to load a game
+	/**
+	 * generates a player with pawns at given locations. Used to load a game
+	 * @param inColor			color for player
+	 * @param startListSize		number in start
+	 * @param finishedListSize	number in finish
+	 * @param ids				where the pawns should go? (not finish or start)
 	 */
 	protected Player(Color inColor, int startListSize, int finishedListSize, List<Integer> ids) {
 		startPawnList = new ArrayList<>();
@@ -79,15 +82,19 @@ public abstract class Player {
 		}
 	}
 
-	/*
-	orders the pawns by how close they are to home. the first pawn should be the first moved
+
+	/**
+	 * orders the pawns by how close they are to home. the first pawn should be the first moved
 	 */
 	public void rankPawns() {
 		movablePawnList = rankPawns(movablePawnList);
 	}
 
-	/*
-	recursive function (nice job me!) that ranks the pawns
+
+	/**
+	 * recursive function (nice job me!) that ranks the pawns
+	 * @param thisList	arraylist of pawns to be ranked
+	 * @return
 	 */
 	protected ArrayList<Pawn> rankPawns(ArrayList<Pawn> thisList) {
 		if (thisList.size() != 0) {
@@ -114,17 +121,19 @@ public abstract class Player {
 		return thisList;
 	}
 
-	/*
-	 populates the potentialMovesList with
+	/**
+	 * populates the potentialMovesList with
 	 */
 	public void generateMoves() {
 		this.generateMoveList(currentDraw);
 	}
 
-	/*
-	Generates an ArrayList of ArrayList<Move> which is all the possible moves for each turn
-	First ArrayList at index 0 is the typical list, every possible move
-	if size > 1 then the ArrayList at index 1 represents the double moves allowed by a 7, matched by index to the first list
+
+	/**
+	 * Generates an ArrayList of ArrayList<Move> which is all the possible moves for each turn
+	 * First ArrayList at index 0 is the typical list, every possible move
+	 * if size > 1 then the ArrayList at index 1 represents the double moves allowed by a 7, matched by index to the first list
+	 * @param draw	card that was drawn
 	 */
 	private void generateMoveList(Card draw) {
 		potentialMovesList = new ArrayList<>();
@@ -242,8 +251,10 @@ public abstract class Player {
 	}
 
 
-	/*
-	helper class that puts the pawns in the correct buckets based on the move
+
+	/**
+	 * helper class that puts the pawns in the correct buckets based on the move
+	 * @param moveIn	the move
 	 */
 	public void shiftPawns(Move moveIn) {
 
