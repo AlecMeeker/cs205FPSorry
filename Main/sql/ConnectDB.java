@@ -1,12 +1,11 @@
 package Main.sql;
 /*
   Class created by Alex Grech IV
-  Class provides methods for connecting to and querying the database
+  Class provides methods for connecting to and querying the database and other related things
  */
 
 
 //need to add this as a dependency to make it work
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -21,9 +20,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Set;
 
-import Main.src.Color;
+import javax.swing.JTable;
 
-import javax.swing.*;
+import Main.src.Color;
 
 
 public class ConnectDB {
@@ -143,11 +142,10 @@ public class ConnectDB {
     public static String[][] getAllPlayerStats() {
         //define query and parameters
         String query = "SELECT * FROM tblPlayer";
-        String params[] = null;
 
         JsonArray dataArr = null;
         try {
-            dataArr = sendQuery(query, params, true);
+            dataArr = sendQuery(query, null, true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -220,11 +218,10 @@ public class ConnectDB {
     public static String[][] getAllGameInfo() {
         //define query and parameters
         String query = "SELECT * FROM tblGames";
-        String params[] = null;
 
         JsonArray dataArr = null;
         try {
-            dataArr = sendQuery(query, params, true);
+            dataArr = sendQuery(query, null, true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -660,7 +657,6 @@ public class ConnectDB {
      * @return      JTable from array
      */
     public static JTable getAsJTable(String[][] data) {
-        JTable table = new JTable(Arrays.copyOfRange(data, 1, data.length), data[0]);
-        return table;
+        return new JTable(Arrays.copyOfRange(data, 1, data.length), data[0]);
     }
 }
