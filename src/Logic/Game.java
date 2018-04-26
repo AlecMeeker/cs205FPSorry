@@ -1,8 +1,12 @@
 package Logic;
 
+import SQL.ConnectDB;
+
 import java.util.ArrayList;
 
 public class Game {
+    private int gameID = -1;
+
     public Player currentPlayer;
     public Player winner;
 
@@ -155,9 +159,27 @@ public class Game {
 
     public void loadState(String inState) {
     }
+
+
     public void quitGame() {
         whilePlaying = false;
-
+        this.saveGame();
+        Color winnerColor = (winner == null)?Color.NULL:winner.color;
+        String AI1Diff = ((AI)allPlayers.get(1)).demeanor;
+        String AI2Diff = (allPlayers.get(2) == null)?"NULL":((AI)allPlayers.get(2)).demeanor;
+        String AI3Diff = (allPlayers.get(3) == null)?"NULL":((AI)allPlayers.get(3)).demeanor;
+        int playerBounce = allPlayers.get(0).bounces;
+        int AI1Bounce = allPlayers.get(1).bounces;
+        int AI2Bounce = (allPlayers.get(2) == null)?0:allPlayers.get(2).bounces;
+        int AI3Bounce = (allPlayers.get(3) == null)?0:allPlayers.get(3).bounces;
+        if (gameID != -1) {
+            gameID = ConnectDB.insertGameData(generateName(), 10, currentMove, currentPlayer.color, winnerColor,
+                    AI1Diff, AI2Diff, AI3Diff, playerBounce, AI1Bounce, AI2Bounce, AI3Bounce,
+                    0, 0, 0, 0, 0, 0, 0, 0);
+        } else {
+            ConnectDB.updateGameData(gameID, 10, currentMove, winnerColor, playerBounce,
+                    AI1Bounce, AI2Bounce, AI3Bounce, 0, 0, 0, 0, 0, 0, 0, 0);
+        }
     }
 
     /*
