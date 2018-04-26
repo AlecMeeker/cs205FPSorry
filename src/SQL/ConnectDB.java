@@ -74,7 +74,7 @@ public class ConnectDB {
     /**
      * This method gets the save game data for a particular gameID
      * @param gameID    The ID of the game whose data you want to load
-     * @return          A string that contains the data needed to reinitialize a game, returns and empty string if failed
+     * @return          A string that contains the data needed to reinitialize a game, returns an empty string if failed
      */
     public static String loadGameData(int gameID) {
         //define query and parameters
@@ -98,6 +98,29 @@ public class ConnectDB {
     }
 
     /**
+     * This method gets the save game data for a the most recent save
+     * @return          A string that contains the data needed to reinitialize a game, returns an empty string if failed
+     */
+    public static String loadGameData() {
+        //define query
+        String query = "SELECT fldSaveString FROM tblSaveGame WHERE fldDate = (SELECT MAX(fldDate) FROM tblSaveGame)";
+
+        //send query and get response
+        JsonArray dataArr = null;
+        try {
+            dataArr = sendQuery(query, null, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String saveString = "";
+        if (dataArr != null) {
+            saveString = dataArr.get(0).getAsJsonObject().get("0").getAsString();
+        }
+        return saveString;
+    }
+
+    /**
      * This method gets the stats for a player from the database
      * @param player    The player that you want stats for
      * @return          A string array that contains the stats for the player. The info in the array follows this format:
@@ -109,6 +132,7 @@ public class ConnectDB {
         String params[] = new String[1];
         params[0] = player;
 
+        //send query and get response
         JsonArray dataArr = null;
         try {
             dataArr = sendQuery(query, params, true);
@@ -140,9 +164,10 @@ public class ConnectDB {
      *                  Player name, wins, losses, times red, times green, times blue, times yellow, total bumps
      */
     public static String[][] getAllPlayerStats() {
-        //define query and parameters
+        //define query
         String query = "SELECT * FROM tblPlayer";
 
+        //send query and get response
         JsonArray dataArr = null;
         try {
             dataArr = sendQuery(query, null, true);
@@ -186,6 +211,7 @@ public class ConnectDB {
         String params[] = new String[1];
         params[0] = Integer.toString(gameID);
 
+        //send query and get response
         JsonArray dataArr = null;
         try {
             dataArr = sendQuery(query, params, true);
@@ -216,9 +242,10 @@ public class ConnectDB {
      * @return  An array that contains column headers and all of the info from the database
      */
     public static String[][] getAllGameInfo() {
-        //define query and parameters
+        //define query
         String query = "SELECT * FROM tblGames";
 
+        //send query and get response
         JsonArray dataArr = null;
         try {
             dataArr = sendQuery(query, null, true);
@@ -258,11 +285,11 @@ public class ConnectDB {
         String query;
         String params[] = new String[2];
         if (isSaved(gameID)) {
-            query = "UPDATE tblSaveGame SET fldSaveString = ? WHERE pmkGameID = ?";
+            query = "UPDATE tblSaveGame SET fldDate = NOW(), fldSaveString = ? WHERE pmkGameID = ?";
             params[0] = saveData;
             params[1] = Integer.toString(gameID);
         } else {
-            query = "INSERT INTO tblSaveGame (pmkGameID, fldSaveString) VALUES (?, ?)";
+            query = "INSERT INTO tblSaveGame (pmkGameID, fldDate, fldSaveString) VALUES (?, NOW(), ?)";
             params[0] = Integer.toString(gameID);
             params[1] = saveData;
         }
@@ -384,6 +411,7 @@ public class ConnectDB {
                                          int playerBumps, int AI1Bumps, int AI2Bumps, int AI3Bumps,
                                          int playerStart, int AI1Start, int AI2Start, int AI3Start,
                                          int playerHome, int AI1Home, int AI2Home, int AI3Home) {
+        //update the player stats
         int origPlayerBump = getPlayerBumps(gameID);
         String player = getPlayerName(gameID);
         Color playerColor = getPlayerColor(gameID);
@@ -530,6 +558,7 @@ public class ConnectDB {
      * @return              A boolean representing whether or not the query succeeded
      */
     private static boolean updatePlayer(String player, boolean didWin, Color playerColor, int bumps) {
+        //define query and parameters
         String winField = didWin ? "fldWins" : "fldLosses";
         boolean updateColor = true;
         String colorField = "fldTimes";
@@ -567,6 +596,7 @@ public class ConnectDB {
         String params[] = new String[1];
         params[0] = player;
 
+        //send query and get response
         JsonArray dataArr = null;
         try {
             dataArr = sendQuery(query, params, false);
@@ -591,6 +621,7 @@ public class ConnectDB {
         String params[] = new String[1];
         params[0] = player;
 
+        //send query and get response
         JsonArray dataArr = null;
         try {
             dataArr = sendQuery(query, params, true);
@@ -610,8 +641,10 @@ public class ConnectDB {
      * @return  the ID of the most recent entry
      */
     private static int getLastGameID() {
+        //define query
         String query = "SELECT MAX(pmkGameID) FROM tblGames";
 
+        //send query and get response
         JsonArray dataArr = null;
         try {
             dataArr = sendQuery(query, null, true);
