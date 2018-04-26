@@ -1,7 +1,7 @@
 package com.sorry.GUI;
 
 import Logic.Game;
-import sql.ConnectDB;
+import SQL.ConnectDB;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
