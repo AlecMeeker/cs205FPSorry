@@ -75,9 +75,8 @@ public class GameWindow extends JFrame{
         initWindow();
     }
 
-    public static GameWindow getInstance(Game gameIn){ //Thread safe singleton model
+    public static GameWindow getInstance(){ //Thread safe singleton model
         GameWindow result = instance;
-        result.currentGame = gameIn;
         if(result == null){
             synchronized (mutex){
                 result = instance;

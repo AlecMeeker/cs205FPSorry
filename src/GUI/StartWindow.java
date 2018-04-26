@@ -174,7 +174,7 @@ public class StartWindow extends JFrame {
         //JOptionPane.showInputDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
         int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
-            numPlayer = Integer.getInteger(numPlayers.getSelectedItem().toString());
+            numPlayer = Integer.parseInt(numPlayers.getSelectedItem().toString());
 
             System.out.println("You entered " +
                     numPlayers.getSelectedItem().toString() + ", " +
@@ -200,7 +200,8 @@ public class StartWindow extends JFrame {
 
             Game newGame = new Game(getColorFromString(playerColorSelect.getSelectedItem().toString()), numPlayer, aiDifficulties);
 
-            GameWindow gw = GameWindow.getInstance(newGame);
+            GameWindow gw = GameWindow.getInstance();
+
             gw.setVisible(true);
             newGame.nextTurn();
         } else {
