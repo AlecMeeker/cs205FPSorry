@@ -179,9 +179,9 @@ public class StartWindow extends JFrame {
                     computerDifficulties3.getSelectedItem().toString());
 
                 //gw.setNumOfPlayers(Integer.getInteger(numPlayers.getSelectedItem().toString()));
-                GameWindow gw = GameWindow.getInstance();
-                gw.setVisible(true);
-                 Game newGame = new Game();
+//                GameWindow gw = GameWindow.getInstance();
+//                gw.setVisible(true);
+                Game newGame = new Game();
                 newGame.playGame();
         } else {
             System.out.println("User canceled / closed the dialog, result = " + result);

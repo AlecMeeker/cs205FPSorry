@@ -22,6 +22,10 @@ public abstract class Player {
 	/*
 	Normal constructor, creates a new player with all default starting locations
 	 */
+
+	protected Player(){
+
+	}
 	protected Player(Color inColor, Board thisBoard) {
 
 		startPawnList = new ArrayList<>();

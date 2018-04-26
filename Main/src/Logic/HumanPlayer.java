@@ -4,6 +4,10 @@ public class HumanPlayer extends Player {
     private String name;
     private Game thisGame;
 
+    public HumanPlayer(){
+
+    }
+
     public HumanPlayer(String name, Color inColor, Board inBoard, Game thisGame) {
         super(inColor, inBoard);
         this.thisGame = thisGame;
