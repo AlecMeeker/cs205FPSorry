@@ -104,7 +104,7 @@ public class ConnectDB {
      * @return          A string array that contains the stats for the player. The info in the array follows this format:
      *                  Player name, wins, losses, times red, times green, times blue, times yellow, total bumps
      */
-    public static String[] getPlayerStats(String player) {
+    public static String[][] getPlayerStats(String player) {
         //define query and parameters
         String query = "SELECT * FROM tblPlayer WHERE pmkPlayer = ?";
         String params[] = new String[1];
@@ -117,10 +117,56 @@ public class ConnectDB {
             e.printStackTrace();
         }
 
-        String stats[] = new String[8];
+        String stats[][] = null;
         if (dataArr != null) {
-            for (int i = 0; i < stats.length; i++) {
-                stats[i] = dataArr.get(0).getAsJsonObject().get(Integer.toString(i)).getAsString();
+            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size()/2];
+            Set<String> keyset = dataArr.get(0).getAsJsonObject().keySet();
+            int k = 0;
+            for (String key : keyset) {
+                if (key.length() > 2) {
+                    stats[0][k] = key.substring(3);
+                    k++;
+                }
+            }
+            for (int i = 0; i < stats[1].length; i++) {
+                stats[1][i] = dataArr.get(0).getAsJsonObject().get(Integer.toString(i)).getAsString();
+            }
+        }
+        return stats;
+    }
+
+    /**
+     * This method gets the stats for a player from the database
+     * @return          A string array that contains the stats for all players. The info in the array follows this format:
+     *                  Player name, wins, losses, times red, times green, times blue, times yellow, total bumps
+     */
+    public static String[][] getAllPlayerStats() {
+        //define query and parameters
+        String query = "SELECT * FROM tblPlayer";
+        String params[] = null;
+
+        JsonArray dataArr = null;
+        try {
+            dataArr = sendQuery(query, params, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String stats[][] = null;
+        if (dataArr != null) {
+            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size()/2];
+            Set<String> keyset = dataArr.get(0).getAsJsonObject().keySet();
+            int k = 0;
+            for (String key : keyset) {
+                if (key.length() > 2) {
+                    stats[0][k] = key.substring(3);
+                    k++;
+                }
+            }
+            for (int i = 0; i < stats.length - 1; i++) {
+                for (int j = 0; j < stats[i].length; j++) {
+                    stats[i+1][j] = dataArr.get(i).getAsJsonObject().get(Integer.toString(j)).getAsString();
+                }
             }
         }
         return stats;
