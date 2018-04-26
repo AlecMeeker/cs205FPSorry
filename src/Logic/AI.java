@@ -6,6 +6,7 @@ public class AI extends Player {
 
     public Boolean smart;
     public Boolean cruel;
+    public String demeanor;
     public String name;
 
     public AI(Color inColor, Board inBoard, boolean isSmart, boolean isCruel, String name) {
@@ -15,6 +16,21 @@ public class AI extends Player {
 
         smart = isSmart;
         cruel = isCruel;
+        String smartness = "";
+        String cruelty = "";
+        if (smart) {
+            smartness = "Smart";
+        }
+        else {
+            smartness = "Dumb";
+        }
+        if (cruel) {
+            cruelty = "Cruel";
+        }
+        else {
+            cruelty = "Nice";
+        }
+        demeanor = cruelty + "/" + smartness;
     }
 
     @Override
@@ -154,4 +170,6 @@ public class AI extends Player {
     public String getName() {
         return name;
     }
+
+
 }

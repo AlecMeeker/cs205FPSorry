@@ -4,20 +4,25 @@ import java.util.ArrayList;
 
 public class Game {
     public Player currentPlayer;
+    public Player winner;
+
+    public boolean nextTurn; // boolean representing being allowed to move to the next turn
 
     public boolean whilePlaying;
-
-    public ArrayList<Pawn> everyPawn;
     public int currentMove;
+
+    public Board gameBoard;
+    public ArrayList<Pawn> everyPawn;
     public ArrayList<Player> allPlayers;
 
-    public void playGame() {
-        Board gameBoard = new Board();
+    public Game(Color playerColor, int numPlayers, ArrayList<Integer> aiDifficulties) {
+        this.gameBoard = new Board();
         ArrayList<Player> players = new ArrayList<>();
 
-        whilePlaying = true;
+        initGame(3);
+    }
 
-        //DISPLAY GAME
+    public void initGame(int numAI) {
 
         //get # of AI players and stats
 
@@ -57,26 +62,24 @@ public class Game {
             thirdColor = generateColor();
         }
 
+        allPlayers = new ArrayList<>();
+        allPlayers.add(you);
 
         switch(AI_PLAYERS) {
             case 3:
                 boolean firstSmart = false, firstCruel = false;
-                players.add(new AI(firstColor, gameBoard, firstSmart, firstCruel, name1));
+                allPlayers.add(new AI(firstColor, gameBoard, firstSmart, firstCruel, name1));
             case 2:
                 boolean secondSmart = true, secondCruel = false;
-                players.add(new AI(secondColor, gameBoard, secondSmart, secondCruel, name2));
+                allPlayers.add(new AI(secondColor, gameBoard, secondSmart, secondCruel, name2));
             case 1:
                 boolean thirdSmart = true, thirdCruel = false;
-                players.add(new AI(thirdColor, gameBoard, thirdSmart, thirdCruel, name3));
+                allPlayers.add(new AI(thirdColor, gameBoard, thirdSmart, thirdCruel, name3));
         }
-
-        allPlayers = new ArrayList<>();
-        allPlayers.add(you);
-        allPlayers.addAll(players);
 
         everyPawn = new ArrayList<>();
 
-        for (Player p : players) {
+        for (Player p : allPlayers) {
             everyPawn.addAll(p.startPawnList);
             everyPawn.addAll(p.movablePawnList);
             everyPawn.addAll(p.finishedPawnList);
@@ -87,33 +90,7 @@ public class Game {
         System.out.println("*************************************************");
         System.out.println("*****************GAME BEGIN**********************");
         System.out.println("*************************************************");
-        while (whilePlaying) {
 
-
-            System.out.print("Turn " + currentMove + "\n");
-            System.out.print("All pawns: ");
-
-            String safe = " ";
-            for (Pawn p : everyPawn) {
-
-                System.out.print(p.getCurrentBlock().id + safe);
-            }
-            System.out.print("\nOuterRing: ");
-            //to show where all the pawns are of course
-            for (int i = 0; i < 60; i++) {
-                if (gameBoard.outerRing[i].getPawn() != null) {
-                    System.out.print(i + ": " + gameBoard.outerRing[i].getPawn().getColor().toString().toLowerCase() + "; ");
-                }
-            }
-            System.out.println("\n*****************");
-
-            currentPlayer = players.get(currentMove%(players.size()));
-            whilePlaying = currentPlayer.play();
-
-            currentMove++;
-
-
-        }
     }
 
     public void saveGame() {
@@ -181,6 +158,38 @@ public class Game {
     public void quitGame() {
         whilePlaying = false;
 
+    }
+
+    /*
+    the new play() function
+     */
+    public void nextTurn() {
+        currentMove++;
+        currentPlayer = allPlayers.get(currentMove % allPlayers.size());
+
+        currentPlayer.play();
+        if (currentPlayer.getPawnsInHome() == 4) {
+            winner = currentPlayer;
+        }
+    }
+
+    public void printData() {
+        System.out.print("Turn " + currentMove + "\n");
+        System.out.print("All pawns: ");
+
+        String safe = " ";
+        for (Pawn p : everyPawn) {
+
+            System.out.print(p.getCurrentBlock().id + safe);
+        }
+        System.out.print("\nOuterRing: ");
+        //to show where all the pawns are of course
+        for (int i = 0; i < 60; i++) {
+            if (gameBoard.outerRing[i].getPawn() != null) {
+                System.out.print(i + ": " + gameBoard.outerRing[i].getPawn().getColor().toString().toLowerCase() + "; ");
+            }
+        }
+        System.out.println("\n*****************");
     }
 }
 

@@ -13,6 +13,7 @@ public abstract class Player {
 	protected Board thisBoard;
 	protected String name;
 
+
 	protected ArrayList<Pawn> movablePawnList; //a list of the player's pawns that can be moved (not finished, not in start)
 	protected ArrayList<Pawn> startPawnList; //a list of pawns still in home
 	protected ArrayList<Pawn> finishedPawnList; //a list of pawns who have won

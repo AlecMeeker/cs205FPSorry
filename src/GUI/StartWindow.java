@@ -2,6 +2,7 @@ package GUI;
 
 import Logic.Game;
 import SQL.ConnectDB;
+import Logic.Color;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -9,6 +10,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+
 public class StartWindow extends JFrame {
 
     //Singleton
@@ -54,7 +57,7 @@ public class StartWindow extends JFrame {
         this.setLayout(null);
         //Setting the window
         this.setSize(Constants.windowWidth,Constants.windowHeight);
-        this.setTitle("Sorry! Sweet avenge board game.");
+        this.setTitle("Sorry! The Sweet Revenge board game.");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //this.pack(); // pack the window
         //this.setVisible(true);
@@ -179,12 +182,61 @@ public class StartWindow extends JFrame {
                     computerDifficulties3.getSelectedItem().toString());
 
             //gw.setNumOfPlayers(Integer.getInteger(numPlayers.getSelectedItem().toString()));
+            numPlayer = Integer.getInteger(numPlayers.getSelectedItem().toString());
             GameWindow gw = GameWindow.getInstance();
             gw.setVisible(true);
-            Game newGame = new Game();
-            newGame.playGame();
+
+            ArrayList<Integer> aiDifficulties = new ArrayList<>();
+
+            switch (numPlayer) {
+                case 4:
+                    aiDifficulties.add(getOptionFromString(computerDifficulties3.getSelectedItem().toString()));
+                case 3:
+                    aiDifficulties.add(getOptionFromString(computerDifficulties2.getSelectedItem().toString()));
+                case 2:
+                    aiDifficulties.add(getOptionFromString(computerDifficulties1.getSelectedItem().toString()));
+            }
+
+            aiDifficulties.add(getOptionFromString(computerDifficulties1.getSelectedItem().toString()));
+            aiDifficulties.add(getOptionFromString(computerDifficulties2.getSelectedItem().toString()));
+            aiDifficulties.add(getOptionFromString(computerDifficulties3.getSelectedItem().toString()));
+
+            Game newGame = new Game(getColorFromString(playerColorSelect.getSelectedItem().toString()), numPlayer, aiDifficulties);
+
+            newGame.nextTurn();
         } else {
             System.out.println("User canceled / closed the dialog, result = " + result);
+        }
+    }
+
+    public int getOptionFromString(String diffString) {
+
+        switch (diffString) {
+            case "Dumb & Nice" :
+                return 0;
+            case "Dumb & Cruel" :
+                return 1;
+            case "Smart & Nice" :
+                return 2;
+            case "Smart & Cruel" :
+                return 3;
+            default :
+                return 5;
+        }
+    }
+
+    public Color getColorFromString(String colorString){
+        switch (colorString) {
+            case "blue" :
+                return Color.BLUE;
+            case "red" :
+                return Color.RED;
+            case "yellow" :
+                return Color.YELLOW;
+            case "green" :
+                return Color.GREEN;
+            default :
+                return Color.NULL;
         }
     }
 }
