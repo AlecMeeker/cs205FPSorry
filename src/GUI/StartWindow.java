@@ -222,6 +222,8 @@ public class StartWindow extends JFrame {
         //JOptionPane.showInputDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
         int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
+            numPlayer = Integer.getInteger(numPlayers.getSelectedItem().toString());
+
             System.out.println("You entered " +
                     numPlayers.getSelectedItem().toString() + ", " +
                     playerColorSelect.getSelectedItem().toString() + ", " +
@@ -253,6 +255,8 @@ public class StartWindow extends JFrame {
             GameWindow gw = GameWindow.getInstance();
             gw.loadConfig(numPlayer);
             gw.loadGameStuff(newGame.everyPawn,newGame);
+
+
             gw.setVisible(true);
             newGame.nextTurn();
         } else {

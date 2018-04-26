@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class AI extends Player {
 
-    public Boolean smart;
-    public Boolean cruel;
-    public String demeanor;
-    public String name;
+    public Boolean smart; //smart or dumb ai
+    public Boolean cruel; //cruel or nice ai
+    public String demeanor; //string used to interface with the database
+    public String name; //the name
 
     public AI() {
         super(Color.NULL, new Board());
