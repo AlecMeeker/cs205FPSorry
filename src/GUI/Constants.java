@@ -46,7 +46,6 @@ public final class Constants {   // this class use for define some constants for
                         instance = result = new Constants();
                     }
                 }
-
             }
         return result;
     }

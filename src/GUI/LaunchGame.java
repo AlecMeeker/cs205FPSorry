@@ -11,5 +11,10 @@ public class LaunchGame {
 //        startWindow.setVisible(true);
         GameWindow gw = GameWindow.getInstance();
         gw.setVisible(true);
+
+//        Game newGame = new Game();
+//
+//        newGame.playGame();
+
     }
 }
