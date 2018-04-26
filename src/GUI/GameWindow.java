@@ -585,6 +585,7 @@ public class GameWindow extends JFrame{
             pawns.add(pawnL);
 
         }
+
         System.out.println("run refreshBoard");
     }
 
