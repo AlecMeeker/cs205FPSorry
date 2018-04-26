@@ -1,12 +1,14 @@
 package GUI;
 
+import Logic.Game;
+import SQL.ConnectDB;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
 public class StartWindow extends JFrame {
 
     //Singleton
@@ -16,6 +18,7 @@ public class StartWindow extends JFrame {
     //gui components
     private JButton newGameBtn;
     private JButton loadGameBtn;
+    private JButton statBtn;
     private JLabel gameLogo;
 
     //some
@@ -60,6 +63,7 @@ public class StartWindow extends JFrame {
     private void initGuiComponents(){
         newGameBtn = new JButton("New Game");
         loadGameBtn = new JButton("Load Game");
+        statBtn = new JButton("Statistic");
         try {
             Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+gameLogoImgPath));
             basicImage = basicImage.getScaledInstance(Constants.gameLogoWidth, Constants.gameLogoHeight, Image.SCALE_SMOOTH);
@@ -76,6 +80,8 @@ public class StartWindow extends JFrame {
         this.add(newGameBtn);
         loadGameBtn.setBounds(930, 320, 120, 40);
         this.add(loadGameBtn);
+        statBtn.setBounds(930, 400, 120, 40);
+        this.add(statBtn);
         gameLogo.setBounds(Constants.gameLogoStartX,Constants.gameLogoStartY,Constants.gameLogoWidth,Constants.gameLogoHeight);
         this.add(gameLogo);
     }
@@ -96,6 +102,38 @@ public class StartWindow extends JFrame {
 
             }
         });
+
+        statBtn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TableDisplay td = new TableDisplay();
+                td.setVisible(true);
+            }
+        });
+
+
+
+    }
+    class TableDisplay extends JFrame
+    {
+        public TableDisplay()
+        {
+
+            JTable table = ConnectDB.getAsJTable(ConnectDB.getAllGameInfo());
+            table.setPreferredScrollableViewportSize(table.getPreferredSize());
+            table.setFillsViewportHeight(true);
+            //add the table to the frame
+            this.add(new JScrollPane(table));
+
+            this.setTitle("Statistics");
+            this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            this.setBounds(100,100,800,800);
+            this.setResizable(false);
+            this.pack();
+            this.setVisible(true);
+        }
+
 
     }
 
@@ -139,11 +177,12 @@ public class StartWindow extends JFrame {
                     computerDifficulties1.getSelectedItem().toString() + ", " +
                     computerDifficulties2.getSelectedItem().toString() + ", " +
                     computerDifficulties3.getSelectedItem().toString());
+
+            //gw.setNumOfPlayers(Integer.getInteger(numPlayers.getSelectedItem().toString()));
             GameWindow gw = GameWindow.getInstance();
-            gw.setNumOfPlayers(Integer.getInteger(numPlayers.getSelectedItem().toString()));
             gw.setVisible(true);
-
-
+            Game newGame = new Game();
+            newGame.playGame();
         } else {
             System.out.println("User canceled / closed the dialog, result = " + result);
         }

@@ -6,6 +6,7 @@ import Logic.Board;
 import Logic.Card;
 import Logic.Deck;
 import Logic.Block;
+import Logic.*;
 import utils.TransparencyUtil;
 
 import javax.imageio.ImageIO;
@@ -93,7 +94,7 @@ public class GameWindow extends JFrame{
         setGuiComponentsPosition();
 
         //initBackEnd;
-        initBackEnd();
+        //initBackEnd();
 
         //add motion
         addEventListenerToComponents();
@@ -115,7 +116,7 @@ public class GameWindow extends JFrame{
         });
 
         //this.pack(); // pack the window
-        this.setVisible(true);
+
         this.setResizable(false);
 
     }
@@ -129,25 +130,25 @@ public class GameWindow extends JFrame{
         numOfPawnsOnStart = new ArrayList<>();
         numOfPawnsOnHome = new ArrayList<>();
 
+//        for(int i = 0; i < this.colorName.length;i++) {
+//            for(int j = 0; j < this.numberOfPawns/4; j++){
+//                this.pawns.add(loadPawns(this.ImagePath, this.colorName[i]));  //load different color pawn
+//            }
+//        }
         for(int i = 0; i < this.colorName.length;i++) {
-            for(int j = 0; j < this.numberOfPawns/4; j++){
-                this.pawns.add(loadPawns(this.ImagePath, this.colorName[i]));  //load different color pawn
-            }
             numOfPawnsOnStart.add(new JLabel());
             numOfPawnsOnHome.add(new JLabel());
         }
-        for(int i = 0; i < this.colorName.length;i++) {
 
-        }
-        this.testPawn = loadPawns(this.ImagePath, "red");
+//        this.testPawn = loadPawns(this.ImagePath, "red");
         //Initial other variables
         blockToBoardPosition = new HashMap<String, Point>();
         initBlockToBoardPosition();
     }
 
-    private JLabel loadPawns(String imagePath, String color){
+    private JLabel loadPawns( String color){
         try {
-            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+imagePath+color+"_pawn.jpg"));
+            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+color+"_pawn.jpg"));
             basicImage = TransparencyUtil.makeColorTransparent(basicImage,java.awt.Color.WHITE);
             Image BoardImage = basicImage.getScaledInstance(Constants.pawnWidth, Constants.pawnHeight, Image.SCALE_SMOOTH);
             ImageIcon pawnImage = new ImageIcon(BoardImage);
@@ -255,8 +256,8 @@ public class GameWindow extends JFrame{
         boardPanel.setBounds(Constants.boardStartX,Constants.boardStartY,Constants.boardWidth,Constants.boardHeight); // 5,5,960,960
         this.add(boardPanel);
 
-        testPawn.setBounds(Constants.pawnStartX, Constants.pawnStartY, Constants.pawnWidth, Constants.pawnHeight); //init the pawns position
-        boardPanel.add(testPawn);
+//        testPawn.setBounds(Constants.pawnStartX, Constants.pawnStartY, Constants.pawnWidth, Constants.pawnHeight); //init the pawns position
+//        boardPanel.add(testPawn);
 
         //put pawns on start position
         for(int i = 0; i < colorName.length; i++){
@@ -267,12 +268,75 @@ public class GameWindow extends JFrame{
             }
         }
 
+        //put set count label of pawns
+
+        Point temP = blockToBoardPosition.get("redStart");
+        numOfPawnsOnStart.get(0).setBounds(temP.x,temP.y + 60,40,40);
+        boardPanel.add(numOfPawnsOnStart.get(0));
+
+        temP = blockToBoardPosition.get("redSafetyZone5");
+        numOfPawnsOnHome.get(0).setBounds(temP.x,temP.y + 60,40,40);
+        boardPanel.add(numOfPawnsOnHome.get(0));
+
+        temP = blockToBoardPosition.get("blueStart");
+        numOfPawnsOnStart.get(1).setBounds(temP.x+60,temP.y ,40,40);
+        boardPanel.add(numOfPawnsOnStart.get(1));
+
+        temP = blockToBoardPosition.get("blueSafetyZone5");
+        numOfPawnsOnHome.get(1).setBounds(temP.x+60,temP.y ,40,40);
+        boardPanel.add(numOfPawnsOnHome.get(1));
+
+        temP = blockToBoardPosition.get("yellowStart");
+        numOfPawnsOnStart.get(2).setBounds(temP.x,temP.y - 60 ,40,40);
+        boardPanel.add(numOfPawnsOnStart.get(2));
+
+        temP = blockToBoardPosition.get("yellowSafetyZone5");
+        numOfPawnsOnHome.get(2).setBounds(temP.x,temP.y - 60 ,40,40);
+        boardPanel.add(numOfPawnsOnHome.get(2));
+
+        temP = blockToBoardPosition.get("greenStart");
+        numOfPawnsOnStart.get(3).setBounds(temP.x-60,temP.y ,40,40);
+        boardPanel.add(numOfPawnsOnStart.get(3));
+
+        temP = blockToBoardPosition.get("greenSafetyZone5");
+        numOfPawnsOnHome.get(3).setBounds(temP.x-60,temP.y  ,40,40);
+        boardPanel.add(numOfPawnsOnHome.get(3));
+
+        //test the display number of pawn
+        for(int i = 0; i < colorName.length; i++){
+            numOfPawnsOnHome.get(i).setText("4");
+            numOfPawnsOnStart.get(i).setText("4");
+
+            setLabelFont(numOfPawnsOnHome.get(i));
+            setLabelFont(numOfPawnsOnStart.get(i));
+        }
+
         movePawnBtn.setBounds(1000, 800, 100, 40);
         this.add(movePawnBtn);
 
         drawCardBtn.setBounds(1000, 700, 100, 40);
         this.add(drawCardBtn);
 
+    }
+
+    private void setLabelFont(JLabel label){
+        Font labelFont = label.getFont();
+        String labelText = label.getText();
+
+        int stringWidth = label.getFontMetrics(labelFont).stringWidth(labelText);
+        int componentWidth = label.getWidth();
+
+// Find out how much the font can grow in width.
+        double widthRatio = (double)componentWidth / (double)stringWidth;
+
+        int newFontSize = (int)(labelFont.getSize() * widthRatio);
+        int componentHeight = label.getHeight();
+
+// Pick a new font size so it will not be larger than the height of label.
+        int fontSizeToUse = Math.min(newFontSize, componentHeight);
+
+// Set the label's font size to the newly determined size.
+        label.setFont(new Font(labelFont.getName(), Font.PLAIN, fontSizeToUse));
     }
 
     private void addEventListenerToComponents(){
@@ -335,7 +399,7 @@ public class GameWindow extends JFrame{
 
         //add mouse click event to pawns JLabel.
 
-        //test kick boolean variable
+        //testing code kick boolean variable
         // How to move the pawn
         for(int i = 0; i < pawns.size(); i++){
 
@@ -350,12 +414,7 @@ public class GameWindow extends JFrame{
                         System.out.println("( "+seletedLabel.getX()+" , "+seletedLabel.getY()+" )");
                     }
 
-//                    else if(seletedLabel != (JLabel)e.getComponent() && canKick){
-//                        Point startPoint = blockToBoardPosition.get("blueStart0");
-//                        System.out.println("startPoint: "+startPoint.x+" , "+startPoint.y);
-//                        JLabel temP = (JLabel) e.getComponent();
-//                        temP.setLocation(startPoint.x,startPoint.y);
-//                    }
+
                 }
 
                 @Override
@@ -423,12 +482,12 @@ public class GameWindow extends JFrame{
     }
 
     private void  initBackEnd(){
-        linkBlockToBackEnd();
+        linkBlockToBackEnd(board);
     }
 
     //Connect Backend Function
-    private void linkBlockToBackEnd(){
-        board = new Board();
+    private void linkBlockToBackEnd(Board boardPa){
+        Board board = boardPa;
         allBlocks = board.everyBlock;
         boardToBackend = new HashMap<>();
         for(int i = 0; i < allBlocks.size(); i++){
@@ -472,8 +531,57 @@ public class GameWindow extends JFrame{
 //        System.out.println("blocks: "+j);
     }
 
-    public void playGame(){
+    public void refreshBoard(ArrayList<Pawn> everyPawn, Board board){
+        linkBlockToBackEnd(board);
+        for(JLabel pawnL: pawns){
+            boardPanel.remove(pawnL);
+        }
 
+        for(Pawn pawn : everyPawn){
+
+            Point tmpP =  boardToBackend.get(pawn.getCurrentBlock());
+            JLabel pawnL = loadPawns(pawn.getColor().toString());
+            pawnL.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if(seletedLabel == null){
+                        seletedLabel = (JLabel)e.getComponent();
+                        if(curCard != null){
+
+                        }
+                        System.out.println("( "+seletedLabel.getX()+" , "+seletedLabel.getY()+" )");
+                    }
+
+
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
+            boardPanel.add(pawnL);
+            pawnL.setBounds(tmpP.x,tmpP.y,Constants.pawnWidth, Constants.pawnHeight);
+            pawns.add(pawnL);
+
+        }
+        System.out.println("run refreshBoard");
     }
+
 
 }
