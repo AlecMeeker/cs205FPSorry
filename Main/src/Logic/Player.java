@@ -9,9 +9,26 @@ public abstract class Player {
 	protected Card currentDraw;
 
 	protected int bounces;
+
+	public Color getColor() {
+		return color;
+	}
+
 	protected Color color;
 	protected Board thisBoard;
 	protected String name;
+
+	public ArrayList<Pawn> getMovablePawnList() {
+		return movablePawnList;
+	}
+
+	public ArrayList<Pawn> getStartPawnList() {
+		return startPawnList;
+	}
+
+	public ArrayList<Pawn> getFinishedPawnList() {
+		return finishedPawnList;
+	}
 
 	protected ArrayList<Pawn> movablePawnList; //a list of the player's pawns that can be moved (not finished, not in start)
 	protected ArrayList<Pawn> startPawnList; //a list of pawns still in home

@@ -122,7 +122,7 @@ public class Game {
                     // Runs inside of the Swing UI thread
                     SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
-                          gw.refreshBoard(everyPawn,gameBoard);
+                          gw.refreshBoard(everyPawn,gameBoard,allPlayers);
                         }
                     });
 

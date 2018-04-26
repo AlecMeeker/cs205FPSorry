@@ -2,6 +2,7 @@ package com.sorry.GUI;
 
 // import internal class of project.
 import Logic.*;
+import Logic.Color;
 import utils.TransparencyUtil;
 
 import javax.imageio.ImageIO;
@@ -34,8 +35,8 @@ public class GameWindow extends JFrame{
     private JLabel drawnCard;
     private JTextArea cardInfoReminder;
 
-    private ArrayList<JLabel> numOfPawnsOnStart;  //blue: 0, red: 1, yellow: 2,green: 3
-    private ArrayList<JLabel> numOfPawnsOnHome;    //blue: 0, red: 1, yellow: 2,green: 3
+    private ArrayList<JLabel> numOfPawnsOnStart;  //red 0, blue 1, yellow 2, green 3
+    private ArrayList<JLabel> numOfPawnsOnHome;    //red 0, blue 1, yellow 2, green 3
 
     /* Some board and movement variables */
     private final int stepLength = 60;
@@ -89,7 +90,7 @@ public class GameWindow extends JFrame{
 
     /* Boolean variables for button click */
     private boolean isDrawn;
-
+    private boolean isMovedThisTurn;
 
     private GameWindow(){
         initWindow();
@@ -152,7 +153,6 @@ public class GameWindow extends JFrame{
         this.saveBtn = new JButton("Save Game");
         this.cardInfoReminder = new JTextArea();
 
-        this.pawns = new ArrayList<>();
         //cardInfoReminder
         numOfPawnsOnStart = new ArrayList<>();
         numOfPawnsOnHome = new ArrayList<>();
@@ -502,7 +502,7 @@ public class GameWindow extends JFrame{
                             && selectedLabel != null){
                         selectedLabel.setLocation(pos.x,pos.y);
                         selectedLabel.setOpaque(false);
-                        System.out.println("selectedLabel pos: "+pos.x+" , "+pos.y);
+                        System.out.println(selectedLabel.isOpaque()+"selectedLabel pos: "+pos.x+" , "+pos.y);
                         break;
                     }
                 }
@@ -617,7 +617,13 @@ public class GameWindow extends JFrame{
     // for close the window event
     private void quitAndSave(){
         startWindow.setVisible(true);
+        removeAllPawns();
         this.dispose();
+    }
+    private void removeAllPawns(){
+        for(JLabel pawnL: pawns){
+            boardPanel.remove(pawnL);
+        }
     }
 
     /* Public function */
@@ -638,18 +644,14 @@ public class GameWindow extends JFrame{
         this.deck = board.thisDeck;
     }
 
-    public void refreshBoard(ArrayList<Pawn> everyPawn, Board board){
+    public void refreshBoard(ArrayList<Pawn> everyPawn, Board board,ArrayList<Player> allPlayers){
 
-        int i = 0;
-        for(JLabel pawnL: pawns){
-            boardPanel.remove(pawnL);
-            i++;
-        }
+        removeAllPawns();
 
         for(Pawn pawn : everyPawn){
             Point tmpP =  boardToBackend.get(pawn.getCurrentBlock());
             JLabel pawnL = pawnsBackToFront.get(pawn);
-            pawnL.setIcon(loadPawnIcon(pawn.getColor().toString()));
+            pawnL.setIcon(loadPawnIcon(pawn.getColor().toString().toLowerCase()));
 
             // If the pawn belong to human player add the click event to it
             HumanPlayer tmpPlayer = new HumanPlayer();
@@ -673,7 +675,8 @@ public class GameWindow extends JFrame{
                         }
                         selectedLabel.setOpaque(true);
                         selectedLabel.setBackground(java.awt.Color.YELLOW);
-                        System.out.println("( " + selectedLabel.getX() + " , " + selectedLabel.getY() + " )");
+                        selectedLabel.repaint();
+                        System.out.println(selectedLabel.isOpaque()+"( " + selectedLabel.getX() + " , " + selectedLabel.getY() + " )");
                     }
 
                     @Override
@@ -701,9 +704,33 @@ public class GameWindow extends JFrame{
             pawnL.setLocation(tmpP.x,tmpP.y);
 
         }
-        System.out.println("how many pawnsLabel now: "+i);
+
+        for(Player player:allPlayers){
+            Color playerColor = player.getColor();
+            Integer pawnsOnStart = player.getStartPawnList().size();
+            Integer pawnsOnHome = player.getFinishedPawnList().size();
+            switch(playerColor){
+                case BLUE: numOfPawnsOnStart.get(0).setText(pawnsOnStart.toString());
+                            numOfPawnsOnHome.get(0).setText(pawnsOnHome.toString());
+                            break;
+                case RED: numOfPawnsOnStart.get(1).setText(pawnsOnStart.toString());
+                             numOfPawnsOnHome.get(1).setText(pawnsOnHome.toString());
+                             break;
+                case YELLOW: numOfPawnsOnStart.get(2).setText(pawnsOnStart.toString());
+                            numOfPawnsOnHome.get(2).setText(pawnsOnHome.toString());
+                            break;
+                case GREEN: numOfPawnsOnStart.get(3).setText(pawnsOnStart.toString());
+                            numOfPawnsOnHome.get(3).setText(pawnsOnHome.toString());
+                            break;
+            }
+        }
 
         System.out.println("run refreshBoard");
     }
+
+    public ArrayList<Block> movableBlocks(){
+        return null;
+    }
+
 
 }
