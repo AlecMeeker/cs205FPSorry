@@ -19,14 +19,14 @@ public class Game {
         this.gameBoard = new Board();
         ArrayList<Player> players = new ArrayList<>();
 
-        initGame(3);
+        initGame(numPlayers-1);
     }
 
     public void initGame(int numAI) {
 
         //get # of AI players and stats
 
-        int AI_PLAYERS = 3; //change this once you meet with junziao TESTING ONLY TESTING ONLY
+        int AI_PLAYERS = numAI; //change this once you meet with junziao TESTING ONLY TESTING ONLY
 
         //USE THIS FOR TESTING ONLY
         String name = "test";

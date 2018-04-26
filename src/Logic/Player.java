@@ -14,6 +14,22 @@ public abstract class Player {
 	protected String name;
 
 
+	public Color getColor() {
+		return color;
+	}
+
+	public ArrayList<Pawn> getMovablePawnList() {
+		return movablePawnList;
+	}
+
+	public ArrayList<Pawn> getStartPawnList() {
+		return startPawnList;
+	}
+
+	public ArrayList<Pawn> getFinishedPawnList() {
+		return finishedPawnList;
+	}
+
 	protected ArrayList<Pawn> movablePawnList; //a list of the player's pawns that can be moved (not finished, not in start)
 	protected ArrayList<Pawn> startPawnList; //a list of pawns still in home
 	protected ArrayList<Pawn> finishedPawnList; //a list of pawns who have won
@@ -23,6 +39,10 @@ public abstract class Player {
 	/*
 	Normal constructor, creates a new player with all default starting locations
 	 */
+
+	public Player(){
+
+	}
 	protected Player(Color inColor, Board thisBoard) {
 
 		startPawnList = new ArrayList<>();
