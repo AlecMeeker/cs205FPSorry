@@ -1,11 +1,10 @@
-package Logic;
 
 /**
  * the card enum
  * by alec
  */
 
-
+package Logic;
 
 
 public enum Card {

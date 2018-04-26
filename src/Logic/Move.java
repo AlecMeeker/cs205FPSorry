@@ -25,6 +25,7 @@ public class Move {
     used in case you draw a 7, and split that into 1/6. The 1 doesn't count as a 1 to move out
      */
     public Move (Pawn thisPawn, int spaces) {
+        System.out.println("move generated");
         this.p = thisPawn;
         origin = thisPawn.getCurrentBlock();
         bounced = false;
@@ -125,6 +126,7 @@ public class Move {
         if (p.getCurrentBlock().id > -1) {
             Block iterBlock = p.getCurrentBlock();
             for (int i = 0; i < 10; i++) {
+
                 iterBlock = iterBlock.getNextBlock(Color.NULL);
                 if (iterBlock.pawnsHere.size() != 0 && iterBlock.getPawn().getColor() != p.getColor()) {
                     pawnsInFront++;
@@ -160,10 +162,8 @@ public class Move {
         //for all those you have bounced in your path, send em home
         if (whomBounced.size() != 0) {
             for (Pawn pp : whomBounced) {
-                Block formerBlock = p.getCurrentBlock();
                 pp.getBounced();
-                formerBlock.removePawn();
-
+                p.myPlayer.bounces++;
             }
         }
 
