@@ -336,7 +336,7 @@ public class GameWindow extends JFrame{
 
         cardInfoReminder.setBounds(980,300,400,300);
         cardInfoReminder.setFont(cardInfoReminder.getFont().deriveFont(20f));
-
+        cardInfoReminder.setEditable(false);
         setTextAreaTran(cardInfoReminder);
         this.add(cardInfoReminder);
     }
@@ -547,7 +547,6 @@ public class GameWindow extends JFrame{
         } );
 
     }
-
 
     /* Connect Backend Function */
     private void linkBlockToBackEnd(Board boardPa){

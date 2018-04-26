@@ -19,6 +19,8 @@ public class StartWindow extends JFrame {
     private JButton newGameBtn;
     private JButton loadGameBtn;
     private JButton statBtn;
+    private JButton instructionBtn;
+
     private JLabel gameLogo;
 
     //some
@@ -65,6 +67,8 @@ public class StartWindow extends JFrame {
         newGameBtn = new JButton("New Game");
         loadGameBtn = new JButton("Load Game");
         statBtn = new JButton("Statistic");
+        instructionBtn = new JButton("Instruction");
+
         try {
             Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+gameLogoImgPath));
             basicImage = basicImage.getScaledInstance(Constants.gameLogoWidth, Constants.gameLogoHeight, Image.SCALE_SMOOTH);
@@ -83,6 +87,9 @@ public class StartWindow extends JFrame {
         this.add(loadGameBtn);
         statBtn.setBounds(930, 400, 120, 40);
         this.add(statBtn);
+        instructionBtn.setBounds(930, 480, 120, 40);
+        this.add(instructionBtn);
+
         gameLogo.setBounds(Constants.gameLogoStartX,Constants.gameLogoStartY,Constants.gameLogoWidth,Constants.gameLogoHeight);
         this.add(gameLogo);
     }
@@ -93,7 +100,6 @@ public class StartWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 newGameDialog();
-
             }
         });
         loadGameBtn.addActionListener(new ActionListener() {
@@ -113,6 +119,20 @@ public class StartWindow extends JFrame {
             }
         });
 
+        instructionBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JTextArea instructionText = new JTextArea();
+                instructionText.setLineWrap(true);
+
+                JFrame instructionWindow= new JFrame();
+                instructionWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                instructionWindow.setBounds(50,50,100,800);
+                instructionWindow.add(instructionText);
+                instructionWindow.setVisible(true);
+            }
+        });
 
 
     }
@@ -179,6 +199,8 @@ public class StartWindow extends JFrame {
                     computerDifficulties2.getSelectedItem().toString() + ", " +
                     computerDifficulties3.getSelectedItem().toString());
             System.out.println(Integer.parseInt(numPlayers.getSelectedItem().toString()));
+
+                //Get the game Config
                 int numberOfPlayers = Integer.parseInt(numPlayers.getSelectedItem().toString());
                 GameWindow gw = GameWindow.getInstance();
                 //gw.initWindow();
