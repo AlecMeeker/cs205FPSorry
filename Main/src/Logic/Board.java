@@ -8,9 +8,10 @@ public class Board {
 
     public Block[] outerRing;
     //List<Block> board;
-    private Block[] blueSafeZone, redSafeZone, yellowSafeZone, greenSafeZone, START_ARRAY;
+    public Block[] blueSafeZone, redSafeZone, yellowSafeZone, greenSafeZone, START_ARRAY;
     public Deck thisDeck;
     public ArrayList<Block> everyBlock;
+    public Pawn[] pieces;
 
     /*
     Creates a board of 60 squares, with some safety zones and homes, and links them all, then adds slides
@@ -29,27 +30,27 @@ public class Board {
             //set the correct color if it leads to a safety
             switch (i) {
                 case 2:
-                    outerRing[i] = new Block(Color.RED, i);
+                    outerRing[i] = new Block(Color.RED, i, false);
                     outerRing[i].setNextSafetyBlock(redSafeZone[0]);
                     redSafeZone[0].setPreviousBlock(outerRing[i]);
                     break;
                 case 17:
-                    outerRing[i] = new Block(Color.BLUE, i);
+                    outerRing[i] = new Block(Color.BLUE, i, false);
                     outerRing[i].setNextSafetyBlock(blueSafeZone[0]);
                     blueSafeZone[0].setPreviousBlock(outerRing[i]);
                     break;
                 case 32:
-                    outerRing[i] = new Block(Color.YELLOW, i);
+                    outerRing[i] = new Block(Color.YELLOW, i, false);
                     outerRing[i].setNextSafetyBlock(yellowSafeZone[0]);
                     yellowSafeZone[0].setPreviousBlock(outerRing[i]);
                     break;
                 case 47:
-                    outerRing[i] = new Block(Color.GREEN, i);
+                    outerRing[i] = new Block(Color.GREEN, i, false);
                     outerRing[i].setNextSafetyBlock(greenSafeZone[0]);
                     greenSafeZone[0].setPreviousBlock(outerRing[i]);
                     break;
                 default:
-                    outerRing[i] = new Block(Color.NULL, i);
+                    outerRing[i] = new Block(Color.NULL, i, false);
                     break;
             }
         }
@@ -64,7 +65,7 @@ public class Board {
         }
         //this sets up and links the start blocks
         //stored [0] BLUE [1] RED [2] YELLOW [3] GREEN
-        START_ARRAY = new Block[]{new Block(Color.RED, -1), new Block(Color.BLUE, -1), new Block(Color.YELLOW, -1), new Block(Color.GREEN, -1)};
+        START_ARRAY = new Block[]{new Block(Color.RED, -10, false), new Block(Color.BLUE, -10, false), new Block(Color.YELLOW, -10, false), new Block(Color.GREEN, -10, false)};
         for (int z = 0; z < START_ARRAY.length; z++) {
             START_ARRAY[z].setNextBlock(outerRing[4 + (15*z)]);
         }
@@ -87,9 +88,10 @@ public class Board {
     private Block[] generateSafetyZone(Color safetyColor){
         System.out.println("Safety zone " + safetyColor.toString() + " generated.");
         Block[] newSafetyZone = new Block[6];
-        for (int i = 0; i < 6; i++) {
-            newSafetyZone[i] = new Block(safetyColor, -i);
+        for (int i = 0; i < 5; i++) {
+            newSafetyZone[i] = new Block(safetyColor, -(i +1), false);
         }
+        newSafetyZone[5] = new Block(safetyColor, -6, true);
         for (int i = 0; i < 5; i++) {
             linkBlocks(newSafetyZone[i], newSafetyZone[i+1]);
         }
@@ -146,6 +148,22 @@ public class Board {
         whereTo.place(thisPawn);
     }
 
+    public Block getSafeBlock(int id, Color color) {
+        if (id < 1 || id > -6) {
+            switch (color) {
+                case RED:
+                    return redSafeZone[-id];
+                case BLUE:
+                    return blueSafeZone[-id];
+                case YELLOW:
+                    return yellowSafeZone[-id];
+                case GREEN:
+                    return greenSafeZone[-id];
+            }
+        }
+        return null;
+    }
+
 
     public Block getRedHome(){
         return START_ARRAY[0]; }
@@ -168,5 +186,38 @@ public class Board {
     public Block getGreenGoal() {
         return greenSafeZone[5];
     }
+
+
+//    public void loadAdjuster(int identer){
+//        String encoded=ConnectDB.loadGameData(gameID);
+//        //16 sets of 00-87 for pawn positions each followed by an s,set of 45 hex 0-B for deck order, number 00-45 for top card, z for end of save
+//        //char[] savedState=encoded.toCharArray();
+//        //StringTokenizer ss=new StringTokenizer(encoded,"s");
+//        String[] data=encoded.split("s");
+//        //int i=1;
+//        for (int i=0;i<16;i++){
+//            pieces[i].setIndex(Integer.parseInt(data[i]));
+//        }
+//        cards.loadStats(data[data.length-2],Integer.parseInt(data[data.length-1]));
+//
+//    }
+//
+//    public String savePrimer(){
+//        String savestate="";
+//        for (int i=0;i<pieces.length;i++){
+//            savestate+=convertPlace(pieces[i].getIndex());
+//            savestate+="s";
+//        }
+//
+//        for (int i=0;i<45;i++){
+//            savestate+=Integer.toHexString(cards.deck[i].num);
+//
+//        }
+//        savestate+="s";
+//        savestate+=convertPlace(cards.getTCindex());
+//
+//        ConnectDB.saveGameData(gameID,savestate);
+//        return savestate;
+//    }
 
 }

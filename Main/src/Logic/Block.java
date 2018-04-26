@@ -8,15 +8,18 @@ public class Block {
     Block previousBlock, nextBlock;
     Block nextSafetyBlock;
 
-    public Boolean highlighted;
-    public Boolean selected;
+    public boolean highlighted;
+    public boolean selected;
+
+    public boolean isHome;
 
     public Slidiness slideStatus;
 
     ArrayList<Pawn> pawnsHere;
 
-    public Block(Color inColor,  int id) {
+    public Block(Color inColor,  int id, boolean isHome) {
         pawnsHere = new ArrayList<>();
+        this.isHome = isHome;
         this.color = inColor;
         this.id = id;
         this.slideStatus = Slidiness.NOT;
@@ -70,7 +73,7 @@ public class Block {
     }
 
     public boolean place(Pawn pawn) {
-        if (id != -1 && pawnsHere.size() != 0){
+        if ((id != -10 || !isHome) && pawnsHere.size() != 0 ){
             //pawnsHere.get(0).getBounced();
             pawnsHere.remove(0);
             pawnsHere.add(pawn);
