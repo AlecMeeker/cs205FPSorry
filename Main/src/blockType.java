@@ -1,4 +1,4 @@
-package Main;
+package Main.src;
 
 import Main.src.Slide;
 

@@ -1,7 +1,5 @@
 package Main.src;
 
-import Main.blockType;
-
 public class Block {
     Color SC;
     //Pawn[] onBlock;

@@ -1,13 +1,10 @@
 package Main.src;
 
-import Main.blockType;
 import Main.sql.ConnectDB;
 
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.StringTokenizer;
 
 public class Board {
     Pawn nullPawn;// for all instances there is no pawn
