@@ -237,7 +237,12 @@ public abstract class Player {
 		}
 	}
 
-	public abstract boolean play();
+
+	public abstract void drawStep();
+	public abstract void selectPawnStep();
+	public abstract void selectEndBlockStep();
+	public abstract void selectSecondPawnStep();
+	public abstract void selectSecondEndBlockStep();
 
 	public abstract String getName();
 

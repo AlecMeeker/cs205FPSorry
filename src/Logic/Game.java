@@ -161,16 +161,25 @@ public class Game {
     }
 
     /*
-    the new play() function
+    the new play() function. Called on click of the next turn button in the gamewindow
      */
     public void nextTurn() {
+        clearHighlightAndSelect();
         currentMove++;
         currentPlayer = allPlayers.get(currentMove % allPlayers.size());
 
-        currentPlayer.play();
-        if (currentPlayer.getPawnsInHome() == 4) {
-            winner = currentPlayer;
+        //if current player is an AI player, do all the stuff automatically
+        if (currentPlayer.getClass() == (new AI()).getClass()) {
+            currentPlayer.drawStep();
+
+            if (currentPlayer.getPawnsInHome() == 4) {
+                winner = currentPlayer;
+            }
+
+            this.nextTurn();
         }
+
+
     }
 
     public void printData() {
@@ -190,6 +199,17 @@ public class Game {
             }
         }
         System.out.println("\n*****************");
+    }
+
+    public void clearHighlightAndSelect() {
+        for (Block b : gameBoard.everyBlock) {
+            b.highlighted = false;
+            b.selected = false;
+        }
+        for (Pawn p : everyPawn) {
+            p.highlighted = false;
+            p.selected = false;
+        }
     }
 }
 

@@ -11,8 +11,11 @@ public class HumanPlayer extends Player {
         System.out.println(name + " entered the arena for Team " + inColor.toString() + "!\n");
     }
 
-    @Override
     public boolean play() {
+        return false;
+    }
+
+    public void drawStep() {
         int choice = 0;
         switch (choice) {
             case 0:
@@ -25,16 +28,47 @@ public class HumanPlayer extends Player {
 
         }
 
-
-        currentDraw = thisBoard.thisDeck.draw();
         System.out.println("You drew " + currentDraw.toString());
         generateMoves();
-        //CHOOSE HOW THE HUMAN SELECTS AN OPTION AND THEN IMPLEMENT THIS
-        if (finishedPawnList.size() == 4) {
-            System.out.println("You win!!!");
-            return false;
+        this.refreshHighlight();
+    }
+
+    public void selectPawnStep() {
+        for (Move m : potentialMovesList.get(0)) {
+            if (m.p.selected) {
+                this.refreshHighlight();
+            }
         }
-        return true;
+    }
+
+    public void selectEndBlockStep() {
+        for (Move m : potentialMovesList.get(0)) {
+            if (m.blockReached.selected) {
+                m.enactMove();
+                if (finishedPawnList.size() == 4) {
+                    System.out.println("You win!!!");
+                }
+            }
+        }
+    }
+
+    public void selectSecondPawnStep() {
+        for (Move m : potentialMovesList.get(1)) {
+            if (m.p.selected) {
+                this.refreshHighlight();
+            }
+        }
+    }
+
+    public void selectSecondEndBlockStep() {
+        for (Move m : potentialMovesList.get(1)) {
+            if (m.blockReached.selected) {
+                m.enactMove();
+                if (finishedPawnList.size() == 4) {
+                    System.out.println("You win!!!");
+                }
+            }
+        }
     }
 
     public String getName() {

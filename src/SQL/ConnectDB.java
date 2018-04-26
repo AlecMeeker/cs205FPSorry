@@ -312,7 +312,7 @@ public class ConnectDB {
     /**
      * This method inserts game data for a particular game into the database
      * @param player        player name
-     * @param playtime      play time
+     * @param playtime      drawStep time
      * @param numRounds     number of rounds
      * @param playerColor   color of the player
      * @param winnerColor   color of the winner
@@ -390,7 +390,7 @@ public class ConnectDB {
     /**
      * This method updates the entry for a game in the database
      * @param gameID        ID of the game
-     * @param playtime      new play time
+     * @param playtime      new drawStep time
      * @param numRounds     new number of rounds
      * @param winnerColor   color of the winner
      * @param playerBumps   new number of player bumps

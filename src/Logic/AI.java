@@ -9,6 +9,10 @@ public class AI extends Player {
     public String demeanor;
     public String name;
 
+    public AI() {
+        super(Color.NULL, new Board());
+    }
+
     public AI(Color inColor, Board inBoard, boolean isSmart, boolean isCruel, String name) {
         super(inColor, inBoard);
         this.name = name;
@@ -34,7 +38,7 @@ public class AI extends Player {
     }
 
     @Override
-    public boolean play() {
+    public void drawStep() {
         System.out.println("It's " + name + "'s turn (" + color.toString().toLowerCase() + ")");
 
         System.out.println("pawns in start: " + startPawnList.size() + "; pawns movable: " + movablePawnList.size() + "; pawns finished: " + finishedPawnList.size());
@@ -58,10 +62,13 @@ public class AI extends Player {
         }
         if (finishedPawnList.size() == 4) {
             System.out.println(name + " WINS!");
-            return false;
         }
-        return true;
     }
+
+    public void selectPawnStep() { }
+    public void selectEndBlockStep() { }
+    public void selectSecondPawnStep(){ }
+    public void selectSecondEndBlockStep(){ }
 
     /*
 	rates a with move with an integer, to allow for optimal move selection

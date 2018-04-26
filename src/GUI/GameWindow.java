@@ -59,6 +59,7 @@ public class GameWindow extends JFrame{
     private int numOfPlayers;
 
     //BackEnd stuff.
+    private Game currentGame;
     private Board board;
     private Card curCard;
     private ArrayList<Block> allBlocks;
@@ -74,8 +75,9 @@ public class GameWindow extends JFrame{
         initWindow();
     }
 
-    public static GameWindow getInstance(){ //Thread safe singleton model
+    public static GameWindow getInstance(Game gameIn){ //Thread safe singleton model
         GameWindow result = instance;
+        result.currentGame = gameIn;
         if(result == null){
             synchronized (mutex){
                 result = instance;
@@ -94,7 +96,7 @@ public class GameWindow extends JFrame{
         setGuiComponentsPosition();
 
         //initBackEnd;
-        //initBackEnd();
+        initBackEnd();
 
         //add motion
         addEventListenerToComponents();
@@ -482,12 +484,12 @@ public class GameWindow extends JFrame{
     }
 
     private void  initBackEnd(){
-        linkBlockToBackEnd(board);
+        linkBlockToBackEnd();
     }
 
     //Connect Backend Function
-    private void linkBlockToBackEnd(Board boardPa){
-        Board board = boardPa;
+    private void linkBlockToBackEnd(){
+        Board board = currentGame.gameBoard;
         allBlocks = board.everyBlock;
         boardToBackend = new HashMap<>();
         for(int i = 0; i < allBlocks.size(); i++){
@@ -531,21 +533,24 @@ public class GameWindow extends JFrame{
 //        System.out.println("blocks: "+j);
     }
 
-    public void refreshBoard(ArrayList<Pawn> everyPawn, Board board){
-        linkBlockToBackEnd(board);
+    public void refreshBoard(){
+        linkBlockToBackEnd();
         for(JLabel pawnL: pawns){
             boardPanel.remove(pawnL);
         }
 
-        for(Pawn pawn : everyPawn){
+        for(Pawn p : currentGame.everyPawn){
 
-            Point tmpP =  boardToBackend.get(pawn.getCurrentBlock());
-            JLabel pawnL = loadPawns(pawn.getColor().toString());
+            Point tmpP =  boardToBackend.get(p.getCurrentBlock());
+            JLabel pawnL = loadPawns(p.getColor().toString());
+
             pawnL.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     if(seletedLabel == null){
                         seletedLabel = (JLabel)e.getComponent();
+                        p.select();
+
                         if(curCard != null){
 
                         }
@@ -582,6 +587,8 @@ public class GameWindow extends JFrame{
         }
         System.out.println("run refreshBoard");
     }
+
+
 
 
 }
