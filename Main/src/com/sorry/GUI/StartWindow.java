@@ -25,6 +25,32 @@ public class StartWindow extends JFrame {
 
     //some
     private String gameLogoImgPath= "/Main/imgs/sorry_start.jpg";
+    private String instructionString = "The modern deck contains 45 cards: there are five 1 cards as well as four each of the other cards (Sorry!, 2, 3, 4, 5, 7, 8, 10, 11 and 12). The 6s or 9s are omitted to avoid confusion. The first edition of the game had 44 cards (four of each) and the extra 1 card was soon introduced as an option for quicker play.[5] A 1996 board from Waddingtons had 5 of each card.\n" +
+            "\n" +
+            "Cards are annotated with the following actions:\n" +
+            "\n" +
+            "1\tMove a pawn from Start or move a pawn one space forward.\n" +
+            "2\tMove a pawn from Start or move a pawn two spaces forward. Drawing a two entitles the player to draw again at the end of his or her turn. If the player cannot use a two to move, he or she can still draw again.\n" +
+            "3\tMove a pawn three spaces forward.\n" +
+            "4\tMove a pawn four spaces backward.\n" +
+            "5\tMove a pawn five spaces forward.\n" +
+            "7\tMove one pawn seven spaces forward, or split the seven spaces between two pawns (such as four spaces for one pawn and three for another). This makes it possible for two pawns to enter Home on the same turn, for example. The seven cannot be used to move a pawn out of Start, even if the player splits it into a six and one or a five and two. The entire seven spaces must be used or the turn is lost. You may not move backwards with a split.\n" +
+            "8\tMove a pawn eight spaces forward.\n" +
+            "10\tMove a pawn 10 spaces forward or one space backward. If none of a player's pawns can move forward 10 spaces, then one pawn must move back one space.\n" +
+            "11\tMove 11 spaces forward, or switch the places of one of the player's own pawns and an opponent's pawn. A player that cannot move 11 spaces is not forced to switch and instead can forfeit the turn. An 11 cannot be used to switch a pawn that is in a Safety Zone.\n" +
+            "12\tMove a pawn 12 spaces forward.\n" +
+            "Sorry! card\tTake any one pawn from Start and move it directly to a square occupied by any opponent's pawn, sending that pawn back to its own Start. A Sorry! card cannot be used on an opponent's pawn in a Safety Zone. If there are no pawns on the player's Start, or no opponent's pawns on any squares outside Safety Zones, the turn is lost."+"Each player chooses four pawns of one color and places them in his or her Start. One player is selected to play first.\n" +
+            "\n" +
+            "Each player in turn draws one card from the deck and follows its instructions. To begin the game, all of a player's four pawns are restricted to Start; a player can only move them out onto the rest of the board if he or she draws a 1 or 2 card. A 1 or a 2 places a pawn on the space directly outside of start (a 2 does not entitle the pawn to move a second space).\n" +
+            "\n" +
+            "The Relaxation Start: When a young player is playing, especially when learning the game of Sorry!, a relaxation is offered in allowing one of his or her pawns to begin the game already on the board, on the space directly outside his or her Start, as the tedium of waiting for a 1 or a 2 can be wearisome even for experienced players.\n" +
+            "\n" +
+            "A pawn can jump over any other pawn during its move. However, two pawns cannot occupy the same square; a pawn that lands on a square occupied by another player's pawn \"bumps\" that pawn back to its own Start. Players can not bump their own pawns back to Start; if the only way to complete a move would result in a player bumping his or her own pawn, the player's pawns remain in place and the player loses his or her turn.\n" +
+            "\n" +
+            "If a pawn lands at the start of a slide (except those of its own color), either by direct movement or as the result of a switch from an 11 card or a Sorry card, it immediately \"slides\" to the last square of the slide. All pawns on all spaces of the slide (including those belonging to the sliding player) are sent back to their respective Starts.[4]\n" +
+            "\n" +
+            "The last five squares before each player's Home are \"Safety Zones\", and are specially colored corresponding to the colors of the Homes they lead to. Access is limited to pawns of the same color. Pawns inside the Safety Zones are immune to being bumped by opponent's pawns or being switched with opponents' pawns via 11 or Sorry! cards. However, if a pawn is forced via a 10 or 4 card to move backwards out of the Safety Zone, it is no longer considered \"safe\" and may be bumped by or switched with " +
+            "opponents' pawns as usual until it re-enters the Safety Zone.";
 
     //
     private int numPlayer;
@@ -123,13 +149,17 @@ public class StartWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                JTextArea instructionText = new JTextArea();
-                instructionText.setLineWrap(true);
+                JTextArea instructionTextArea = new JTextArea();
+                instructionTextArea.setLineWrap(true);
+                instructionTextArea.setText(instructionString);
+                instructionTextArea.setFont(instructionTextArea.getFont().deriveFont(16f));
+                JScrollPane scroll = new JScrollPane(instructionTextArea);
+                scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
                 JFrame instructionWindow= new JFrame();
                 instructionWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                instructionWindow.setBounds(50,50,100,800);
-                instructionWindow.add(instructionText);
+                instructionWindow.setBounds(50,50,1000,800);
+                instructionWindow.add(scroll);
                 instructionWindow.setVisible(true);
             }
         });
@@ -144,8 +174,12 @@ public class StartWindow extends JFrame {
             JTable table = ConnectDB.getAsJTable(ConnectDB.getAllGameInfo());
             table.setPreferredScrollableViewportSize(table.getPreferredSize());
             table.setFillsViewportHeight(true);
+            table.setMaximumSize(new Dimension(1000,800));
             //add the table to the frame
-            this.add(new JScrollPane(table));
+            JScrollPane scroll = new JScrollPane(table);
+            scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            this.add(scroll);
 
             this.setTitle("Statistics");
             this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
