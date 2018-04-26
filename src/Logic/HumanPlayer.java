@@ -28,7 +28,6 @@ public class HumanPlayer extends Player {
                 currentDraw = thisBoard.thisDeck.draw();
                 break;
 
-
         }
 
         System.out.println("You drew " + currentDraw.toString());

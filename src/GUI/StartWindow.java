@@ -254,10 +254,7 @@ public class StartWindow extends JFrame {
             GameWindow gw = GameWindow.getInstance();
             gw.loadConfig(numPlayer);
             gw.loadGameStuff(newGame.everyPawn,newGame);
-
-
             gw.setVisible(true);
-            newGame.nextTurn();
         } else {
             System.out.println("User canceled / closed the dialog, result = " + result);
         }

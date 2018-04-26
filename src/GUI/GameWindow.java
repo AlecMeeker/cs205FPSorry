@@ -34,7 +34,7 @@ public class GameWindow extends JFrame{
     private BoardPanel boardPanel;
     private JLabel testPawn;
     private ArrayList<JLabel> pawns;
-    private JButton movePawnBtn;
+    private JButton nextBtn;
     private JButton drawCardBtn;
     private JButton quitBtn;
     private JButton saveBtn;
@@ -43,6 +43,7 @@ public class GameWindow extends JFrame{
 
     private ArrayList<JLabel> numOfPawnsOnStart;
     private ArrayList<JLabel> numOfPawnsOnHome;
+    private ArrayList<JLabel> highlightBlocks;
 
     /* Some board and movement variables */
     private int stepLength = 60;
@@ -138,7 +139,7 @@ public class GameWindow extends JFrame{
     private void initGuiComponents(){
         //Initial the GUI components
         this.boardPanel = new BoardPanel();
-        this.movePawnBtn = new JButton("Move");
+        this.nextBtn = new JButton("Next Turn");
         this.drawCardBtn = new JButton("Draw Card");
         this.quitBtn = new JButton("Quit");
         this.saveBtn = new JButton("Save Game");
@@ -318,8 +319,8 @@ public class GameWindow extends JFrame{
             setLabelFont(numOfPawnsOnStart.get(i));
         }
 
-        movePawnBtn.setBounds(1000, 900, 100, 40);
-        this.add(movePawnBtn);
+        nextBtn.setBounds(1000, 900, 100, 40);
+        this.add(nextBtn);
 
         drawCardBtn.setBounds(1000, 700, 100, 40);
         this.add(drawCardBtn);
@@ -387,10 +388,12 @@ public class GameWindow extends JFrame{
 
     private void addEventListenerToComponents(){
 
-        movePawnBtn.addActionListener(new ActionListener() {
+        nextBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 isDrawn = false;
+                currentGame.nextTurn();
+                refreshBoard(currentGame.everyPawn,boardGui,currentGame.allPlayers);
 //                for(int i = 0; i < moveSteps;i++) {
 //                    Point pt = testPawn.getLocation();
 //                    int x = pt.x;
@@ -418,7 +421,12 @@ public class GameWindow extends JFrame{
         drawCardBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (deck == null) {
+                    return;
+                }
+                if (isDrawn) {
+                    return;
+                }
                 curCard = deck.draw();
                 try {
                     Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+curCard.imgName));
@@ -431,12 +439,12 @@ public class GameWindow extends JFrame{
                     else{
                         drawnCard.setIcon(cardImg);
                     }
-                    System.out.println(System.getProperty("user.dir")+ImagePath+curCard.imgName);
+                    System.out.println(System.getProperty("user.dir")+ImagePath+curCard.num);
                 } catch (Exception ex) {
                     // handle exception...
                     System.out.println("loadCards failed \n" + ex.toString());
                 }
-
+                cardInfoReminder.setText(curCard.reminderText);
                 boardPanel.add(drawnCard);
                 drawnCard.setBounds(Constants.cardStartX,Constants.cardStartY, Constants.cardWidth,Constants.cardHeight);
                 if(curCard.num != 2){
@@ -506,8 +514,6 @@ public class GameWindow extends JFrame{
         } );
 
     }
-
-
 
 //    private void  initBackEnd(){
 //        linkBlockToBackEnd();
@@ -588,6 +594,7 @@ public class GameWindow extends JFrame{
         removeAllPawns();
         this.dispose();
     }
+
     private void removeAllPawns(){
         for(JLabel pawnL: pawns){
             boardPanel.remove(pawnL);
@@ -595,6 +602,11 @@ public class GameWindow extends JFrame{
     }
 
     /* Public function */
+
+    /**
+     * Using for load game configuration
+     * @param numOfPlayers
+     */
     public void loadConfig(int numOfPlayers){
 
         this.pawns = new ArrayList<>();
@@ -604,7 +616,6 @@ public class GameWindow extends JFrame{
         for(int i = 0; i < numOfPawns; i++){
             pawns.add(new JLabel());
         }
-        System.out.println("asdfadsf"+pawns.size());
     }
 
     public void loadGameStuff(ArrayList<Pawn> everyPawn, Game newGame){
@@ -623,7 +634,7 @@ public class GameWindow extends JFrame{
     public void refreshBoard(ArrayList<Pawn> everyPawn, Board board,ArrayList<Player> allPlayers){
 
         removeAllPawns();
-
+        highlightBlocks = new ArrayList<>();
         for(Pawn pawn : everyPawn){
             Point tmpP =  boardToBackend.get(pawn.getCurrentBlock());
             JLabel pawnL = pawnsBackToFront.get(pawn);
@@ -631,51 +642,51 @@ public class GameWindow extends JFrame{
 
             // If the pawn belong to human player add the click event to it
             HumanPlayer tmpPlayer = new HumanPlayer();
-//            if(pawn.myPlayer.getClass() == tmpPlayer.getClass())
-//            {
+            if(pawn.myPlayer.getClass() == tmpPlayer.getClass())
+            {
+                if(pawnL.getMouseListeners().length < 1) {
+                    pawnL.addMouseListener(new MouseListener() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
 
+                            if (selectedLabel == null) {
+                                selectedLabel = (JLabel) e.getComponent();
 
-//            }
-            if(pawnL.getMouseListeners().length < 1) {
-                pawnL.addMouseListener(new MouseListener() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-
-                        if (selectedLabel == null) {
-                            selectedLabel = (JLabel) e.getComponent();
-
-                            if (curCard != null) {
-                                ;
+                                if (curCard != null) {
+                                    ;
+                                }
+                                System.out.println("null"+"( " + selectedLabel.getX() + " , " + selectedLabel.getY() + " )");
                             }
-                            System.out.println("null"+"( " + selectedLabel.getX() + " , " + selectedLabel.getY() + " )");
+                            selectedLabel.setOpaque(true);
+                            selectedLabel.setBackground(java.awt.Color.YELLOW);
+                            selectedLabel.repaint();
+                            System.out.println(selectedLabel.isOpaque()+"( " + selectedLabel.getX() + " , " + selectedLabel.getY() + " )");
                         }
-                        selectedLabel.setOpaque(true);
-                        selectedLabel.setBackground(java.awt.Color.YELLOW);
-                        selectedLabel.repaint();
-                        System.out.println(selectedLabel.isOpaque()+"( " + selectedLabel.getX() + " , " + selectedLabel.getY() + " )");
-                    }
 
-                    @Override
-                    public void mousePressed(MouseEvent e) {
+                        @Override
+                        public void mousePressed(MouseEvent e) {
 
-                    }
+                        }
 
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
+                        @Override
+                        public void mouseReleased(MouseEvent e) {
 
-                    }
+                        }
 
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
 
-                    }
+                        }
 
-                    @Override
-                    public void mouseExited(MouseEvent e) {
+                        @Override
+                        public void mouseExited(MouseEvent e) {
 
-                    }
-                });
+                        }
+                    });
+                }
+
             }
+
             boardPanel.add(pawnL);
             pawnL.setLocation(tmpP.x,tmpP.y);
 
@@ -701,6 +712,18 @@ public class GameWindow extends JFrame{
             }
         }
 
+        for(Block block: allBlocks){
+            if(block.highlighted == true){
+                Point tmpP = boardToBackend.get(block);
+
+                JLabel tmpLabel = new JLabel();
+                tmpLabel.setOpaque(true);
+                tmpLabel.setBackground(java.awt.Color.cyan);
+                tmpLabel.setBounds(tmpP.x,tmpP.y,Constants.pawnWidth,Constants.boardHeight);
+                boardPanel.add(tmpLabel);
+                highlightBlocks.add(tmpLabel);
+            }
+        }
         System.out.println("run refreshBoard");
     }
 

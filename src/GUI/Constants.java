@@ -30,7 +30,7 @@ public final class Constants {   // this class use for define some constants for
 
 
     //window size
-    public final static int windowWidth = 1200;
+    public final static int windowWidth = 1400;
     public final static int windowHeight = 1020;
 
     private Constants(){

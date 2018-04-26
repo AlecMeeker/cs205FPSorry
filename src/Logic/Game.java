@@ -21,9 +21,7 @@ public class Game {
 
     public Game(Color playerColor, int numPlayers, ArrayList<Integer> aiDifficulties) {
         this.gameBoard = new Board();
-        ArrayList<Player> players = new ArrayList<>();
-
-        initGame(numPlayers-1);
+        initGame(aiDifficulties.size());
     }
 
     public void initGame(int numAI) {
