@@ -53,11 +53,12 @@ public class StartWindow extends JFrame {
         //Set layout
         this.setLayout(null);
         //Setting the window
-        this.setSize(Constants.windowWidth,Constants.windowHeight);
+        this.setSize(Constants.windowWidth,Constants.windowHeight-100);
         this.setTitle("Sorry! Sweet avenge board game.");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //this.pack(); // pack the window
         //this.setVisible(true);
+        this.setResizable(false);
     }
 
     private void initGuiComponents(){
@@ -177,11 +178,14 @@ public class StartWindow extends JFrame {
                     computerDifficulties1.getSelectedItem().toString() + ", " +
                     computerDifficulties2.getSelectedItem().toString() + ", " +
                     computerDifficulties3.getSelectedItem().toString());
-
-                //gw.setNumOfPlayers(Integer.getInteger(numPlayers.getSelectedItem().toString()));
-//                GameWindow gw = GameWindow.getInstance();
-//                gw.setVisible(true);
+            System.out.println(Integer.parseInt(numPlayers.getSelectedItem().toString()));
+                int numberOfPlayers = Integer.parseInt(numPlayers.getSelectedItem().toString());
+                GameWindow gw = GameWindow.getInstance();
+                //gw.initWindow();
+                gw.loadConfig(numberOfPlayers);
+                gw.setVisible(true);
                 Game newGame = new Game();
+                newGame.numOfPlayers = numberOfPlayers;
                 newGame.playGame();
         } else {
             System.out.println("User canceled / closed the dialog, result = " + result);

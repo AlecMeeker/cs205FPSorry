@@ -32,6 +32,7 @@ public class GameWindow extends JFrame{
     private JButton quitBtn;
     private JButton saveBtn;
     private JLabel drawnCard;
+    private JTextArea cardInfoReminder;
 
     private ArrayList<JLabel> numOfPawnsOnStart;  //blue: 0, red: 1, yellow: 2,green: 3
     private ArrayList<JLabel> numOfPawnsOnHome;    //blue: 0, red: 1, yellow: 2,green: 3
@@ -45,7 +46,7 @@ public class GameWindow extends JFrame{
 
 
     /* Pawns variables */
-    private JLabel selectedLabel = null; //selected pawns label
+    private static JLabel selectedLabel = null; //selected pawns label
     private Map<Pawn,JLabel> pawnsBackToFront;
     private Map<JLabel,Pawn> pawnsFrontToBack;
 
@@ -76,7 +77,6 @@ public class GameWindow extends JFrame{
     }
 
     //BackEnd stuff.
-    private Board board;
     private Card curCard;
     private ArrayList<Block> allBlocks;
     //Try to store the block position of board panel
@@ -84,7 +84,7 @@ public class GameWindow extends JFrame{
     private Map<Block, Point> boardToBackend;
 
     //some constants member
-    public static Deck deck = new Deck();
+    private Deck deck ;
     private StartWindow startWindow = StartWindow.getInstance();
 
     /* Boolean variables for button click */
@@ -108,7 +108,7 @@ public class GameWindow extends JFrame{
         return result;
     }
 
-    private void initWindow(){
+    public void initWindow(){
         System.out.println("initWindow\n");
         //Gui Components config
         initGuiComponents();
@@ -149,16 +149,14 @@ public class GameWindow extends JFrame{
         this.movePawnBtn = new JButton("Move");
         this.drawCardBtn = new JButton("Draw Card");
         this.quitBtn = new JButton("Quit");
+        this.saveBtn = new JButton("Save Game");
+        this.cardInfoReminder = new JTextArea();
 
         this.pawns = new ArrayList<>();
+        //cardInfoReminder
         numOfPawnsOnStart = new ArrayList<>();
         numOfPawnsOnHome = new ArrayList<>();
-//
-//        for(int i = 0; i < this.colorName.length;i++) {
-//            for(int j = 0; j < this.numOfPawns/4; j++){
-//                this.pawns.add(new JLabel(loadPawnIcon(this.colorName[i])));  //load different color pawn
-//            }
-//        }
+
         for(int i = 0; i < this.colorName.length;i++) {
             numOfPawnsOnStart.add(new JLabel());
             numOfPawnsOnHome.add(new JLabel());
@@ -283,15 +281,6 @@ public class GameWindow extends JFrame{
 //        testPawn.setBounds(Constants.pawnStartX, Constants.pawnStartY, Constants.pawnWidth, Constants.pawnHeight); //init the pawns position
 //        boardPanel.add(testPawn);
 
-        //put pawns on start position
-        for(int i = 0; i < colorName.length; i++){
-            for(int j = 0; j < pawns.size()/4; j++){
-                Point curP = blockToBoardPosition.get(colorName[i]+"Start");
-                pawns.get(i*4+j).setBounds(curP.x, curP.y, Constants.pawnWidth, Constants.pawnHeight);
-                boardPanel.add(pawns.get(i*4+j));
-            }
-        }
-
         //put set count label of pawns
 
         Point temP = blockToBoardPosition.get("redStart");
@@ -328,22 +317,55 @@ public class GameWindow extends JFrame{
 
         //test the display number of pawn
         for(int i = 0; i < colorName.length; i++){
-            numOfPawnsOnHome.get(i).setText("4");
-            numOfPawnsOnStart.get(i).setText("4");
 
             setLabelFont(numOfPawnsOnHome.get(i));
             setLabelFont(numOfPawnsOnStart.get(i));
         }
 
-        movePawnBtn.setBounds(1000, 800, 100, 40);
+        movePawnBtn.setBounds(1000, 900, 100, 40);
         this.add(movePawnBtn);
 
         drawCardBtn.setBounds(1000, 700, 100, 40);
         this.add(drawCardBtn);
 
-        quitBtn.setBounds(1000, 700, 100, 40);
-    }
+        quitBtn.setBounds(1000, 800, 100, 40);
+        this.add(quitBtn);
 
+        saveBtn.setBounds(1000, 200, 100, 40);
+        this.add(saveBtn);
+
+        cardInfoReminder.setBounds(980,300,400,300);
+        cardInfoReminder.setFont(cardInfoReminder.getFont().deriveFont(20f));
+
+        setTextAreaTran(cardInfoReminder);
+        this.add(cardInfoReminder);
+    }
+    private void setTextAreaTran(JTextArea textArea){
+        textArea.setOpaque(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        JScrollPane scrollPane = new JScrollPane(textArea) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                try {
+                    Composite composite = ((Graphics2D)g).getComposite();
+
+                    ((Graphics2D)g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0));
+                    g.setColor(getBackground());
+                    g.fillRect(0, 0, getWidth(), getHeight());
+
+                    ((Graphics2D)g).setComposite(composite);
+                    paintChildren(g);
+                }
+                catch(IndexOutOfBoundsException e) {
+                    super.paintComponent(g);
+                }
+            }
+        };
+
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setOpaque(false);
+    }
     private void setLabelFont(JLabel label){
         Font labelFont = label.getFont();
         String labelText = label.getText();
@@ -369,35 +391,37 @@ public class GameWindow extends JFrame{
         movePawnBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                for(int i = 0; i < moveSteps;i++) {
-                    Point pt = testPawn.getLocation();
-                    int x = pt.x;
-                    int y = pt.y;
-
-                    testPawn.setLocation(91 , 381);
-                    testPawn.setLocation(151 , 441);
-
-                    if (x < 50 && y > 50) {
-                        testPawn.setLocation(x, y - stepLength);
-                    }  else if (x < 850 && y < 50) {
-                        testPawn.setLocation(x + stepLength, y);
-                    } else if (x > 850 && y < 850) {
-                        testPawn.setLocation(x, y + stepLength );
-                    } else if (x > 50 && y > 850) {
-                        testPawn.setLocation(x - stepLength, y);
-                    }
-
-
-
-                }
+                isDrawn = false;
+//                for(int i = 0; i < moveSteps;i++) {
+//                    Point pt = testPawn.getLocation();
+//                    int x = pt.x;
+//                    int y = pt.y;
+//
+//                    testPawn.setLocation(91 , 381);
+//                    testPawn.setLocation(151 , 441);
+//
+//                    if (x < 50 && y > 50) {
+//                        testPawn.setLocation(x, y - stepLength);
+//                    }  else if (x < 850 && y < 50) {
+//                        testPawn.setLocation(x + stepLength, y);
+//                    } else if (x > 850 && y < 850) {
+//                        testPawn.setLocation(x, y + stepLength );
+//                    } else if (x > 50 && y > 850) {
+//                        testPawn.setLocation(x - stepLength, y);
+//                    }
+//                }
             }
         });
 
         drawCardBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (deck == null) {
+                    return;
+                }
+                if (isDrawn) {
+                    return;
+                }
                     curCard = deck.draw();
                     try {
                         Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+curCard.imgName));
@@ -410,15 +434,17 @@ public class GameWindow extends JFrame{
                         else{
                             drawnCard.setIcon(cardImg);
                         }
-                        System.out.println(System.getProperty("user.dir")+ImagePath+curCard.imgName);
+                        System.out.println(System.getProperty("user.dir")+ImagePath+curCard.num);
                     } catch (Exception ex) {
                         // handle exception...
                         System.out.println("loadCards failed \n" + ex.toString());
                     }
-
+                cardInfoReminder.setText(curCard.reminderText);
                 boardPanel.add(drawnCard);
                 drawnCard.setBounds(Constants.cardStartX,Constants.cardStartY, Constants.cardWidth,Constants.cardHeight);
-
+                if(curCard.num != 2){
+                    isDrawn = true;
+                }
             }
         });
 
@@ -426,45 +452,44 @@ public class GameWindow extends JFrame{
 
         //testing code kick boolean variable
         // How to move the pawn
-        for(int i = 0; i < pawns.size(); i++){
-
-            pawns.get(i).addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if(selectedLabel == null){
-                        selectedLabel = (JLabel)e.getComponent();
-                        if(curCard != null){
-
-                        }
-                        System.out.println("( "+selectedLabel.getX()+" , "+selectedLabel.getY()+" )");
-                    }
-
-
-                }
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent e) {
-
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-
-                }
-            });
-
-        }
-
+//        for(int i = 0; i < pawns.size(); i++){
+//
+//            pawns.get(i).addMouseListener(new MouseListener() {
+//                @Override
+//                public void mouseClicked(MouseEvent e) {
+//                    if(selectedLabel == null){
+//                        selectedLabel = (JLabel)e.getComponent();
+//                        selectedLabel.setOpaque(true);
+//                        selectedLabel.setBackground(Color.YELLOW);
+//                        if(curCard != null){
+//
+//                        }
+//                        System.out.println("( "+selectedLabel.getX()+" , "+selectedLabel.getY()+" )");
+//                    }
+//                }
+//
+//                @Override
+//                public void mousePressed(MouseEvent e) {
+//
+//                }
+//
+//                @Override
+//                public void mouseReleased(MouseEvent e) {
+//
+//                }
+//
+//                @Override
+//                public void mouseEntered(MouseEvent e) {
+//
+//                }
+//
+//                @Override
+//                public void mouseExited(MouseEvent e) {
+//
+//                }
+//            });
+//
+//        }
         boardPanel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -476,6 +501,7 @@ public class GameWindow extends JFrame{
                             && e.getX() - pos.x < 60 && e.getY() - pos.y < 60
                             && selectedLabel != null){
                         selectedLabel.setLocation(pos.x,pos.y);
+                        selectedLabel.setOpaque(false);
                         System.out.println("selectedLabel pos: "+pos.x+" , "+pos.y);
                         break;
                     }
@@ -504,11 +530,28 @@ public class GameWindow extends JFrame{
             }
         });
 
+
+        quitBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                quitAndSave();
+            }
+        } );
+
+
+        saveBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("save game");
+            }
+        } );
+
     }
 
 
     /* Connect Backend Function */
     private void linkBlockToBackEnd(Board boardPa){
+
         Board board = boardPa;
         allBlocks = board.everyBlock;
         boardToBackend = new HashMap<>();
@@ -555,32 +598,48 @@ public class GameWindow extends JFrame{
 
     private void linkPawnTogether(ArrayList<Pawn> allPawn){
 
+        pawnsBackToFront = new HashMap<>();
+        pawnsFrontToBack = new HashMap<>();
         for(int i = 0;i < allPawn.size();i++){
             pawnsBackToFront.put(allPawn.get(i),pawns.get(i));
+            Point curP = blockToBoardPosition.get(allPawn.get(i).getColor().toString().toLowerCase()+"Start");
+            System.out.println(allPawn.get(i).getColor().toString()+"Start");
+            pawns.get(i).setBounds(curP.x, curP.y, Constants.pawnWidth, Constants.pawnHeight);
+            boardPanel.add(pawns.get(i));
         }
 
         for(Map.Entry entry: pawnsBackToFront.entrySet()){
             pawnsFrontToBack.put((JLabel) entry.getValue(),(Pawn)entry.getKey());
         }
+
     }
 
     // for close the window event
     private void quitAndSave(){
         startWindow.setVisible(true);
+        this.dispose();
     }
 
     /* Public function */
     public void loadConfig(int numOfPlayers){
+
+        this.pawns = new ArrayList<>();
         this.numOfPlayers = numOfPlayers;
-        this.numOfPawns = 4 * numOfPlayers;
+        this.numOfPawns = 4 * (numOfPlayers);
+        pawns = new ArrayList<>();
         for(int i = 0; i < numOfPawns; i++){
             pawns.add(new JLabel());
         }
     }
 
-    public void refreshBoard(ArrayList<Pawn> everyPawn, Board board){
+    public void loadGameStuff(ArrayList<Pawn> everyPawn, Board board){
         linkBlockToBackEnd(board);
         linkPawnTogether(everyPawn);
+        this.deck = board.thisDeck;
+    }
+
+    public void refreshBoard(ArrayList<Pawn> everyPawn, Board board){
+
         int i = 0;
         for(JLabel pawnL: pawns){
             boardPanel.remove(pawnL);
@@ -594,18 +653,27 @@ public class GameWindow extends JFrame{
 
             // If the pawn belong to human player add the click event to it
             HumanPlayer tmpPlayer = new HumanPlayer();
-            if(pawn.myPlayer.getClass() == tmpPlayer.getClass())
-            {
+//            if(pawn.myPlayer.getClass() == tmpPlayer.getClass())
+//            {
+
+
+//            }
+            if(pawnL.getMouseListeners().length < 1) {
                 pawnL.addMouseListener(new MouseListener() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if(selectedLabel == null){
-                            selectedLabel = (JLabel)e.getComponent();
-                            if(curCard != null){
 
+                        if (selectedLabel == null) {
+                            selectedLabel = (JLabel) e.getComponent();
+
+                            if (curCard != null) {
+                                ;
                             }
-                            System.out.println("( "+selectedLabel.getX()+" , "+selectedLabel.getY()+" )");
+                            System.out.println("null"+"( " + selectedLabel.getX() + " , " + selectedLabel.getY() + " )");
                         }
+                        selectedLabel.setOpaque(true);
+                        selectedLabel.setBackground(java.awt.Color.YELLOW);
+                        System.out.println("( " + selectedLabel.getX() + " , " + selectedLabel.getY() + " )");
                     }
 
                     @Override
@@ -629,16 +697,13 @@ public class GameWindow extends JFrame{
                     }
                 });
             }
-
-
             boardPanel.add(pawnL);
-            pawnL.setBounds(tmpP.x,tmpP.y,Constants.pawnWidth, Constants.pawnHeight);
+            pawnL.setLocation(tmpP.x,tmpP.y);
 
         }
         System.out.println("how many pawnsLabel now: "+i);
 
         System.out.println("run refreshBoard");
     }
-
 
 }

@@ -2,6 +2,7 @@ package Logic;
 
 import com.sorry.GUI.GameWindow;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Game {
@@ -13,6 +14,7 @@ public class Game {
     public int currentMove;
     public ArrayList<Player> allPlayers;
 
+    public int numOfPlayers;
     public void playGame() {
         Board gameBoard = new Board();
         ArrayList<Player> players = new ArrayList<>();
@@ -24,7 +26,7 @@ public class Game {
 
         //get # of AI players and stats
 
-        int AI_PLAYERS = 3; //change this once you meet with junziao TESTING ONLY TESTING ONLY
+        int AI_PLAYERS = numOfPlayers-1; //change this once you meet with junziao TESTING ONLY TESTING ONLY
 
         //USE THIS FOR TESTING ONLY
         String name = "test";
@@ -84,6 +86,8 @@ public class Game {
             everyPawn.addAll(p.movablePawnList);
             everyPawn.addAll(p.finishedPawnList);
         }
+        //load game stuff to gameWindow
+        gw.loadGameStuff(everyPawn,gameBoard);
 
         currentMove = 0;
 
@@ -112,9 +116,24 @@ public class Game {
 
             currentPlayer = players.get(currentMove%(players.size()));
             whilePlaying = currentPlayer.play();
-            gw.refreshBoard(everyPawn,gameBoard);
-            currentMove++;
 
+            new Thread(new Runnable() {
+                public void run() {
+                    // Runs inside of the Swing UI thread
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                          gw.refreshBoard(everyPawn,gameBoard);
+                        }
+                    });
+
+                    try {
+                        java.lang.Thread.sleep(1000);
+                    }
+                    catch(Exception e) { }
+                }
+            }).start();
+
+            currentMove++;
 
         }
     }
