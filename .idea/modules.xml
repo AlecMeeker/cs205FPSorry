@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/cs205FPSorryIntegrated.iml" filepath="$PROJECT_DIR$/cs205FPSorryIntegrated.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cs205Sorry_integration.iml" filepath="$PROJECT_DIR$/cs205Sorry_integration.iml" />
     </modules>
   </component>
 </project>

@@ -253,11 +253,11 @@ public class StartWindow extends JFrame {
             Game newGame = new Game(getColorFromString(playerColorSelect.getSelectedItem().toString()), aiDifficulties);
 
             GameWindow gw = GameWindow.getInstance();
-            gw.loadConfig(numPlayer);
-            gw.loadGameStuff(newGame.everyPawn,newGame);
+            gw.loadConfig(numPlayer,playerColorSelect.getSelectedItem().toString());
+            gw.loadGameStuff(newGame);
 
             gw.setVisible(true);
-            gw.refreshBoard(newGame.everyPawn,newGame.allPlayers);
+            gw.refreshBoard();
         } else {
             System.out.println("User canceled / closed the dialog, result = " + result);
         }

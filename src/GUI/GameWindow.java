@@ -76,6 +76,8 @@ public class GameWindow extends JFrame{
     private Game currentGame;
     private Card curCard;
     private ArrayList<Block> allBlocks;
+    private String humanPlayerColor;
+
     //Try to store the block position of board panel
     private Map<String, Point> blockToBoardPosition;  //java.awt.point
     private Map<Block, Point> boardToBackend;
@@ -172,6 +174,21 @@ public class GameWindow extends JFrame{
         try {
             Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+color+"_pawn.jpg"));
             basicImage = TransparencyUtil.makeColorTransparent(basicImage,java.awt.Color.WHITE);
+            Image BoardImage = basicImage.getScaledInstance(Constants.pawnWidth-10, Constants.pawnHeight, Image.SCALE_SMOOTH);
+            ImageIcon pawnImage = new ImageIcon(BoardImage);
+
+            return pawnImage;
+        } catch (Exception ex) {
+            // handle exception...
+            System.out.println("loadPawns failed \n" + ex.toString());
+            return new ImageIcon();
+        }
+    }
+
+    private ImageIcon loadLabelIcon(String FileName){
+        try {
+            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+FileName));
+            basicImage = TransparencyUtil.makeColorTransparent(basicImage,java.awt.Color.WHITE);
             Image BoardImage = basicImage.getScaledInstance(Constants.pawnWidth, Constants.pawnHeight, Image.SCALE_SMOOTH);
             ImageIcon pawnImage = new ImageIcon(BoardImage);
 
@@ -182,6 +199,7 @@ public class GameWindow extends JFrame{
             return new ImageIcon();
         }
     }
+
 
     private void initBlockToBoardPosition(){
 
@@ -392,9 +410,12 @@ public class GameWindow extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 isDrawn = false;
+                isMovedThisTurn = false;
                 currentGame.nextTurn();
                 currentGame.human.selectEndBlockStep();
-                refreshBoard(currentGame.everyPawn,currentGame.allPlayers);
+                selectedLabel = null;
+                removeAllHighlight();
+                refreshBoard();
 
             }
         });
@@ -408,6 +429,7 @@ public class GameWindow extends JFrame{
                 if (isDrawn) {
                     return;
                 }
+                isMovedThisTurn = false;
                 //Backend human player draw card
                 currentGame.human.drawStep();
                 curCard = currentGame.human.getCurrentDraw();
@@ -449,6 +471,13 @@ public class GameWindow extends JFrame{
                 //move the pieces to the high light point.
 
                 System.out.println("mouse pos: "+e.getX()+" , "+e.getY());
+                refreshBoard();
+                if(isMovedThisTurn){
+                    selectedLabel.setOpaque(false);
+                    selectedLabel.repaint();
+                    return;
+                }
+
                 for (JLabel HLBlock : highlightBlocks) {
                     // ...
                     Point pos = HLBlock.getLocation();
@@ -465,6 +494,8 @@ public class GameWindow extends JFrame{
                         }
 
                         currentGame.human.selectEndBlockStep();
+
+                        isMovedThisTurn = true;
                         System.out.println("selectedLabel pos: "+pos.x+" , "+pos.y);
                         break;
                     }
@@ -587,8 +618,9 @@ public class GameWindow extends JFrame{
     private void quitAndSave(){
         startWindow.setVisible(true);
         removeAllPawns();
-        currentGame.quitGame();
+        //currentGame.quitGame();
         this.dispose();
+        System.out.println("refreshBoard times");
     }
 
     private void removeAllPawns(){
@@ -614,11 +646,12 @@ public class GameWindow extends JFrame{
      * Using for load game configuration
      * @param numOfPlayers
      */
-    public void loadConfig(int numOfPlayers){
+    public void loadConfig(int numOfPlayers,String playerColor){
 
         this.pawns = new ArrayList<>();
         this.numOfPlayers = numOfPlayers;
         this.numOfPawns = 4 * (numOfPlayers);
+        this.humanPlayerColor = playerColor.toLowerCase();
         pawns = new ArrayList<>();
         for(int i = 0; i < numOfPawns; i++){
             pawns.add(new JLabel());
@@ -627,12 +660,11 @@ public class GameWindow extends JFrame{
 
     /**
      * Load Game stuff from backend
-     * @param everyPawn all the pawns in this game
-     * @param newGame   the current Game instance
+     *@param newGame   the current Game instance
      */
-    public void loadGameStuff(ArrayList<Pawn> everyPawn, Game newGame){
+    public void loadGameStuff(Game newGame){
         currentGame = newGame;
-
+        ArrayList<Pawn> everyPawn = currentGame.everyPawn;
         this.boardGui = currentGame.gameBoard;
         linkBlockToBackEnd();
         linkPawnTogether(everyPawn);
@@ -641,18 +673,29 @@ public class GameWindow extends JFrame{
 
     /**
      *  Each turn all players AIs and Human finish the turn will refresh the GUI board
-     * @param everyPawn
-     * @param allPlayers
+     *
      */
-    public void refreshBoard(ArrayList<Pawn> everyPawn, ArrayList<Player> allPlayers){
+    public void refreshBoard(){
+        long startTime = System.nanoTime();
 
+
+        if(currentGame == null) {
+            return;
+        }
+        ArrayList<Pawn> everyPawn = currentGame.everyPawn;
+        ArrayList<Player> allPlayers = currentGame.allPlayers;
         removeAllPawns();
         removeAllHighlight();
         highlightBlocks = new ArrayList<>();
+
+
         for(Pawn pawn : everyPawn){
             Point tmpP =  boardToBackend.get(pawn.getCurrentBlock());
             JLabel pawnL = pawnsBackToFront.get(pawn);
+
             pawnL.setIcon(loadPawnIcon(pawn.getColor().toString().toLowerCase()));
+            pawnL.setHorizontalAlignment(SwingConstants.CENTER);
+
 
             // If the pawn belong to human player add the click event to it
             HumanPlayer tmpPlayer = new HumanPlayer();
@@ -671,7 +714,7 @@ public class GameWindow extends JFrame{
                                 //if a card has been drawn
                                 if (curCard != null) {
                                     currentGame.human.selectPawnStep();
-                                    refreshBoard(currentGame.everyPawn,currentGame.allPlayers);
+                                    refreshBoard();
                                 }
                                 System.out.println("null"+"( " + selectedLabel.getX() + " , " + selectedLabel.getY() + " )");
                             }
@@ -735,12 +778,11 @@ public class GameWindow extends JFrame{
         }
 
         for(Block block: allBlocks){
+
             if(block.highlighted == true){
                 Point tmpP = boardToBackend.get(block);
 
-                JLabel tmpLabel = new JLabel();
-                tmpLabel.setOpaque(true);
-                tmpLabel.setBackground(java.awt.Color.cyan);
+                JLabel tmpLabel = new JLabel(loadLabelIcon(humanPlayerColor+"_hl.jpg"));
                 tmpLabel.setBounds(tmpP.x,tmpP.y,Constants.pawnWidth,Constants.pawnHeight);
 
                 boardPanel.add(tmpLabel);
@@ -749,7 +791,11 @@ public class GameWindow extends JFrame{
                 System.out.println("highlighted");
             }
         }
-        System.out.println("run refreshBoard");
+
+        long endTime   = System.nanoTime();
+        float totalTime = (endTime - startTime)/1000000000;
+        System.out.println("run refreshBoard: "+totalTime);
+
     }
 
     public ArrayList<Block> movableBlocks(){

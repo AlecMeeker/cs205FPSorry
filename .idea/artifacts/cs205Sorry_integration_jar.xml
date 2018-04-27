@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="cs205Sorry_integration:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/cs205Sorry_integration_jar</output-path>
+    <root id="archive" name="cs205Sorry_integration.jar">
+      <element id="module-output" name="cs205Sorry_integration" />
+      <element id="library" level="project" name="gson-2.8.21" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/SQL/gson-2.8.2.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
