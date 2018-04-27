@@ -422,7 +422,7 @@ public class ConnectDB {
         }
 
         //define query and parameters
-        String query = "UPDATE tblGames SET fldPlaytime = ?, fldNumRounds = ?, fldWinner = ?, "
+        String query = "UPDATE tblGames SET fldPlaytime = fldPlaytime + ?, fldNumRounds = ?, fldWinner = ?, "
                 + "fldPlayerNumBump = ?, fldAI1NumBump = ?, fldAI2NumBump = ?, fldAI3NumBump = ?, "
                 + "fldPlayerNumStart = ?, fldAI1NumStart = ?, fldAI2NumStart = ?, fldAI3NumStart = ?, "
                 + "fldPlayerNumHome = ?, fldAI1NumHome = ?, fldAI2NumHome = ?, fldAI3NumHome = ? "

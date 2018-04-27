@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 public class Game {
     private int gameID = -1;
+    private long startTimeStamp = System.currentTimeMillis();
 
     public Player currentPlayer;
     public Player winner;
@@ -240,22 +241,39 @@ public class Game {
      * This method gets all of the stats for the game and inserts them into the database
      */
     public void insertGameStats(){
+        Player human = allPlayers.get(0);
+        AI AI1 = (AI)allPlayers.get(1);
+        AI AI2 = (allPlayers.size() <= 2)?null:(AI)allPlayers.get(2);
+        AI AI3 = (allPlayers.size() <= 3)?null:(AI)allPlayers.get(3);
+        String playerName = human.getName();
+        int playtime = (int)(System.currentTimeMillis() - startTimeStamp)/60000;
+        startTimeStamp = System.currentTimeMillis();
+        Color playerColor = human.getColor();
         Color winnerColor = (winner == null)?Color.NULL:winner.color;
-        String AI1Diff = ((AI)allPlayers.get(1)).demeanor;
-        String AI2Diff = (allPlayers.size() <= 2)?"NULL":((AI)allPlayers.get(2)).demeanor;
-        String AI3Diff = (allPlayers.size() <= 3)?"NULL":((AI)allPlayers.get(3)).demeanor;
-        int playerBounce = allPlayers.get(0).bounces;
-        int AI1Bounce = allPlayers.get(1).bounces;
-        int AI2Bounce = (allPlayers.size() <= 2)?0:allPlayers.get(2).bounces;
-        int AI3Bounce = (allPlayers.size() <= 3)?0:allPlayers.get(3).bounces;
+        String AI1Diff = AI1.demeanor;
+        String AI2Diff = (AI2 == null)?"NULL":AI2.demeanor;
+        String AI3Diff = (AI3 == null)?"NULL":AI3.demeanor;
+        int playerBounce = human.bounces;
+        int AI1Bounce = AI1.bounces;
+        int AI2Bounce = (AI2 == null)?0:AI2.bounces;
+        int AI3Bounce = (AI3 == null)?0:AI3.bounces;
+        int playerStart = human.getPawnsInStart();
+        int AI1Start = AI1.getPawnsInStart();
+        int AI2Start = (AI2 == null)?0:AI2.getPawnsInStart();
+        int AI3Start = (AI3 == null)?0:AI3.getPawnsInStart();
+        int playerHome = human.getPawnsInHome();
+        int AI1Home = AI1.getPawnsInHome();
+        int AI2Home = (AI2 == null)?0:AI2.getPawnsInHome();
+        int AI3Home = (AI3 == null)?0:AI3.getPawnsInHome();
         if (gameID == -1) {
-            gameID = ConnectDB.insertGameData(generateName(), 10, currentMove, allPlayers.get(0).color, winnerColor,
+            gameID = ConnectDB.insertGameData(playerName, playtime, currentMove, playerColor, winnerColor,
                     AI1Diff, AI2Diff, AI3Diff, playerBounce, AI1Bounce, AI2Bounce, AI3Bounce,
-                    0, 0, 0, 0, 0, 0, 0, 0);
+                    playerStart, AI1Start, AI2Start, AI3Start, playerHome, AI1Home, AI2Home, AI3Home);
         } else {
             System.out.println("gameID: "+ gameID);
-            ConnectDB.updateGameData(gameID, 10, currentMove, winnerColor, playerBounce,
-                    AI1Bounce, AI2Bounce, AI3Bounce, 0, 0, 0, 0, 0, 0, 0, 0);
+            ConnectDB.updateGameData(gameID, playtime, currentMove, winnerColor, playerBounce,
+                    AI1Bounce, AI2Bounce, AI3Bounce, playerStart, AI1Start, AI2Start, AI3Start,
+                    playerHome, AI1Home, AI2Home, AI3Home);
         }
     }
 
