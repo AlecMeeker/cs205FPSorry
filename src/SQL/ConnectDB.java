@@ -257,11 +257,11 @@ public class ConnectDB {
 
         String stats[][] = null;
         if (dataArr != null) {
-            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size()/2];
+            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size()/2 - 8];
             Set<String> keyset = dataArr.get(0).getAsJsonObject().keySet();
             int k = 0;
             for (String key : keyset) {
-                if (key.length() > 2) {
+                if (key.length() > 2 && k < stats[0].length) {
                     stats[0][k] = key.substring(3);
                     k++;
                 }
