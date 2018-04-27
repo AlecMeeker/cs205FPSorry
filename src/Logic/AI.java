@@ -10,15 +10,21 @@ public class AI extends Player {
     public String name; //the name
     public int difficulty;
 
-    /*
-    basic constructor for simply getting the class type AI by the gameWindow during gamePlay
+    /**
+     * basic constructor for simply getting the class type AI by the gameWindow during gamePlay
      */
     public AI() {
 
     }
 
-    /*
-    descriptive constructor that creates an entire default player
+    /**
+     * descriptive constructor that creates an entire default player
+     *
+     * @param inColor
+     * @param inBoard
+     * @param isSmart
+     * @param isCruel
+     * @param name
      */
     public AI(Color inColor, Board inBoard, boolean isSmart, boolean isCruel, String name) {
         super(inColor, inBoard);
@@ -32,41 +38,32 @@ public class AI extends Player {
         if (!smart) {
             if (!cruel) {
                 difficulty = 0;
-            }
-            else {
+            } else {
                 difficulty = 1;
             }
-        }
-        else {
+        } else {
             if (!cruel) {
                 difficulty = 2;
-            }
-            else {
+            } else {
                 difficulty = 3;
             }
         }
 
         if (smart) {
             smartness = "Smart";
-        }
-        else {
+        } else {
             smartness = "Dumb";
         }
         if (cruel) {
             cruelty = "Cruel";
-        }
-        else {
+        } else {
             cruelty = "Nice";
         }
         demeanor = cruelty + "/" + smartness;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    /*
-    in AI, drawStep does the entire process of a turn
+    /**
+     * in AI, drawStep does the entire process of a turn
      */
     @Override
     public void drawStep() {
@@ -87,8 +84,7 @@ public class AI extends Player {
         generateMoves();
         if (smart) {
             enactBestMoveIndex(currentDraw);
-        }
-        else {
+        } else {
             enactRandomMove(currentDraw);
         }
         if (finishedPawnList.size() == 4) {
@@ -97,13 +93,21 @@ public class AI extends Player {
     }
 
     //abstract methods in player that are actually unneeded by AI but still better included. Must be a better way to do this
-    public void selectPawnStep() { }
-    public void selectEndBlockStep() { }
-    public void selectSecondPawnStep(){ }
-    public void selectSecondEndBlockStep(){ }
+    public void selectPawnStep() {
+    }
+
+    public void selectEndBlockStep() {
+    }
+
+    public void selectSecondPawnStep() {
+    }
+
+    public void selectSecondEndBlockStep() {
+    }
 
     /**
      * Rates a move so that the optimal move can be selected
+     *
      * @param m : Move to be rated
      * @return : a double that is the move rating
      */
@@ -128,7 +132,7 @@ public class AI extends Player {
             for (int i = 0; i < m.whomBounced.size(); i++) {
                 moveRating += 2 * crueltyMultiplier;
                 moveRating += m.whomBounced.get(i).myPlayer.movablePawnList.size(); //targets players who have a lot of movable pawns first-off
-                moveRating += ( 65 - m.whomBounced.get(i).getDistanceFromHome() / 65); //targets pawns that are closest to their goal,
+                moveRating += (65 - m.whomBounced.get(i).getDistanceFromHome() / 65); //targets pawns that are closest to their goal,
             }
         }
 
@@ -142,18 +146,19 @@ public class AI extends Player {
         }
 
 
-
         return moveRating;
     }
 
     /**
      * Enacts the best move in the potential move list based on ratings
+     *
      * @param draw : the card drawn
      */
     public void enactBestMoveIndex(Card draw) {
         if (potentialMovesList.get(0).size() == 0) {
             System.out.println("No possible moves. Pass\n");
-            return;}
+            return;
+        }
 
         movablePawnList = rankPawns(movablePawnList);
         ArrayList<Double> ratedList = new ArrayList<>();
@@ -163,8 +168,7 @@ public class AI extends Player {
                 ratedList.add(rateMove(potentialMovesList.get(0).get(i)) + rateMove(potentialMovesList.get(1).get(i)));
                 i++;
             }
-        }
-        else {
+        } else {
             for (Move m : potentialMovesList.get(0)) {
                 ratedList.add(rateMove(m));
             }
@@ -194,13 +198,15 @@ public class AI extends Player {
 
     /**
      * Enacts a random move, for dumb AI
+     *
      * @param draw : the card drawn
      */
     public void enactRandomMove(Card draw) {
         //if empty do nothing
         if (potentialMovesList.get(0).size() == 0) {
             System.out.println("No possible moves. Pass\n");
-            return;}
+            return;
+        }
 
         //generate a random index as choice
         int randomIndex = (int) (Math.random() * potentialMovesList.get(0).size());

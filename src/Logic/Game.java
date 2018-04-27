@@ -24,6 +24,12 @@ public class Game {
     public ArrayList<Player> allPlayers;
     public HumanPlayer you;
 
+    /**
+     * TODO
+     *
+     * @param playerColor
+     * @param aiDifficulties
+     */
     public Game(Color playerColor, ArrayList<Integer> aiDifficulties) {
         this.gameBoard = new Board();
 
@@ -31,6 +37,17 @@ public class Game {
     }
 
     //example: 5;BLUE;-1:4:1:59,40,3;2:5:2:4,6; current turn; player color; difficulty : bounces : startList size : loc1, loc2, loc3
+
+    /**
+     * TODO
+     *
+     * @param playerColor
+     * @param aiDifficulties
+     * @param startLists
+     * @param locations
+     * @param bounces
+     * @param currentMove
+     */
     public Game(Color playerColor, ArrayList<Integer> aiDifficulties, ArrayList<Integer> startLists, ArrayList<ArrayList<Integer>> locations, ArrayList<Integer> bounces, int currentMove) {
 
         //This block creates all the players
@@ -50,50 +67,56 @@ public class Game {
             do {
                 AIColor = generateColor();
                 distinctColor = false;
-                for (int iii = 0; iii < ii+1; iii++) {
+                for (int iii = 0; iii < ii + 1; iii++) {
                     distinctColor = distinctColor || (AIColor == allPlayers.get(iii).color);
                 }
             } while (distinctColor);
-            allPlayers.add(new AI(AIColor, gameBoard, aiPairs.get(ii).getKey(), aiPairs.get(ii).getValue(), generateName() ));
+            allPlayers.add(new AI(AIColor, gameBoard, aiPairs.get(ii).getKey(), aiPairs.get(ii).getValue(), generateName()));
         }
         this.currentMove = currentMove;
 
 
-         //for each player
-         for (int i = 0; i < startLists.size() + 1; i++) {
-             //set each player's bounces
-             allPlayers.get(i).bounces = bounces.get(i);
-             //add that many new pawns for each player's # of pawns in start
-             for (int j = 0; j < startLists.size(); j++) {
-                 allPlayers.get(i).startPawnList.add(new Pawn(gameBoard, allPlayers.get(i)));
-             }
+        //for each player
+        for (int i = 0; i < startLists.size() + 1; i++) {
+            //set each player's bounces
+            allPlayers.get(i).bounces = bounces.get(i);
+            //add that many new pawns for each player's # of pawns in start
+            for (int j = 0; j < startLists.size(); j++) {
+                allPlayers.get(i).startPawnList.add(new Pawn(gameBoard, allPlayers.get(i)));
+            }
 
-             //iterate through the given location list for each player and make that many pawns in those locations and add them to the movable list
-             for (int k = 0; k < locations.get(i).size(); k++) {
-                 if (allPlayers.get(i).color == Color.BLUE && locations.get(0).get(k) < 0) {
-                     allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.blueSafeZone[i]));
-                 }
-                 if (allPlayers.get(i).color == Color.RED && locations.get(0).get(k) < 0) {
-                     allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.redSafeZone[i]));
-                 }
-                 if (allPlayers.get(i).color == Color.GREEN && locations.get(0).get(k) < 0) {
-                     allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.greenSafeZone[i]));
-                 }
-                 if (allPlayers.get(i).color == Color.YELLOW && locations.get(0).get(k) < 0) {
-                     allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.yellowSafeZone[i]));
-                 }
-                 allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.everyBlock.get(locations.get(0).get(k))));
-             }
-             //for the remaining pawns, add them to the finished list
-             for (int l = 0; l < (4 - (allPlayers.get(i).startPawnList.size()+ (allPlayers.get(i).movablePawnList.size()))); l++) {
-                 allPlayers.get(i).finishedPawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.getGoalLocation(allPlayers.get(i).color)));
-             }
-         }
+            //iterate through the given location list for each player and make that many pawns in those locations and add them to the movable list
+            for (int k = 0; k < locations.get(i).size(); k++) {
+                if (allPlayers.get(i).color == Color.BLUE && locations.get(0).get(k) < 0) {
+                    allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.blueSafeZone[i]));
+                }
+                if (allPlayers.get(i).color == Color.RED && locations.get(0).get(k) < 0) {
+                    allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.redSafeZone[i]));
+                }
+                if (allPlayers.get(i).color == Color.GREEN && locations.get(0).get(k) < 0) {
+                    allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.greenSafeZone[i]));
+                }
+                if (allPlayers.get(i).color == Color.YELLOW && locations.get(0).get(k) < 0) {
+                    allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.yellowSafeZone[i]));
+                }
+                allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.everyBlock.get(locations.get(0).get(k))));
+            }
+            //for the remaining pawns, add them to the finished list
+            for (int l = 0; l < (4 - (allPlayers.get(i).startPawnList.size() + (allPlayers.get(i).movablePawnList.size()))); l++) {
+                allPlayers.get(i).finishedPawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.getGoalLocation(allPlayers.get(i).color)));
+            }
+        }
 
         System.out.print("difficulties size : " + aiDifficulties.size());
 
     }
 
+    /**
+     * initializes the game
+     *
+     * @param aiDifficulties difficulties of AI
+     * @param playerColor    color of human player
+     */
     public void initGame(ArrayList<Integer> aiDifficulties, Color playerColor) {
 
         //get # of AI players and stats
@@ -104,7 +127,6 @@ public class Game {
 
 
         human = new HumanPlayer(generateName(), playerColor, gameBoard, this);
-
 
 
         String name1 = generateName();
@@ -140,7 +162,7 @@ public class Game {
             aiPairs.add(setOptionsFromInt(tmp));
         }
 
-        switch(AI_PLAYERS) {
+        switch (AI_PLAYERS) {
             case 3:
                 allPlayers.add(new AI(firstColor, gameBoard, aiPairs.get(2).getKey(), aiPairs.get(2).getValue(), name1));
             case 2:
@@ -167,7 +189,11 @@ public class Game {
 
     }
 
-
+    /**
+     * Converts the current game state into a string to be sent to the database
+     *
+     * @return save state string
+     */
     public String saveGame() {
         insertGameStats();
         String saveState = "";
@@ -187,16 +213,33 @@ public class Game {
     //example: 5;BLUE;-1:4:1:59,40,3;2:5:2:4,6;
     //example explained: currentTurn; playerColor; then, for each player, difficulty: bounces: # pawns in home: pawn1Location, pawn2location, pawn3location;
 
+    /**
+     * unpacks a save state string then creates a game object from said string
+     *
+     * @param inState save state string
+     * @return a new game
+     */
     public static Game loadFromState(String inState) {
         String[] gameParams = inState.split(";");
         int currentMove = Integer.parseInt(gameParams[0]);
         Color playerColor;
         switch (gameParams[1]) {
-            case "RED": playerColor = Color.RED; break;
-            case "GREEN": playerColor = Color.GREEN; break;
-            case "BLUE": playerColor = Color.BLUE; break;
-            case "YELLOW": playerColor = Color.YELLOW; break;
-            case "NULL": default: playerColor = Color.NULL; break;
+            case "RED":
+                playerColor = Color.RED;
+                break;
+            case "GREEN":
+                playerColor = Color.GREEN;
+                break;
+            case "BLUE":
+                playerColor = Color.BLUE;
+                break;
+            case "YELLOW":
+                playerColor = Color.YELLOW;
+                break;
+            case "NULL":
+            default:
+                playerColor = Color.NULL;
+                break;
         }
         int numPlayers = gameParams.length - 2;
         ArrayList<Integer> difficulties = new ArrayList<>(numPlayers);
@@ -210,7 +253,7 @@ public class Game {
             numPawnsHome.add(Integer.parseInt(playerParams[2]));
             String pawnIndexes[] = playerParams[3].split(",");
             ArrayList<Integer> pawnLocations = new ArrayList<>(pawnIndexes.length);
-            for (String index: pawnIndexes) {
+            for (String index : pawnIndexes) {
                 pawnLocations.add(Integer.parseInt(index));
             }
             allPawnLocations.add(pawnLocations);
@@ -218,6 +261,11 @@ public class Game {
         return new Game(playerColor, difficulties, numPawnsHome, allPawnLocations, bounces, currentMove);
     }
 
+    /**
+     * generates a random russian name from a list
+     *
+     * @return a name
+     */
     public static String generateName() {
         ArrayList<String> nameList = new ArrayList<>();
         nameList.add("Alexei");
@@ -247,11 +295,16 @@ public class Game {
         nameList.add("Julian Assange");
         nameList.add("Anonymous");
 
-        int nameIndex = (int)(Math.random() * nameList.size());
+        int nameIndex = (int) (Math.random() * nameList.size());
 
         return nameList.get(nameIndex);
     }
 
+    /**
+     * generates a random color
+     *
+     * @return a color
+     */
     public static Color generateColor() {
         int cIndex = (int) (Math.random() * 4);
         switch (cIndex) {
@@ -268,7 +321,9 @@ public class Game {
         }
     }
 
-
+    /**
+     * quits the game
+     */
     public void quitGame() {
         whilePlaying = false;
         this.saveGame();
@@ -277,45 +332,45 @@ public class Game {
     /**
      * This method gets all of the stats for the game and inserts them into the database
      */
-    public void insertGameStats(){
+    public void insertGameStats() {
         Player human = allPlayers.get(0);
-        AI AI1 = (AI)allPlayers.get(1);
-        AI AI2 = (allPlayers.size() <= 2)?null:(AI)allPlayers.get(2);
-        AI AI3 = (allPlayers.size() <= 3)?null:(AI)allPlayers.get(3);
+        AI AI1 = (AI) allPlayers.get(1);
+        AI AI2 = (allPlayers.size() <= 2) ? null : (AI) allPlayers.get(2);
+        AI AI3 = (allPlayers.size() <= 3) ? null : (AI) allPlayers.get(3);
         String playerName = human.getName();
-        int playtime = (int)(System.currentTimeMillis() - startTimeStamp)/60000;
+        int playtime = (int) (System.currentTimeMillis() - startTimeStamp) / 60000;
         startTimeStamp = System.currentTimeMillis();
         Color playerColor = human.getColor();
-        Color winnerColor = (winner == null)?Color.NULL:winner.color;
+        Color winnerColor = (winner == null) ? Color.NULL : winner.color;
         String AI1Diff = AI1.demeanor;
-        String AI2Diff = (AI2 == null)?"NULL":AI2.demeanor;
-        String AI3Diff = (AI3 == null)?"NULL":AI3.demeanor;
+        String AI2Diff = (AI2 == null) ? "NULL" : AI2.demeanor;
+        String AI3Diff = (AI3 == null) ? "NULL" : AI3.demeanor;
         int playerBounce = human.bounces;
         int AI1Bounce = AI1.bounces;
-        int AI2Bounce = (AI2 == null)?0:AI2.bounces;
-        int AI3Bounce = (AI3 == null)?0:AI3.bounces;
+        int AI2Bounce = (AI2 == null) ? 0 : AI2.bounces;
+        int AI3Bounce = (AI3 == null) ? 0 : AI3.bounces;
         int playerStart = human.getPawnsInStart();
         int AI1Start = AI1.getPawnsInStart();
-        int AI2Start = (AI2 == null)?0:AI2.getPawnsInStart();
-        int AI3Start = (AI3 == null)?0:AI3.getPawnsInStart();
+        int AI2Start = (AI2 == null) ? 0 : AI2.getPawnsInStart();
+        int AI3Start = (AI3 == null) ? 0 : AI3.getPawnsInStart();
         int playerHome = human.getPawnsInHome();
         int AI1Home = AI1.getPawnsInHome();
-        int AI2Home = (AI2 == null)?0:AI2.getPawnsInHome();
-        int AI3Home = (AI3 == null)?0:AI3.getPawnsInHome();
+        int AI2Home = (AI2 == null) ? 0 : AI2.getPawnsInHome();
+        int AI3Home = (AI3 == null) ? 0 : AI3.getPawnsInHome();
         if (gameID == -1) {
             gameID = ConnectDB.insertGameData(playerName, playtime, currentMove, playerColor, winnerColor,
                     AI1Diff, AI2Diff, AI3Diff, playerBounce, AI1Bounce, AI2Bounce, AI3Bounce,
                     playerStart, AI1Start, AI2Start, AI3Start, playerHome, AI1Home, AI2Home, AI3Home);
         } else {
-            System.out.println("gameID: "+ gameID);
+            System.out.println("gameID: " + gameID);
             ConnectDB.updateGameData(gameID, playtime, currentMove, winnerColor, playerBounce,
                     AI1Bounce, AI2Bounce, AI3Bounce, playerStart, AI1Start, AI2Start, AI3Start,
                     playerHome, AI1Home, AI2Home, AI3Home);
         }
     }
 
-    /*
-    the new play() function. Called on click of the next turn button in the gamewindow
+    /**
+     * the new play() function. Called on click of the next turn button in the gamewindow
      */
     public void nextTurn() {
         clearHighlightAndSelect();
@@ -336,6 +391,9 @@ public class Game {
 
     }
 
+    /**
+     * prints out game information
+     */
     public void printData() {
         System.out.print("Turn " + currentMove + "\n");
         System.out.print("All pawns: ");
@@ -355,6 +413,9 @@ public class Game {
         System.out.println("\n*****************");
     }
 
+    /**
+     * clears all highlights and selects
+     */
     public void clearHighlightAndSelect() {
         for (Block b : gameBoard.everyBlock) {
             b.highlighted = false;
@@ -368,6 +429,7 @@ public class Game {
 
     /**
      * returns a HashMap<boolean smart, boolean cruel> from the given difficulty int
+     *
      * @param optInt - int given as difficulty representation
      * @return that hashmap
      */

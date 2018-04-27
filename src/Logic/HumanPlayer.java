@@ -8,10 +8,12 @@ public class HumanPlayer extends Player {
     /**
      * Default constructor
      */
-    public HumanPlayer(){}
+    public HumanPlayer() {
+    }
 
     /**
      * TODO
+     *
      * @param name
      * @param inColor
      * @param inBoard
@@ -27,6 +29,7 @@ public class HumanPlayer extends Player {
 
     /**
      * TODO
+     *
      * @return
      */
     public boolean play() {
@@ -97,14 +100,6 @@ public class HumanPlayer extends Player {
                 }
             }
         }
-    }
-
-    /**
-     * Gets the name of the player
-     * @return  name of player
-     */
-    public String getName() {
-        return name;
     }
 }
 

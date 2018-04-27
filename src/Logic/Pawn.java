@@ -16,8 +16,9 @@ public class Pawn {
 
     /**
      * Constructor for a pawn that sets the board where the pawn is played and the player the pawn belongs to
-     * @param inBoard   board to be played on
-     * @param inPlayer  player the pawn belongs to
+     *
+     * @param inBoard  board to be played on
+     * @param inPlayer player the pawn belongs to
      */
     public Pawn(Board inBoard, Player inPlayer) {
         thisBoard = inBoard;
@@ -35,9 +36,10 @@ public class Pawn {
 
     /**
      * Constructor for a pawn that gives the pawn a board, player, and starting location
-     * @param inBoard       board to be played on
-     * @param inPlayer      player the pawn belongs to
-     * @param currentBlock  block the pawn is to be initialized to
+     *
+     * @param inBoard      board to be played on
+     * @param inPlayer     player the pawn belongs to
+     * @param currentBlock block the pawn is to be initialized to
      */
     public Pawn(Board inBoard, Player inPlayer, Block currentBlock) {
         thisBoard = inBoard;
@@ -48,8 +50,7 @@ public class Pawn {
         if (currentBlock == inBoard.getStartLocation(this.color)) {
             hasReachedSafeZone = false;
             isFinished = false;
-        }
-        else if (currentBlock == locationArray[2]) {
+        } else if (currentBlock == locationArray[2]) {
             isFinished = true;
             hasReachedSafeZone = true;
         }
@@ -77,8 +78,9 @@ public class Pawn {
 
     /**
      * This method checks to see if this pawn can move the given number of spaces
-     * @param spaces    the number of spaces ahead to check
-     * @return          whether or not the pawn can move there
+     *
+     * @param spaces the number of spaces ahead to check
+     * @return whether or not the pawn can move there
      */
     public boolean canMoveHere(int spaces) {
 
@@ -95,8 +97,7 @@ public class Pawn {
             }
             if (targetBlock.getPawn() != null && targetBlock.getPawn().getColor() == color && !targetBlock.isHome) {
                 return false;
-            }
-            else {
+            } else {
                 return true;
             }
         }
@@ -108,7 +109,8 @@ public class Pawn {
 
     /**
      * Gets the color this pawn belongs to
-     * @return  what color the pawn is
+     *
+     * @return what color the pawn is
      */
     public Color getColor() {
         return color;
@@ -116,6 +118,7 @@ public class Pawn {
 
     /**
      * sets color of pawn
+     *
      * @param color the color this pawn belongs to
      */
     public void setColor(Color color) {
@@ -124,7 +127,8 @@ public class Pawn {
 
     /**
      * Gets the current block the pawn is on
-     * @return  block where pawn is located
+     *
+     * @return block where pawn is located
      */
     public Block getCurrentBlock() {
         return locationArray[0];
@@ -132,7 +136,8 @@ public class Pawn {
 
     /**
      * Sets the current block for this pawn
-     * @param currentBlock  the block to be set
+     *
+     * @param currentBlock the block to be set
      */
     public void setCurrentBlock(Block currentBlock) {
         locationArray[0] = currentBlock;
@@ -140,7 +145,8 @@ public class Pawn {
 
     /**
      * calculates the disatance this pawn is from its home
-     * @return  number of blocks between where the pawn is and its home
+     *
+     * @return number of blocks between where the pawn is and its home
      */
     public int getDistanceFromHome() {
         if (!hasLeftStart()) {
@@ -158,6 +164,7 @@ public class Pawn {
 
     /**
      * changes all of the fields of the pertinent blocks
+     *
      * @param targetBlock the block that the pawn is moving to
      */
     public void move(Block targetBlock) {
@@ -171,9 +178,7 @@ public class Pawn {
         if (origin == getStartLocation()) {
             myPlayer.startPawnList.remove(this);
             myPlayer.movablePawnList.add(this);
-        }
-
-        else if (targetBlock == this.getHomeLocation()) {
+        } else if (targetBlock == this.getHomeLocation()) {
             this.myPlayer.movablePawnList.remove(this);
             this.myPlayer.finishedPawnList.add(this);
         }
@@ -185,7 +190,8 @@ public class Pawn {
 
     /**
      * Returns whether or not the pawn is home
-     * @return  whether or not the pawn is home
+     *
+     * @return whether or not the pawn is home
      */
     public boolean isFinished() {
         return isFinished;
@@ -193,7 +199,8 @@ public class Pawn {
 
     /**
      * Sets the field isFinished
-     * @param home  whether the pawn is in the home
+     *
+     * @param home whether the pawn is in the home
      */
     public void setFinished(boolean home) { //Slightly confusing name - sets the isHome field
         isFinished = home;
@@ -201,7 +208,8 @@ public class Pawn {
 
     /**
      * Returns the home block for this color of pawn
-     * @return  Home block for this pawn
+     *
+     * @return Home block for this pawn
      */
     public Block getHomeLocation() {
         return locationArray[2];
@@ -209,7 +217,8 @@ public class Pawn {
 
     /**
      * Returns the start block for the color of this pawn
-     * @return  Start block for this pawn
+     *
+     * @return Start block for this pawn
      */
     public Block getStartLocation() {
         return locationArray[1];
@@ -217,17 +226,19 @@ public class Pawn {
 
     /**
      * calculates whether or not the pawn has reached the safe zone
-     * @return  whether or not the pawn has reached the safe zone
+     *
+     * @return whether or not the pawn has reached the safe zone
      */
     public boolean hasReachedSafeZone() {
-        if (getCurrentBlock() == thisBoard.getSafeBlock(getCurrentBlock().id, color)){
-            return  true;
+        if (getCurrentBlock() == thisBoard.getSafeBlock(getCurrentBlock().id, color)) {
+            return true;
         }
         return false;
     }
 
     /**
      * sets the field that says whether or not the pawn has reached the safe zone
+     *
      * @param hasReachedSafeZone whether or not the pawn has reached the safe zone
      */
     public void setHasReachedSafeZone(boolean hasReachedSafeZone) {
@@ -240,17 +251,22 @@ public class Pawn {
     public void select() {
         this.selected = true;
     }
-    public void deselect() { if (selected) { selected = false;}}
+
+    public void deselect() {
+        if (selected) {
+            selected = false;
+        }
+    }
 
     /**
      * Figures out whether this pawn has left the start
-     * @return  Whether or not the pawn has left start
+     *
+     * @return Whether or not the pawn has left start
      */
     public boolean hasLeftStart() {
         if (this.getCurrentBlock() == locationArray[1]) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }

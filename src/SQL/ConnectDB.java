@@ -6,6 +6,7 @@ package SQL;
 
 
 //need to add this as a dependency to make it work
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -33,11 +34,12 @@ public class ConnectDB {
     /**
      * This method takes a query and parameters and creates an http request to a php script that will query the database
      * and return a Json encoded array
-     * @param query         SQL query that is being sent to database
-     * @param params        Parameters that replace '?' in the query
-     * @param read          Boolean that tells whether the query will read (true) or write (false) to the database
-     * @return              JsonArray that will hold the data return from the query
-     * @throws IOException  Exception may occur if unable to open a connection to php page
+     *
+     * @param query  SQL query that is being sent to database
+     * @param params Parameters that replace '?' in the query
+     * @param read   Boolean that tells whether the query will read (true) or write (false) to the database
+     * @return JsonArray that will hold the data return from the query
+     * @throws IOException Exception may occur if unable to open a connection to php page
      */
     private static JsonArray sendQuery(String query, String[] params, boolean read) throws IOException {
         String urlString = ConnectDB.BASE_URL + (read ? ConnectDB.READ_FILE : ConnectDB.WRITE_FILE);
@@ -73,8 +75,9 @@ public class ConnectDB {
 
     /**
      * This method gets the save game data for a particular gameID
-     * @param gameID    The ID of the game whose data you want to load
-     * @return          A string that contains the data needed to reinitialize a game, returns an empty string if failed
+     *
+     * @param gameID The ID of the game whose data you want to load
+     * @return A string that contains the data needed to reinitialize a game, returns an empty string if failed
      */
     public static String loadGameData(int gameID) {
         //define query and parameters
@@ -99,7 +102,8 @@ public class ConnectDB {
 
     /**
      * This method gets the save game data for a the most recent save
-     * @return          A string that contains the data needed to reinitialize a game, returns an empty string if failed
+     *
+     * @return A string that contains the data needed to reinitialize a game, returns an empty string if failed
      */
     public static String[] loadGameData() {
         //define query
@@ -123,9 +127,10 @@ public class ConnectDB {
 
     /**
      * This method gets the stats for a player from the database
-     * @param player    The player that you want stats for
-     * @return          A string array that contains the stats for the player. The info in the array follows this format:
-     *                  Player name, wins, losses, times red, times green, times blue, times yellow, total bumps
+     *
+     * @param player The player that you want stats for
+     * @return A string array that contains the stats for the player. The info in the array follows this format:
+     * Player name, wins, losses, times red, times green, times blue, times yellow, total bumps
      */
     public static String[][] getPlayerStats(String player) {
         //define query and parameters
@@ -143,7 +148,7 @@ public class ConnectDB {
 
         String stats[][] = null;
         if (dataArr != null) {
-            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size()/2];
+            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size() / 2];
             Set<String> keyset = dataArr.get(0).getAsJsonObject().keySet();
             int k = 0;
             for (String key : keyset) {
@@ -161,8 +166,9 @@ public class ConnectDB {
 
     /**
      * This method gets the stats for a player from the database
-     * @return          A string array that contains the stats for all players. The info in the array follows this format:
-     *                  Player name, wins, losses, times red, times green, times blue, times yellow, total bumps
+     *
+     * @return A string array that contains the stats for all players. The info in the array follows this format:
+     * Player name, wins, losses, times red, times green, times blue, times yellow, total bumps
      */
     public static String[][] getAllPlayerStats() {
         //define query
@@ -178,7 +184,7 @@ public class ConnectDB {
 
         String stats[][] = null;
         if (dataArr != null) {
-            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size()/2];
+            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size() / 2];
             Set<String> keyset = dataArr.get(0).getAsJsonObject().keySet();
             int k = 0;
             for (String key : keyset) {
@@ -189,7 +195,7 @@ public class ConnectDB {
             }
             for (int i = 0; i < stats.length - 1; i++) {
                 for (int j = 0; j < stats[i].length; j++) {
-                    stats[i+1][j] = dataArr.get(i).getAsJsonObject().get(Integer.toString(j)).getAsString();
+                    stats[i + 1][j] = dataArr.get(i).getAsJsonObject().get(Integer.toString(j)).getAsString();
                 }
             }
         }
@@ -198,13 +204,14 @@ public class ConnectDB {
 
     /**
      * This method gets the info for a particular game by game ID in the database
-     * @param gameID    The ID number for a game
-     * @return          A string array that contains the stats for the game. The info in the array follows this format:
-     *                  Game ID, player name, date, playtime, number of rounds, player color, winner color,
-     *                  AI1 difficulty, AI2 difficulty, AI3 difficulty,
-     *                  player number bumped, AI1 number bumped, AI2 number bumped, AI3 number bumped,
-     *                  player number start, AI1 number start, AI2 number start, AI3 number start,
-     *                  player number home, AI1 number home, AI2 number home, AI3 number home,
+     *
+     * @param gameID The ID number for a game
+     * @return A string array that contains the stats for the game. The info in the array follows this format:
+     * Game ID, player name, date, playtime, number of rounds, player color, winner color,
+     * AI1 difficulty, AI2 difficulty, AI3 difficulty,
+     * player number bumped, AI1 number bumped, AI2 number bumped, AI3 number bumped,
+     * player number start, AI1 number start, AI2 number start, AI3 number start,
+     * player number home, AI1 number home, AI2 number home, AI3 number home,
      */
     public static String[][] getGameInfo(int gameID) {
         //define query and parameters
@@ -222,7 +229,7 @@ public class ConnectDB {
 
         String stats[][] = null;
         if (dataArr != null) {
-            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size()/2];
+            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size() / 2];
             Set<String> keyset = dataArr.get(0).getAsJsonObject().keySet();
             int k = 0;
             for (String key : keyset) {
@@ -240,7 +247,8 @@ public class ConnectDB {
 
     /**
      * This method gets info for all games stored in the database (currently removed stats involving pawns in home and start
-     * @return  An array that contains column headers and all of the info from the database
+     *
+     * @return An array that contains column headers and all of the info from the database
      */
     public static String[][] getAllGameInfo() {
         //define query
@@ -257,7 +265,7 @@ public class ConnectDB {
 
         String stats[][] = null;
         if (dataArr != null) {
-            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size()/2 - 8];
+            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size() / 2 - 8];
             Set<String> keyset = dataArr.get(0).getAsJsonObject().keySet();
             int k = 0;
             for (String key : keyset) {
@@ -266,9 +274,9 @@ public class ConnectDB {
                     k++;
                 }
             }
-            for (int i = 0; i < stats.length-1; i++) {
+            for (int i = 0; i < stats.length - 1; i++) {
                 for (int j = 0; j < stats[i].length; j++) {
-                    stats[i+1][j] = dataArr.get(i).getAsJsonObject().get(Integer.toString(j)).getAsString();
+                    stats[i + 1][j] = dataArr.get(i).getAsJsonObject().get(Integer.toString(j)).getAsString();
                 }
             }
         }
@@ -277,9 +285,10 @@ public class ConnectDB {
 
     /**
      * This method saves game data into the database
-     * @param gameID    The id of the game to be saved
-     * @param saveData  The string containing all of the info being saved
-     * @return          A boolean representing the success of the query
+     *
+     * @param gameID   The id of the game to be saved
+     * @param saveData The string containing all of the info being saved
+     * @return A boolean representing the success of the query
      */
     public static boolean saveGameData(int gameID, String saveData) {
         //define query and parameters
@@ -312,27 +321,28 @@ public class ConnectDB {
 
     /**
      * This method inserts game data for a particular game into the database
-     * @param player        player name
-     * @param playtime      drawStep time
-     * @param numRounds     number of rounds
-     * @param playerColor   color of the player
-     * @param winnerColor   color of the winner
-     * @param AI1Diff       difficulty of first AI. Options: "Nice/Smart", "Nice/Dumb", "Cruel/Smart", "Cruel/Dumb"
-     * @param AI2Diff       difficulty of second AI. Same as above plus "NULL"
-     * @param AI3Diff       difficulty of third AI. Same as above
-     * @param playerBumps   number of player bumps
-     * @param AI1Bumps      number of bumps for first AI
-     * @param AI2Bumps      number of bumps for second AI
-     * @param AI3Bumps      number of bumps for third AI
-     * @param playerStart   number of pawns in player start
-     * @param AI1Start      number of pawns in start for first AI
-     * @param AI2Start      number of pawns in start for second AI
-     * @param AI3Start      number of pawns in start for third AI
-     * @param playerHome    number of pawns in player start
-     * @param AI1Home       number of pawns in home for first AI
-     * @param AI2Home       number of pawns in home for second AI
-     * @param AI3Home       number of pawns in home for third AI
-     * @return              The ID of the entry in the database, needed for future updates and retrieval
+     *
+     * @param player      player name
+     * @param playtime    drawStep time
+     * @param numRounds   number of rounds
+     * @param playerColor color of the player
+     * @param winnerColor color of the winner
+     * @param AI1Diff     difficulty of first AI. Options: "Nice/Smart", "Nice/Dumb", "Cruel/Smart", "Cruel/Dumb"
+     * @param AI2Diff     difficulty of second AI. Same as above plus "NULL"
+     * @param AI3Diff     difficulty of third AI. Same as above
+     * @param playerBumps number of player bumps
+     * @param AI1Bumps    number of bumps for first AI
+     * @param AI2Bumps    number of bumps for second AI
+     * @param AI3Bumps    number of bumps for third AI
+     * @param playerStart number of pawns in player start
+     * @param AI1Start    number of pawns in start for first AI
+     * @param AI2Start    number of pawns in start for second AI
+     * @param AI3Start    number of pawns in start for third AI
+     * @param playerHome  number of pawns in player start
+     * @param AI1Home     number of pawns in home for first AI
+     * @param AI2Home     number of pawns in home for second AI
+     * @param AI3Home     number of pawns in home for third AI
+     * @return The ID of the entry in the database, needed for future updates and retrieval
      */
     public static int insertGameData(String player, int playtime, int numRounds, Color playerColor, Color winnerColor,
                                      String AI1Diff, String AI2Diff, String AI3Diff,
@@ -390,23 +400,24 @@ public class ConnectDB {
 
     /**
      * This method updates the entry for a game in the database
-     * @param gameID        ID of the game
-     * @param playtime      new drawStep time
-     * @param numRounds     new number of rounds
-     * @param winnerColor   color of the winner
-     * @param playerBumps   new number of player bumps
-     * @param AI1Bumps      new number of bumps for first AI
-     * @param AI2Bumps      new number of bumps for second AI
-     * @param AI3Bumps      new number of bumps for third AI
-     * @param playerStart   new number of pawns in player start
-     * @param AI1Start      new number of pawns in start for first AI
-     * @param AI2Start      new number of pawns in start for second AI
-     * @param AI3Start      new number of pawns in start for third AI
-     * @param playerHome    new number of pawns in player start
-     * @param AI1Home       new number of pawns in home for first AI
-     * @param AI2Home       new number of pawns in home for second AI
-     * @param AI3Home       new number of pawns in home for third AI
-     * @return              A boolean representing whether the update succeeded
+     *
+     * @param gameID      ID of the game
+     * @param playtime    new drawStep time
+     * @param numRounds   new number of rounds
+     * @param winnerColor color of the winner
+     * @param playerBumps new number of player bumps
+     * @param AI1Bumps    new number of bumps for first AI
+     * @param AI2Bumps    new number of bumps for second AI
+     * @param AI3Bumps    new number of bumps for third AI
+     * @param playerStart new number of pawns in player start
+     * @param AI1Start    new number of pawns in start for first AI
+     * @param AI2Start    new number of pawns in start for second AI
+     * @param AI3Start    new number of pawns in start for third AI
+     * @param playerHome  new number of pawns in player start
+     * @param AI1Home     new number of pawns in home for first AI
+     * @param AI2Home     new number of pawns in home for second AI
+     * @param AI3Home     new number of pawns in home for third AI
+     * @return A boolean representing whether the update succeeded
      */
     public static boolean updateGameData(int gameID, int playtime, int numRounds, Color winnerColor,
                                          int playerBumps, int AI1Bumps, int AI2Bumps, int AI3Bumps,
@@ -463,8 +474,9 @@ public class ConnectDB {
 
     /**
      * This method gets the current player bumps stat from the database
-     * @param gameID    ID of the game
-     * @return          the player bumps
+     *
+     * @param gameID ID of the game
+     * @return the player bumps
      */
     private static int getPlayerBumps(int gameID) {
         //build query and parameters
@@ -490,8 +502,9 @@ public class ConnectDB {
 
     /**
      * This method gets the player name for a game from the database
-     * @param gameID    ID of the game
-     * @return          name of the player for that game
+     *
+     * @param gameID ID of the game
+     * @return name of the player for that game
      */
     private static String getPlayerName(int gameID) {
         //build query and parameters
@@ -516,8 +529,9 @@ public class ConnectDB {
 
     /**
      * This method gets the player color for a game from the database
-     * @param gameID    ID of the game
-     * @return          color of the player for that game
+     *
+     * @param gameID ID of the game
+     * @return color of the player for that game
      */
     private static Color getPlayerColor(int gameID) {
         //build query and parameters
@@ -553,11 +567,12 @@ public class ConnectDB {
 
     /**
      * This method inserts/updates stats for a player in the database
-     * @param player        name of plater
-     * @param didWin        whether or not the player won
-     * @param playerColor   the color of the player
-     * @param bumps         the number of times the player bumped
-     * @return              A boolean representing whether or not the query succeeded
+     *
+     * @param player      name of plater
+     * @param didWin      whether or not the player won
+     * @param playerColor the color of the player
+     * @param bumps       the number of times the player bumped
+     * @return A boolean representing whether or not the query succeeded
      */
     private static boolean updatePlayer(String player, boolean didWin, Color playerColor, int bumps) {
         //define query and parameters
@@ -614,8 +629,9 @@ public class ConnectDB {
 
     /**
      * This method checks to see if a player already has an entry for their stats in the database
-     * @param player    name of player
-     * @return          whether or not the player has an entry
+     *
+     * @param player name of player
+     * @return whether or not the player has an entry
      */
     private static boolean hasEntry(String player) {
         //define query and parameters
@@ -640,7 +656,8 @@ public class ConnectDB {
 
     /**
      * This method gets the ID of the last entry entered into the table of game stats
-     * @return  the ID of the most recent entry
+     *
+     * @return the ID of the most recent entry
      */
     private static int getLastGameID() {
         //define query
@@ -662,8 +679,9 @@ public class ConnectDB {
 
     /**
      * This method checks to see if a game has already been saved
-     * @param gameID    ID of the game
-     * @return          whether or not the game has been saved
+     *
+     * @param gameID ID of the game
+     * @return whether or not the game has been saved
      */
     private static boolean isSaved(int gameID) {
         //define query and parameters
@@ -688,8 +706,9 @@ public class ConnectDB {
 
     /**
      * Converts the 2D array into JTable
-     * @param data  2D string array where first row is the column headers
-     * @return      JTable from array
+     *
+     * @param data 2D string array where first row is the column headers
+     * @return JTable from array
      */
     public static JTable getAsJTable(String[][] data) {
         return new JTable(Arrays.copyOfRange(data, 1, data.length), data[0]);
