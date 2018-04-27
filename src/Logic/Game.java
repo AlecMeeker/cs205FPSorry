@@ -158,6 +158,7 @@ public class Game {
 
 
     public String saveGame() {
+        insertGameStats();
         String saveState = "";
         saveState += currentMove + ";";
         saveState += this.human.color.toString() + ";";
@@ -233,6 +234,12 @@ public class Game {
     public void quitGame() {
         whilePlaying = false;
         this.saveGame();
+    }
+
+    /**
+     * This method gets all of the stats for the game and inserts them into the database
+     */
+    public void insertGameStats(){
         Color winnerColor = (winner == null)?Color.NULL:winner.color;
         String AI1Diff = ((AI)allPlayers.get(1)).demeanor;
         String AI2Diff = (allPlayers.size() <= 2)?"NULL":((AI)allPlayers.get(2)).demeanor;

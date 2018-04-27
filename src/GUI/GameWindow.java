@@ -515,6 +515,7 @@ public class GameWindow extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("save game");
+                currentGame.saveGame();
             }
         } );
 
