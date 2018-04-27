@@ -177,8 +177,8 @@ public class Game {
         int AI1Bounce = allPlayers.get(1).bounces;
         int AI2Bounce = (allPlayers.size() <= 2)?0:allPlayers.get(2).bounces;
         int AI3Bounce = (allPlayers.size() <= 3)?0:allPlayers.get(3).bounces;
-        if (gameID != -1) {
-            gameID = ConnectDB.insertGameData(generateName(), 10, currentMove, currentPlayer.color, winnerColor,
+        if (gameID == -1) {
+            gameID = ConnectDB.insertGameData(generateName(), 10, currentMove, allPlayers.get(0).color, winnerColor,
                     AI1Diff, AI2Diff, AI3Diff, playerBounce, AI1Bounce, AI2Bounce, AI3Bounce,
                     0, 0, 0, 0, 0, 0, 0, 0);
         } else {

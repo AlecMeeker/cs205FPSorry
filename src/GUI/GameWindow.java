@@ -581,7 +581,7 @@ public class GameWindow extends JFrame{
     private void quitAndSave(){
         startWindow.setVisible(true);
         removeAllPawns();
-        //currentGame.quitGame();
+        currentGame.quitGame();
         this.dispose();
     }
 
