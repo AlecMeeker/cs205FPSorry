@@ -178,6 +178,37 @@ public class Game {
     //example explained: currentTurn; playerColor; then, for each player, difficulty: bounces: # pawns in home: pawn1Location, pawn2location, pawn3location;
 
 
+    public static Game loadFromState(String inState) {
+        String[] gameParams = inState.split(";");
+        int currentMove = Integer.parseInt(gameParams[0]);
+        Color playerColor;
+        switch (gameParams[1]) {
+            case "RED": playerColor = Color.RED; break;
+            case "GREEN": playerColor = Color.GREEN; break;
+            case "BLUE": playerColor = Color.BLUE; break;
+            case "YELLOW": playerColor = Color.YELLOW; break;
+            case "NULL": default: playerColor = Color.NULL; break;
+        }
+        int numPlayers = gameParams.length - 2;
+        ArrayList<Integer> difficulties = new ArrayList<>(numPlayers);
+        ArrayList<Integer> bounces = new ArrayList<>(numPlayers);
+        ArrayList<Integer> numPawnsHome = new ArrayList<>(numPlayers);
+        ArrayList<ArrayList<Integer>> allPawnLocations = new ArrayList<>(numPlayers);
+        for (int i = 2; i < gameParams.length; i++) {
+            String playerParams[] = gameParams[i].split(":");
+            difficulties.add(Integer.parseInt(playerParams[0]));
+            bounces.add(Integer.parseInt(playerParams[1]));
+            numPawnsHome.add(Integer.parseInt(playerParams[2]));
+            String pawnIndexes[] = playerParams[3].split(",");
+            ArrayList<Integer> pawnLocations = new ArrayList<>(pawnIndexes.length);
+            for (String index: pawnIndexes) {
+                pawnLocations.add(Integer.parseInt(index));
+            }
+            allPawnLocations.add(pawnLocations);
+        }
+        return new Game(playerColor, difficulties, numPawnsHome, allPawnLocations, bounces, currentMove);
+    }
+
     public static String generateName() {
         ArrayList<String> nameList = new ArrayList<>();
         nameList.add("Alexei");
@@ -226,9 +257,6 @@ public class Game {
             default:
                 return Color.NULL;
         }
-    }
-
-    public void loadState(String inState) {
     }
 
 
