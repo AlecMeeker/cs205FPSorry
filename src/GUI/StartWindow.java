@@ -3,12 +3,14 @@ package GUI;
 import Logic.Game;
 import SQL.ConnectDB;
 import Logic.Color;
+import utils.ImagePanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -27,6 +29,7 @@ public class StartWindow extends JFrame {
 
     //some
     private String gameLogoImgPath= "/src/imgs/sorry_start.jpg";
+    private String ImagePath = "/src/imgs/";
     private String instructionString = "The modern deck contains 45 cards: there are five 1 cards as well as four each of the other cards (Sorry!, 2, 3, 4, 5, 7, 8, 10, 11 and 12). The 6s or 9s are omitted to avoid confusion. The first edition of the game had 44 cards (four of each) and the extra 1 card was soon introduced as an option for quicker play.[5] A 1996 board from Waddingtons had 5 of each card.\n" +
             "\n" +
             "Cards are annotated with the following actions:\n" +
@@ -74,17 +77,27 @@ public class StartWindow extends JFrame {
 
     private void initWindow(){
 
+        //Set layout
+        this.setLayout(null);
+        //Setting the window
+        this.setSize(Constants.windowWidth-100,Constants.windowHeight);
+        this.setTitle("Sorry! The Sweet Revenge board game.");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        try{
+            BufferedImage myImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath + "woodDesktop.jpg"));
+            this.setContentPane(new ImagePanel(myImage));
+        }
+        catch(Exception ex){
+            System.out.println("load window background failed" + ex.toString());
+        }
+        this.setResizable(false);
         //GUI Components config
         initGuiComponents();
         setGuiComponents();
         addEventListenerToComponents();
 
-        //Set layout
-        this.setLayout(null);
-        //Setting the window
-        this.setSize(Constants.windowWidth,Constants.windowHeight);
-        this.setTitle("Sorry! The Sweet Revenge board game.");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         //this.pack(); // pack the window
         //this.setVisible(true);
     }
@@ -106,13 +119,13 @@ public class StartWindow extends JFrame {
     }
 
     private void setGuiComponents(){
-        newGameBtn.setBounds(930, 240, 120, 40);
+        newGameBtn.setBounds(980, 240, 120, 40);
         this.add(newGameBtn);
-        loadGameBtn.setBounds(930, 320, 120, 40);
+        loadGameBtn.setBounds(980, 320, 120, 40);
         this.add(loadGameBtn);
-        statBtn.setBounds(930, 400, 120, 40);
+        statBtn.setBounds(980, 400, 120, 40);
         this.add(statBtn);
-        instructionBtn.setBounds(930, 480, 120, 40);
+        instructionBtn.setBounds(980, 480, 120, 40);
         this.add(instructionBtn);
 
         gameLogo.setBounds(Constants.gameLogoStartX,Constants.gameLogoStartY,Constants.gameLogoWidth,Constants.gameLogoHeight);
@@ -215,7 +228,7 @@ public class StartWindow extends JFrame {
 
         };
 
-        int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.OK_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(null, inputs, "Game Config", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
 
             System.out.println("You entered " +
@@ -248,7 +261,6 @@ public class StartWindow extends JFrame {
             gw.loadGameStuff(newGame.everyPawn,newGame);
 
             gw.setVisible(true);
-            newGame.nextTurn();
             gw.refreshBoard(newGame.everyPawn,newGame.allPlayers);
         } else {
             System.out.println("User canceled / closed the dialog, result = " + result);

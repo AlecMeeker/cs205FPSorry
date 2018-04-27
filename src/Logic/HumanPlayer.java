@@ -48,9 +48,13 @@ public class HumanPlayer extends Player {
         for (Move m : potentialMovesList.get(0)) {
             if (m.blockReached.selected) {
                 m.enactMove();
+
+                m.blockReached.selected = false;
+
                 if (finishedPawnList.size() == 4) {
                     System.out.println("You win!!!");
                 }
+                break;
             }
         }
     }
