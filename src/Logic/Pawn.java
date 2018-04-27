@@ -8,7 +8,7 @@ public class Pawn {
     public Player myPlayer;
 
     public Boolean highlighted;
-    public Boolean selected;
+    public Boolean selected = false;
 
     public Block[] locationArray;
 
