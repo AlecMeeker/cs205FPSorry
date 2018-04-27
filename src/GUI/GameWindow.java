@@ -9,7 +9,7 @@ import Logic.Deck;
 import Logic.Block;
 import Logic.*;
 //import org.omg.CORBA.SystemException;
-import utils.TransparencyUtil;
+import utils.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,12 +107,14 @@ public class GameWindow extends JFrame{
 
     private void initWindow(){
 
-        //Gui Components config
-        initGuiComponents();
-        setGuiComponentsPosition();
 
-        //add motion
-        addEventListenerToComponents();
+        try{
+            BufferedImage myImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath + "woodDesktop.jpg"));
+            this.setContentPane(new ImagePanel(myImage));
+        }
+        catch(Exception ex){
+            System.out.println("load window background failed" + ex.toString());
+        }
 
         //Set layout
         this.setLayout(null);
@@ -128,8 +131,14 @@ public class GameWindow extends JFrame{
                 startWindow.setVisible(false);
             }
         });
-
         this.setResizable(false);
+
+        //Gui Components config
+        initGuiComponents();
+        setGuiComponentsPosition();
+
+        //add motion
+        addEventListenerToComponents();
 
     }
 
@@ -384,6 +393,7 @@ public class GameWindow extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 isDrawn = false;
                 currentGame.nextTurn();
+                currentGame.you.selectEndBlockStep();
                 refreshBoard(currentGame.everyPawn,currentGame.allPlayers);
 
             }
@@ -439,13 +449,22 @@ public class GameWindow extends JFrame{
                 //move the pieces to the high light point.
 
                 System.out.println("mouse pos: "+e.getX()+" , "+e.getY());
-                for (Point pos : blockToBoardPosition.values()) {
+                for (JLabel HLBlock : highlightBlocks) {
                     // ...
+                    Point pos = HLBlock.getLocation();
                     if( e.getX() - pos.x > 0 && e.getY() - pos.y > 0
                             && e.getX() - pos.x < 60 && e.getY() - pos.y < 60
                             && selectedLabel != null){
                         selectedLabel.setLocation(pos.x,pos.y);
 
+                        for(Block block: allBlocks){
+                            Point blockPt = boardToBackend.get(block);
+                            if(blockPt.equals(pos)){
+                                block.selected = true;
+                            }
+                        }
+
+                        currentGame.you.selectEndBlockStep();
                         System.out.println("selectedLabel pos: "+pos.x+" , "+pos.y);
                         break;
                     }
@@ -456,6 +475,9 @@ public class GameWindow extends JFrame{
                     selectedLabel.setOpaque(false);
                     selectedLabel.repaint();
                 }
+                Pawn tmpPawn = pawnsFrontToBack.get(selectedLabel);
+                tmpPawn.selected = false;
+                removeAllHighlight();
                 selectedLabel = null;
             }
 
@@ -716,8 +738,8 @@ public class GameWindow extends JFrame{
                 JLabel tmpLabel = new JLabel();
                 tmpLabel.setOpaque(true);
                 tmpLabel.setBackground(java.awt.Color.cyan);
-
                 tmpLabel.setBounds(tmpP.x,tmpP.y,Constants.pawnWidth,Constants.pawnHeight);
+
                 boardPanel.add(tmpLabel);
                 tmpLabel.repaint();
                 highlightBlocks.add(tmpLabel);

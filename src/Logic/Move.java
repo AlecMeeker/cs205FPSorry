@@ -2,9 +2,9 @@ package Logic;
 
 import java.util.ArrayList;
 
-/*
- Returns a move, containing fields used to rank relative quality of the move in various AI
-  */
+/**
+ * Returns a move, containing fields used to rank relative quality of the move in various AI
+ */
 public class Move {
 
     public Pawn p;
@@ -20,9 +20,11 @@ public class Move {
     public int backPawns; //pawns behind this pawn, representing future potential danger
     public Block origin;
 
-    /*
-    computes a move based purely on the integer number rather than the card itself
-    used in case you draw a 7, and split that into 1/6. The 1 doesn't count as a 1 to move out
+    /**
+     * computes a move based purely on the integer number rather than the card itself
+     * used in case you draw a 7, and split that into 1/6. The 1 doesn't count as a 1 to move out
+     * @param thisPawn  the pawn being moved
+     * @param spaces    the spaces the pawn will be moved
      */
     public Move (Pawn thisPawn, int spaces) {
         System.out.println("move generated");
@@ -41,6 +43,11 @@ public class Move {
         backPawns = getBackPawns();
     }
 
+    /**
+     * Moves a pawn directly to a target pawn???
+     * @param thisPawn      pawn being moved
+     * @param targetPawn    target pawn
+     */
     public Move (Pawn thisPawn, Pawn targetPawn) {
         origin = thisPawn.getCurrentBlock();
         this.p = thisPawn;
@@ -51,8 +58,10 @@ public class Move {
         blockReached = trySpecialMove(thisPawn, blockReached);
     }
 
-    /*
-    helper method to iterate through the board
+    /**
+     * helper method to iterate through the board
+     * @param spaces    number of spaces to move
+     * @return          the block where the spaces will take the pawn
      */
     private Block move(int spaces) {
 
@@ -71,8 +80,11 @@ public class Move {
         return currentBlock;
     }
 
-    /*
-    helper method to account for special moves within the testMove method
+    /**
+     * helper method to account for special moves within the testMove method
+     * @param thisPawn      the pawn being moved
+     * @param startBlock    where the pawn will be moved to (does not include slide)
+     * @return              where the pawn will be moved to (includes slide)
      */
     private Block trySpecialMove(Pawn thisPawn, Block startBlock) {
         Block currentBlock = startBlock;
@@ -118,15 +130,15 @@ public class Move {
 
     }
 
-    /*
-    get the 10 pawns in front of where this pawn will land
+    /**
+     * get the 10 pawns in front of where this pawn will land
+     * @return  number of pawns (up to 10) in front of current block
      */
     private int getFrontPawns() {
         int pawnsInFront = 0;
         if (p.getCurrentBlock().id > -1) {
             Block iterBlock = p.getCurrentBlock();
             for (int i = 0; i < 10; i++) {
-
                 iterBlock = iterBlock.getNextBlock(Color.NULL);
                 if (iterBlock.pawnsHere.size() != 0 && iterBlock.getPawn().getColor() != p.getColor()) {
                     pawnsInFront++;
@@ -136,8 +148,9 @@ public class Move {
         return pawnsInFront;
     }
 
-    /*
-    get the 10 pawns behind where the pawn will land
+    /**
+     * get the 10 pawns behind where the pawn will land
+     * @return number of pawns (up to 10) behind the current block
      */
     private int getBackPawns() {
         int pawnsInBack = 0;
@@ -153,8 +166,8 @@ public class Move {
         return pawnsInBack;
     }
 
-    /*
-    used to run the move the player has chosen
+    /**
+     * used to run the move the player has chosen
      */
     public void enactMove() {
         p.move(blockReached);
