@@ -9,7 +9,7 @@ public class Block {
     Block nextSafetyBlock; //the next block if this is one of those exit spaces for a certain color
 
     public boolean highlighted; //for highlighting this block in the GUI
-    public boolean selected; //for selecting this block in the GUI, possibly unnecessary
+    public boolean selected = false; //for selecting this block in the GUI, possibly unnecessary
 
     public boolean isHome; //if the block is a home block
 

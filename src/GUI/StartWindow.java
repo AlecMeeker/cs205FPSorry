@@ -216,7 +216,7 @@ public class StartWindow extends JFrame {
                 scroll.setOpaque(false);
                 scroll.getViewport().setOpaque(false);
 
-                
+
                 instructionWindow.add(scroll);
                 instructionWindow.setVisible(true);
             }
