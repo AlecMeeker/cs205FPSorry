@@ -168,6 +168,11 @@ public class Pawn {
             this.myPlayer.startPawnList.add(this);
         }
 
+        if (origin == getStartLocation()) {
+            myPlayer.startPawnList.remove(this);
+            myPlayer.movablePawnList.add(this);
+        }
+
         else if (targetBlock == this.getHomeLocation()) {
             this.myPlayer.movablePawnList.remove(this);
             this.myPlayer.finishedPawnList.add(this);
