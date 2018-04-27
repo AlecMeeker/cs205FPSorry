@@ -3,10 +3,13 @@ package Logic;
 import javafx.util.Pair;
 import org.omg.PortableInterceptor.INACTIVE;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Game {
+    private int gameID = -1;
+
     public Player currentPlayer;
     public Player winner;
     public Player human;
@@ -17,6 +20,7 @@ public class Game {
     public Board gameBoard;
     public ArrayList<Pawn> everyPawn;
     public ArrayList<Player> allPlayers;
+    public HumanPlayer you;
 
     public Game(Color playerColor, ArrayList<Integer> aiDifficulties) {
         this.gameBoard = new Board();
@@ -42,7 +46,7 @@ public class Game {
              }
              this.currentMove = currentMove;
 
-         
+
          //for each player
          for (int i = 0; i < startLists.size() + 1; i++) {
              //set each player's bounces
@@ -74,6 +78,7 @@ public class Game {
              }
          }
 
+        System.out.print("difficulties size : " + aiDifficulties.size());
 
     }
 
@@ -106,13 +111,13 @@ public class Game {
         Color secondColor = generateColor();
         Color thirdColor = generateColor();
 
-        while (firstColor == yourColor) {
+        while (firstColor == playerColor) {
             firstColor = generateColor();
         }
-        while (secondColor == firstColor || secondColor == yourColor) {
+        while (secondColor == firstColor || secondColor == playerColor) {
             secondColor = generateColor();
         }
-        while (thirdColor == firstColor || thirdColor == secondColor || thirdColor == yourColor) {
+        while (thirdColor == firstColor || thirdColor == secondColor || thirdColor == playerColor) {
             thirdColor = generateColor();
         }
 
@@ -222,9 +227,28 @@ public class Game {
 
     public void loadState(String inState) {
     }
+
+
     public void quitGame() {
         whilePlaying = false;
-
+        this.saveGame();
+        Color winnerColor = (winner == null)?Color.NULL:winner.color;
+        String AI1Diff = ((AI)allPlayers.get(1)).demeanor;
+        String AI2Diff = (allPlayers.size() <= 2)?"NULL":((AI)allPlayers.get(2)).demeanor;
+        String AI3Diff = (allPlayers.size() <= 3)?"NULL":((AI)allPlayers.get(3)).demeanor;
+        int playerBounce = allPlayers.get(0).bounces;
+        int AI1Bounce = allPlayers.get(1).bounces;
+        int AI2Bounce = (allPlayers.size() <= 2)?0:allPlayers.get(2).bounces;
+        int AI3Bounce = (allPlayers.size() <= 3)?0:allPlayers.get(3).bounces;
+        if (gameID == -1) {
+            gameID = ConnectDB.insertGameData(generateName(), 10, currentMove, allPlayers.get(0).color, winnerColor,
+                    AI1Diff, AI2Diff, AI3Diff, playerBounce, AI1Bounce, AI2Bounce, AI3Bounce,
+                    0, 0, 0, 0, 0, 0, 0, 0);
+        } else {
+            System.out.println("gameID: "+ gameID);
+            ConnectDB.updateGameData(gameID, 10, currentMove, winnerColor, playerBounce,
+                    AI1Bounce, AI2Bounce, AI3Bounce, 0, 0, 0, 0, 0, 0, 0, 0);
+        }
     }
 
     /*

@@ -474,9 +474,10 @@ public class GameWindow extends JFrame{
                     selectedPawn.selected = false;
                     selectedLabel.setOpaque(false);
                     selectedLabel.repaint();
+                    Pawn tmpPawn = pawnsFrontToBack.get(selectedLabel);
+                    tmpPawn.selected = false;
                 }
-                Pawn tmpPawn = pawnsFrontToBack.get(selectedLabel);
-                tmpPawn.selected = false;
+
                 removeAllHighlight();
                 selectedLabel = null;
             }
@@ -585,6 +586,7 @@ public class GameWindow extends JFrame{
     private void quitAndSave(){
         startWindow.setVisible(true);
         removeAllPawns();
+        currentGame.quitGame();
         this.dispose();
     }
 
