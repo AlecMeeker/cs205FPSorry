@@ -105,8 +105,8 @@ public class StartWindow extends JFrame {
     private void initGuiComponents(){
         newGameBtn = new JButton("New Game");
         loadGameBtn = new JButton("Load Game");
-        statBtn = new JButton("Statistic");
-        instructionBtn = new JButton("Instruction");
+        statBtn = new JButton("Statistics");
+        instructionBtn = new JButton("Instructions");
         try {
             Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+gameLogoImgPath));
             basicImage = basicImage.getScaledInstance(Constants.gameLogoWidth, Constants.gameLogoHeight, Image.SCALE_SMOOTH);

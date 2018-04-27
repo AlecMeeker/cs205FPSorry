@@ -460,6 +460,7 @@ public class GameWindow extends JFrame{
                 //if the human's potential move size is 0, go to next turn automatically
                 if (currentGame.human.potentialMovesList.get(0).size() == 0) {
                     currentGame.nextTurn();
+                    isDrawn = false;
                 }
             }
         });
