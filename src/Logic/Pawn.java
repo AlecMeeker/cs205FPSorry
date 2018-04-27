@@ -142,13 +142,13 @@ public class Pawn {
         Block origin = this.getCurrentBlock();
 
         if (targetBlock == this.getStartLocation()) {
-            this.myPlayer.movablePawnList.remove(this);
-            this.myPlayer.startPawnList.add(this);
+            myPlayer.movablePawnList.remove(this);
+            myPlayer.startPawnList.add(this);
         }
 
         else if (targetBlock == this.getHomeLocation()) {
-            this.myPlayer.movablePawnList.remove(this);
-            this.myPlayer.finishedPawnList.add(this);
+            myPlayer.movablePawnList.remove(this);
+            myPlayer.finishedPawnList.add(this);
         }
 
         origin.removePawn();
@@ -188,6 +188,7 @@ public class Pawn {
     public void select() {
         this.selected = true;
     }
+    public void deselect() { if (selected) { selected = false;}}
 
     /**
      * reports if the pawn is still in the starting zone or not

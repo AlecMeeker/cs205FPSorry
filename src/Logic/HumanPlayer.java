@@ -3,6 +3,7 @@ package Logic;
 public class HumanPlayer extends Player {
     private String name;
     private Game thisGame;
+    public int difficulty;
 
 
     public HumanPlayer(){
@@ -21,18 +22,9 @@ public class HumanPlayer extends Player {
     }
 
     public void drawStep() {
-        int choice = 1;
-        switch (choice) {
-            case 0:
-                thisGame.quitGame();
-                break;
-            case 1:
-                currentDraw = thisBoard.thisDeck.draw();
-                break;
-
-        }
-
+        currentDraw = thisBoard.thisDeck.draw();
         System.out.println("You drew " + currentDraw.toString());
+
         generateMoves();
         this.refreshHighlight();
     }
@@ -40,6 +32,7 @@ public class HumanPlayer extends Player {
     public void selectPawnStep() {
         for (Move m : potentialMovesList.get(0)) {
             if (m.p.selected) {
+                m.blockReached.highlighted = true;
                 this.refreshHighlight();
             }
         }

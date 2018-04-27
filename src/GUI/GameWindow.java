@@ -399,8 +399,8 @@ public class GameWindow extends JFrame{
                     return;
                 }
                 //Backend human player draw card
-                currentGame.you.drawStep();
-                curCard = currentGame.you.getCurrentDraw();
+                currentGame.human.drawStep();
+                curCard = currentGame.human.getCurrentDraw();
                 try {
                     Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+curCard.imgName));
 
@@ -423,6 +423,11 @@ public class GameWindow extends JFrame{
                 drawnCard.setBounds(Constants.cardStartX,Constants.cardStartY, Constants.cardWidth,Constants.cardHeight);
                 if(curCard.num != 2){
                     isDrawn = true;
+                }
+
+                //if the human's potential move size is 0, go to next turn automatically
+                if (currentGame.human.potentialMovesList.get(0).size() == 0) {
+                    currentGame.nextTurn();
                 }
             }
         });
@@ -636,9 +641,11 @@ public class GameWindow extends JFrame{
                             if (selectedLabel == null) {
                                 selectedLabel = (JLabel) e.getComponent();
                                 Pawn selectedPawn = pawnsFrontToBack.get(selectedLabel);
+                                //if clicked, pawn is now selected in backend
                                 selectedPawn.selected = true;
+                                //if a card has been drawn
                                 if (curCard != null) {
-                                    currentGame.you.selectPawnStep();
+                                    currentGame.human.selectPawnStep();
                                     refreshBoard(currentGame.everyPawn,currentGame.allPlayers);
                                 }
                                 System.out.println("null"+"( " + selectedLabel.getX() + " , " + selectedLabel.getY() + " )");

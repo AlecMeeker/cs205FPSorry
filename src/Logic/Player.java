@@ -16,6 +16,7 @@ public abstract class Player {
 	protected Color color;
 	protected Board thisBoard;
 	protected String name;
+	public int difficulty;
 
 
 	public Color getColor() {

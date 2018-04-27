@@ -15,6 +15,11 @@ public class Board {
     public ArrayList<Block> everyBlock;
     public Pawn[] pieces;
 
+
+    public Board(boolean in){
+
+    }
+
     /*
     Creates a board of 60 squares, with some safety zones and homes, and links them all, then adds slides
      */
