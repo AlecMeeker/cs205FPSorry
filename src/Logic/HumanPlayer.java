@@ -4,10 +4,18 @@ public class HumanPlayer extends Player {
     private String name;
     private Game thisGame;
 
+    /**
+     * Default constructor
+     */
+    public HumanPlayer(){}
 
-    public HumanPlayer(){
-
-    }
+    /**
+     * TODO
+     * @param name
+     * @param inColor
+     * @param inBoard
+     * @param thisGame
+     */
     public HumanPlayer(String name, Color inColor, Board inBoard, Game thisGame) {
         super(inColor, inBoard);
         this.thisGame = thisGame;
@@ -15,10 +23,17 @@ public class HumanPlayer extends Player {
         System.out.println(name + " entered the arena for Team " + inColor.toString() + "!\n");
     }
 
+    /**
+     * TODO
+     * @return
+     */
     public boolean play() {
         return false;
     }
 
+    /**
+     * TODO
+     */
     public void drawStep() {
         int choice = 1;
         switch (choice) {
@@ -36,6 +51,9 @@ public class HumanPlayer extends Player {
         this.refreshHighlight();
     }
 
+    /**
+     * TODO
+     */
     public void selectPawnStep() {
         for (Move m : potentialMovesList.get(0)) {
             if (m.p.selected) {
@@ -44,6 +62,9 @@ public class HumanPlayer extends Player {
         }
     }
 
+    /**
+     * TODO
+     */
     public void selectEndBlockStep() {
         for (Move m : potentialMovesList.get(0)) {
             if (m.blockReached.selected) {
@@ -59,6 +80,9 @@ public class HumanPlayer extends Player {
         }
     }
 
+    /**
+     * TODO
+     */
     public void selectSecondPawnStep() {
         for (Move m : potentialMovesList.get(1)) {
             if (m.p.selected) {
@@ -67,6 +91,9 @@ public class HumanPlayer extends Player {
         }
     }
 
+    /**
+     * TODO
+     */
     public void selectSecondEndBlockStep() {
         for (Move m : potentialMovesList.get(1)) {
             if (m.blockReached.selected) {
@@ -78,6 +105,10 @@ public class HumanPlayer extends Player {
         }
     }
 
+    /**
+     * Gets the name of the player
+     * @return  name of player
+     */
     public String getName() {
         return name;
     }
