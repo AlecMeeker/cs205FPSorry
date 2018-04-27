@@ -1,5 +1,6 @@
 package Logic;
 
+import SQL.*;
 import javafx.util.Pair;
 import org.omg.PortableInterceptor.INACTIVE;
 
