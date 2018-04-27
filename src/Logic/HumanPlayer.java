@@ -4,6 +4,10 @@ public class HumanPlayer extends Player {
     private String name;
     private Game thisGame;
 
+
+    public HumanPlayer(){
+
+    }
     public HumanPlayer(String name, Color inColor, Board inBoard, Game thisGame) {
         super(inColor, inBoard);
         this.thisGame = thisGame;
@@ -17,7 +21,7 @@ public class HumanPlayer extends Player {
     }
 
     public void drawStep() {
-        int choice = 0;
+        int choice = 1;
         switch (choice) {
             case 0:
                 thisGame.quitGame();
@@ -25,7 +29,6 @@ public class HumanPlayer extends Player {
             case 1:
                 currentDraw = thisBoard.thisDeck.draw();
                 break;
-
 
         }
 

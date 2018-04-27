@@ -101,9 +101,9 @@ public class ConnectDB {
      * This method gets the save game data for a the most recent save
      * @return          A string that contains the data needed to reinitialize a game, returns an empty string if failed
      */
-    public static String loadGameData() {
+    public static String[] loadGameData() {
         //define query
-        String query = "SELECT fldSaveString FROM tblSaveGame WHERE fldDate = (SELECT MAX(fldDate) FROM tblSaveGame)";
+        String query = "SELECT fldDate, fldSaveString FROM tblSaveGame WHERE fldDate = (SELECT MAX(fldDate) FROM tblSaveGame)";
 
         //send query and get response
         JsonArray dataArr = null;
@@ -113,11 +113,12 @@ public class ConnectDB {
             e.printStackTrace();
         }
 
-        String saveString = "";
+        String gameInfo[] = new String[2];
         if (dataArr != null) {
-            saveString = dataArr.get(0).getAsJsonObject().get("0").getAsString();
+            gameInfo[0] = dataArr.get(0).getAsJsonObject().get("0").getAsString();
+            gameInfo[1] = dataArr.get(0).getAsJsonObject().get("1").getAsString();
         }
-        return saveString;
+        return gameInfo;
     }
 
     /**
@@ -256,11 +257,11 @@ public class ConnectDB {
 
         String stats[][] = null;
         if (dataArr != null) {
-            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size()/2];
+            stats = new String[dataArr.size() + 1][dataArr.get(0).getAsJsonObject().size()/2 - 8];
             Set<String> keyset = dataArr.get(0).getAsJsonObject().keySet();
             int k = 0;
             for (String key : keyset) {
-                if (key.length() > 2) {
+                if (key.length() > 2 && k < stats[0].length) {
                     stats[0][k] = key.substring(3);
                     k++;
                 }
