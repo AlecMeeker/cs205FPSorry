@@ -1,12 +1,15 @@
 package Logic;
 
+import javafx.util.Pair;
+import org.omg.PortableInterceptor.INACTIVE;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Game {
     public Player currentPlayer;
     public Player winner;
-
-    public boolean nextTurn; // boolean representing being allowed to move to the next turn
+    public Player human;
 
     public boolean whilePlaying;
     public int currentMove;
@@ -15,26 +18,77 @@ public class Game {
     public ArrayList<Pawn> everyPawn;
     public ArrayList<Player> allPlayers;
 
-    public Game(Color playerColor, int numPlayers, ArrayList<Integer> aiDifficulties) {
+    public Game(Color playerColor, ArrayList<Integer> aiDifficulties) {
         this.gameBoard = new Board();
-        ArrayList<Player> players = new ArrayList<>();
 
-        initGame(3);
+        initGame(aiDifficulties, playerColor);
     }
 
-    public void initGame(int numAI) {
+    //example: 5;BLUE;-1:4:1:59,40,3;2:5:2:4,6; current turn; player color; difficulty : bounces : startList size : loc1, loc2, loc3
+    public Game(Color playerColor, ArrayList<Integer> aiDifficulties, ArrayList<Integer> startLists, ArrayList<ArrayList<Integer>> locations, ArrayList<Integer> bounces, int currentMove) {
+
+        //This block creates all the players
+        allPlayers = new ArrayList<>();
+        allPlayers.add(new HumanPlayer(generateName(), playerColor, gameBoard, this));
+
+        ArrayList<Pair<Boolean, Boolean>> aiPairs = new ArrayList<>();
+        for (Integer tmp : aiDifficulties) {
+            aiPairs.add(setOptionsFromInt(tmp));
+        }
+
+
+             for (int ii = 0; ii < aiDifficulties.size(); ii++) {
+                 allPlayers.add(new AI(generateColor(), gameBoard, aiPairs.get(ii).getKey(), aiPairs.get(ii).getValue(), generateName() ));
+             }
+             this.currentMove = currentMove;
+
+         
+         //for each player
+         for (int i = 0; i < startLists.size() + 1; i++) {
+             //set each player's bounces
+             allPlayers.get(i).bounces = bounces.get(i);
+             //add that many new pawns for each player's # of pawns in start
+             for (int j = 0; j < startLists.size(); j++) {
+                 allPlayers.get(i).startPawnList.add(new Pawn(gameBoard, allPlayers.get(i)));
+             }
+
+             //iterate through the given location list for each player and make that many pawns in those locations and add them to the movable list
+             for (int k = 0; k < locations.get(i).size(); k++) {
+                 if (allPlayers.get(i).color == Color.BLUE && locations.get(0).get(k) < 0) {
+                     allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.blueSafeZone[i]));
+                 }
+                 if (allPlayers.get(i).color == Color.RED && locations.get(0).get(k) < 0) {
+                     allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.redSafeZone[i]));
+                 }
+                 if (allPlayers.get(i).color == Color.GREEN && locations.get(0).get(k) < 0) {
+                     allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.greenSafeZone[i]));
+                 }
+                 if (allPlayers.get(i).color == Color.YELLOW && locations.get(0).get(k) < 0) {
+                     allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.yellowSafeZone[i]));
+                 }
+                 allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.everyBlock.get(locations.get(0).get(k))));
+             }
+             //for the remaining pawns, add them to the finished list
+             for (int l = 0; l < (4 - (allPlayers.get(i).startPawnList.size()+ (allPlayers.get(i).movablePawnList.size()))); l++) {
+                 allPlayers.get(i).finishedPawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.getGoalLocation(allPlayers.get(i).color)));
+             }
+         }
+
+
+    }
+
+    public void initGame(ArrayList<Integer> aiDifficulties, Color playerColor) {
 
         //get # of AI players and stats
 
-        int AI_PLAYERS = 3; //change this once you meet with junziao TESTING ONLY TESTING ONLY
+        int AI_PLAYERS = aiDifficulties.size(); //change this once you meet with junxiao TESTING ONLY TESTING ONLY
 
         //USE THIS FOR TESTING ONLY
-        String name = "test";
-        Color youColor = Color.RED;
-        HumanPlayer you = new HumanPlayer(name, youColor, gameBoard, this);
 
-        //turn this off to pit AI against each other
-        //players.add(you);
+
+        human = new HumanPlayer(generateName(), playerColor, gameBoard, this);
+
+
 
         String name1 = generateName();
         String name2 = generateName();
@@ -47,34 +101,37 @@ public class Game {
             name3 = generateName();
         }
 
-        Color yourColor = Color.RED;
+        Color yourColor = playerColor;
         Color firstColor = generateColor();
         Color secondColor = generateColor();
         Color thirdColor = generateColor();
 
-        while (firstColor == youColor) {
+        while (firstColor == yourColor) {
             firstColor = generateColor();
         }
-        while (secondColor == firstColor || secondColor == youColor) {
+        while (secondColor == firstColor || secondColor == yourColor) {
             secondColor = generateColor();
         }
-        while (thirdColor == firstColor || thirdColor == secondColor || thirdColor == youColor) {
+        while (thirdColor == firstColor || thirdColor == secondColor || thirdColor == yourColor) {
             thirdColor = generateColor();
         }
 
         allPlayers = new ArrayList<>();
-        allPlayers.add(you);
+        allPlayers.add(human);
+        ArrayList<Pair<Boolean, Boolean>> aiPairs = new ArrayList<>();
+        for (Integer tmp : aiDifficulties) {
+            aiPairs.add(setOptionsFromInt(tmp));
+        }
 
         switch(AI_PLAYERS) {
             case 3:
-                boolean firstSmart = false, firstCruel = false;
-                allPlayers.add(new AI(firstColor, gameBoard, firstSmart, firstCruel, name1));
+                allPlayers.add(new AI(firstColor, gameBoard, aiPairs.get(2).getKey(), aiPairs.get(2).getValue(), name1));
             case 2:
                 boolean secondSmart = true, secondCruel = false;
-                allPlayers.add(new AI(secondColor, gameBoard, secondSmart, secondCruel, name2));
+                allPlayers.add(new AI(secondColor, gameBoard, aiPairs.get(1).getKey(), aiPairs.get(1).getValue(), name2));
             case 1:
                 boolean thirdSmart = true, thirdCruel = false;
-                allPlayers.add(new AI(thirdColor, gameBoard, thirdSmart, thirdCruel, name3));
+                allPlayers.add(new AI(thirdColor, gameBoard, aiPairs.get(0).getKey(), aiPairs.get(0).getValue(), name3));
         }
 
         everyPawn = new ArrayList<>();
@@ -93,15 +150,25 @@ public class Game {
 
     }
 
-    public void saveGame() {
-        String saveState = "";
-        for (Player p : allPlayers) {
-            saveState += p.startPawnList.size() + ";";
-            for (Pawn myPawn : p.movablePawnList) {
 
+    public String saveGame() {
+        String saveState = "";
+        saveState += currentMove + ";";
+        saveState += this.human.color.toString() + ";";
+        for (Player p : allPlayers) {
+            saveState += p.difficulty + ":";
+            saveState += p.bounces + ":";
+            saveState += p.startPawnList.size() + ":";
+            for (Pawn myPawn : p.movablePawnList) {
+                saveState += myPawn.getCurrentBlock().id + ",";
             }
+            saveState += ";";
         }
+        return saveState;
     }
+    //example: 5;BLUE;-1:4:1:59,40,3;2:5:2:4,6;
+    //example explained: currentTurn; playerColor; then, for each player, difficulty: bounces: # pawns in home: pawn1Location, pawn2location, pawn3location;
+
 
     public static String generateName() {
         ArrayList<String> nameList = new ArrayList<>();
@@ -210,6 +277,30 @@ public class Game {
             p.highlighted = false;
             p.selected = false;
         }
+    }
+
+    /**
+     * returns a HashMap<boolean smart, boolean cruel> from the given difficulty int
+     * @param optInt - int given as difficulty representation
+     * @return that hashmap
+     */
+    public Pair<Boolean, Boolean> setOptionsFromInt(int optInt) {
+        Pair<Boolean, Boolean> optionsPair = new Pair<>(false, false);
+        switch (optInt) {
+            case 0:
+                optionsPair = new Pair<>(false, false);
+                break;
+            case 1:
+                optionsPair = new Pair<>(false, true);
+                break;
+            case 2:
+                optionsPair = new Pair<>(true, false);
+                break;
+            case 3:
+                optionsPair = new Pair<>(true, true);
+                break;
+        }
+        return optionsPair;
     }
 }
 

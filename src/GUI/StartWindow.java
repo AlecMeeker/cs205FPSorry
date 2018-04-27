@@ -198,7 +198,7 @@ public class StartWindow extends JFrame {
                     aiDifficulties.add(getOptionFromString(computerDifficulties1.getSelectedItem().toString()));
             }
 
-            Game newGame = new Game(getColorFromString(playerColorSelect.getSelectedItem().toString()), numPlayer, aiDifficulties);
+            Game newGame = new Game(getColorFromString(playerColorSelect.getSelectedItem().toString()), aiDifficulties);
 
             GameWindow gw = GameWindow.getInstance();
 
@@ -238,5 +238,57 @@ public class StartWindow extends JFrame {
             default :
                 return Color.NULL;
         }
+    }
+
+    /*
+    method for loading of a game from a string
+     */
+    public static Game loadGame(String inState) {
+        //Divides inState string into part1- turn; part 2- playerColor; part 3+ - player details, starting with human
+        String[] inStateParsed = inState.split(";");
+
+        ArrayList<Integer> aiDifficulties = new ArrayList<>();
+        ArrayList<Integer> bounces = new ArrayList<>();
+        ArrayList<Integer> startList = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> locations = new ArrayList<>();
+
+        int currentMove = Integer.getInteger(inStateParsed[0]);
+        for (int i = 2; i < inStateParsed.length; i++) {
+            String[] playerParsed = inStateParsed[i].split(":");
+            if (i > 2) {
+                aiDifficulties.add(Integer.getInteger(playerParsed[0]));
+            }
+
+            startList.add(Integer.getInteger(playerParsed[2]));
+
+            bounces.add(Integer.getInteger(playerParsed[1]));
+            if (playerParsed.length > 2) {
+                locations.add(new ArrayList<Integer>());
+                String[] locationsParsed = playerParsed[3].split(",");
+                for (String s : locationsParsed) {
+                    locations.get(i).add(Integer.getInteger(s));
+                }
+            }
+        }
+
+        Color newColor = Color.NULL;
+        switch (inStateParsed[0]) {
+            case "BLUE" :
+                newColor = Color.BLUE;
+                break;
+            case "YELLOW" :
+                newColor = Color.YELLOW;
+                break;
+            case "RED" :
+                newColor = Color.RED;
+                break;
+            case "GREEN" :
+                newColor = Color.GREEN;
+                break;
+        }
+
+        Game newNewGame = new Game(newColor, aiDifficulties, startList, locations, bounces, currentMove);
+        return newNewGame;
+
     }
 }

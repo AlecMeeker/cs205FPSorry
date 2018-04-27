@@ -8,6 +8,7 @@ public class HumanPlayer extends Player {
         super(inColor, inBoard);
         this.thisGame = thisGame;
         this.name = name;
+        difficulty = -1;
         System.out.println(name + " entered the arena for Team " + inColor.toString() + "!\n");
     }
 

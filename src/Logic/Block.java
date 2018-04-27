@@ -3,20 +3,26 @@ package Logic;
 import java.util.ArrayList;
 
 public class Block {
-    int id;
-    Color color;
-    Block previousBlock, nextBlock;
-    Block nextSafetyBlock;
+    int id; //block's location ID
+    Color color; //color, if its a special block that interfaces with a pawn's color
+    Block previousBlock, nextBlock; //the blocks immediately after and before
+    Block nextSafetyBlock; //the next block if this is one of those exit spaces for a certain color
 
-    public boolean highlighted;
-    public boolean selected;
+    public boolean highlighted; //for highlighting this block in the GUI
+    public boolean selected; //for selecting this block in the GUI, possibly unnecessary
 
-    public boolean isHome;
+    public boolean isHome; //if the block is a home block
 
-    public Slidiness slideStatus;
+    public Slidiness slideStatus; //if the block contains a slide, has different slideStatus such
 
-    ArrayList<Pawn> pawnsHere;
+    ArrayList<Pawn> pawnsHere; //the pawns situated on this block
 
+    /**
+     * Normal block constructor
+     * @param inColor : this block's color
+     * @param id : this block's id
+     * @param isHome : if this block is a home block
+     */
     public Block(Color inColor,  int id, boolean isHome) {
         pawnsHere = new ArrayList<>();
         this.isHome = isHome;
@@ -25,7 +31,11 @@ public class Block {
         this.slideStatus = Slidiness.NOT;
     }
 
-    //returns the first safety block if it's the right color and location
+    /**
+     * Gets the next block, or a safety block one if given a pawn's color
+     * @param pawnColor : the pawn moving's color. for generic movements and tests, given null
+     * @return the next block
+     */
     public Block getNextBlock(Color pawnColor) {
         if (color == pawnColor && nextSafetyBlock != null) {
             return nextSafetyBlock;
@@ -35,6 +45,10 @@ public class Block {
         }
     }
 
+    /**
+     * gets the first pawn on the block
+     * @return
+     */
     public Pawn getPawn() {
         if (pawnsHere.size() == 0) {
             return null;
@@ -42,6 +56,10 @@ public class Block {
         return pawnsHere.get(0);
     }
 
+    /**
+     * gets the
+     * @param slideIn
+     */
     public void setSlideStatus(Slidiness slideIn) {
         this.slideStatus = slideIn;
     }

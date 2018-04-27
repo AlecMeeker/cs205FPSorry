@@ -9,10 +9,16 @@ public class AI extends Player {
     public String demeanor; //string used to interface with the database
     public String name; //the name
 
+    /*
+    basic constructor for simply getting the class type AI by the gameWindow during gamePlay
+     */
     public AI() {
         super(Color.NULL, new Board());
     }
 
+    /*
+    descriptive constructor that creates an entire default player
+     */
     public AI(Color inColor, Board inBoard, boolean isSmart, boolean isCruel, String name) {
         super(inColor, inBoard);
         this.name = name;
@@ -22,6 +28,23 @@ public class AI extends Player {
         cruel = isCruel;
         String smartness = "";
         String cruelty = "";
+        if (!smart) {
+            if (!cruel) {
+                difficulty = 0;
+            }
+            else {
+                difficulty = 1;
+            }
+        }
+        else {
+            if (!cruel) {
+                difficulty = 2;
+            }
+            else {
+                difficulty = 3;
+            }
+        }
+
         if (smart) {
             smartness = "Smart";
         }
@@ -37,6 +60,13 @@ public class AI extends Player {
         demeanor = cruelty + "/" + smartness;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    /*
+    in AI, drawStep does the entire process of a turn
+     */
     @Override
     public void drawStep() {
         System.out.println("It's " + name + "'s turn (" + color.toString().toLowerCase() + ")");
@@ -65,14 +95,17 @@ public class AI extends Player {
         }
     }
 
+    //abstract methods in player that are actually unneeded by AI but still better included. Must be a better way to do this
     public void selectPawnStep() { }
     public void selectEndBlockStep() { }
     public void selectSecondPawnStep(){ }
     public void selectSecondEndBlockStep(){ }
 
-    /*
-	rates a with move with an integer, to allow for optimal move selection
-	 */
+    /**
+     * Rates a move so that the optimal move can be selected
+     * @param m : Move to be rated
+     * @return : a double that is the move rating
+     */
     public double rateMove(Move m) {
         int crueltyMultiplier = 1;
         if (cruel) {
@@ -112,6 +145,10 @@ public class AI extends Player {
         return moveRating;
     }
 
+    /**
+     * Enacts the best move in the potential move list based on ratings
+     * @param draw : the card drawn
+     */
     public void enactBestMoveIndex(Card draw) {
         if (potentialMovesList.get(0).size() == 0) {
             System.out.println("No possible moves. Pass\n");
@@ -154,6 +191,10 @@ public class AI extends Player {
 
     }
 
+    /**
+     * Enacts a random move, for dumb AI
+     * @param draw : the card drawn
+     */
     public void enactRandomMove(Card draw) {
         //if empty do nothing
         if (potentialMovesList.get(0).size() == 0) {
@@ -174,9 +215,30 @@ public class AI extends Player {
 
     }
 
-    public String getName() {
-        return name;
+
+    public void setOptionsFromInt(int optInt) {
+        switch (optInt) {
+            case 0:
+                smart = false;
+                cruel = false;
+                break;
+            case 1:
+                smart = false;
+                cruel = true;
+                break;
+            case 2:
+                smart = true;
+                cruel = false;
+                break;
+            case 3:
+                smart = true;
+                cruel = true;
+                break;
+            default:
+                System.out.println("You should not reach this case ever.");
+                smart = false;
+                cruel = false;
+                break;
+        }
     }
-
-
 }

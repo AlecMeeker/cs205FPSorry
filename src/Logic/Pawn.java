@@ -2,9 +2,6 @@ package Logic;
 
 public class Pawn {
 
-    private boolean hasReachedSafeZone; //is in the safety zone at least
-    private boolean isFinished; //is home
-    private Color color; //integer representing the color of the player
     public Player myPlayer;
 
     public Boolean highlighted;
@@ -14,6 +11,15 @@ public class Pawn {
 
     public Board thisBoard;
 
+    private boolean hasReachedSafeZone; //is in the safety zone at least
+    private boolean isFinished; //is home
+    private Color color; //integer representing the color of the player
+
+    /**
+     * constructor for a default pawn - josh
+     * @param inBoard board the pawn is going on. sometimes needs to access info about the board
+     * @param inPlayer player this pawn belongs to
+     */
     public Pawn(Board inBoard, Player inPlayer) {
         thisBoard = inBoard;
         this.color = inPlayer.color;
@@ -28,6 +34,12 @@ public class Pawn {
 
     }
 
+    /**
+     * contructor for pawn at custom location
+     * @param inBoard
+     * @param inPlayer
+     * @param currentBlock
+     */
     public Pawn(Board inBoard, Player inPlayer, Block currentBlock) {
         thisBoard = inBoard;
         this.color = inPlayer.color;
@@ -44,6 +56,9 @@ public class Pawn {
         }
     }
 
+    /**
+     * for a pawn's color, sets their start and home (goal) location
+     */
     public void setTargets() {
         System.out.println("Setting targets");
 
@@ -102,6 +117,10 @@ public class Pawn {
         locationArray[0] = currentBlock;
     }
 
+    /**
+     * gets the distance from the pawn's goal/home, to make sure it can perform certain moves
+     * @return
+     */
     public int getDistanceFromHome() {
         if (!hasLeftStart()) {
             return 65;
@@ -117,7 +136,7 @@ public class Pawn {
     }
 
     /*
-    changes all of the fields of the pertinent blocks
+    changes all of the fields of the pertinent blocks and puts the pawn in the right list
      */
     public void move(Block targetBlock) {
         Block origin = this.getCurrentBlock();
@@ -163,10 +182,17 @@ public class Pawn {
         this.hasReachedSafeZone = hasReachedSafeZone;
     }
 
+    /*
+    method used to select this pawn during gameplay
+     */
     public void select() {
         this.selected = true;
     }
 
+    /**
+     * reports if the pawn is still in the starting zone or not
+     * @return boolean of that
+     */
     public boolean hasLeftStart() {
         if (this.getCurrentBlock() == locationArray[1]) {
             return false;
@@ -175,6 +201,7 @@ public class Pawn {
             return true;
         }
     }
+
 
 }
 
