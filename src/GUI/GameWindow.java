@@ -393,7 +393,7 @@ public class GameWindow extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 isDrawn = false;
                 currentGame.nextTurn();
-                currentGame.you.selectEndBlockStep();
+                currentGame.human.selectEndBlockStep();
                 refreshBoard(currentGame.everyPawn,currentGame.allPlayers);
 
             }
@@ -464,7 +464,7 @@ public class GameWindow extends JFrame{
                             }
                         }
 
-                        currentGame.you.selectEndBlockStep();
+                        currentGame.human.selectEndBlockStep();
                         System.out.println("selectedLabel pos: "+pos.x+" , "+pos.y);
                         break;
                     }

@@ -254,7 +254,7 @@ public class StartWindow extends JFrame {
             aiDifficulties.add(getOptionFromString(computerDifficulties2.getSelectedItem().toString()));
             aiDifficulties.add(getOptionFromString(computerDifficulties3.getSelectedItem().toString()));
 
-            Game newGame = new Game(getColorFromString(playerColorSelect.getSelectedItem().toString()), numPlayer, aiDifficulties);
+            Game newGame = new Game(getColorFromString(playerColorSelect.getSelectedItem().toString()), aiDifficulties);
 
             GameWindow gw = GameWindow.getInstance();
             gw.loadConfig(numPlayer);
