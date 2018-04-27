@@ -171,17 +171,18 @@ public class Game {
         this.saveGame();
         Color winnerColor = (winner == null)?Color.NULL:winner.color;
         String AI1Diff = ((AI)allPlayers.get(1)).demeanor;
-        String AI2Diff = (allPlayers.get(2) == null)?"NULL":((AI)allPlayers.get(2)).demeanor;
-        String AI3Diff = (allPlayers.get(3) == null)?"NULL":((AI)allPlayers.get(3)).demeanor;
+        String AI2Diff = (allPlayers.size() <= 2)?"NULL":((AI)allPlayers.get(2)).demeanor;
+        String AI3Diff = (allPlayers.size() <= 3)?"NULL":((AI)allPlayers.get(3)).demeanor;
         int playerBounce = allPlayers.get(0).bounces;
         int AI1Bounce = allPlayers.get(1).bounces;
-        int AI2Bounce = (allPlayers.get(2) == null)?0:allPlayers.get(2).bounces;
-        int AI3Bounce = (allPlayers.get(3) == null)?0:allPlayers.get(3).bounces;
+        int AI2Bounce = (allPlayers.size() <= 2)?0:allPlayers.get(2).bounces;
+        int AI3Bounce = (allPlayers.size() <= 3)?0:allPlayers.get(3).bounces;
         if (gameID != -1) {
             gameID = ConnectDB.insertGameData(generateName(), 10, currentMove, currentPlayer.color, winnerColor,
                     AI1Diff, AI2Diff, AI3Diff, playerBounce, AI1Bounce, AI2Bounce, AI3Bounce,
                     0, 0, 0, 0, 0, 0, 0, 0);
         } else {
+            System.out.println("gameID: "+ gameID);
             ConnectDB.updateGameData(gameID, 10, currentMove, winnerColor, playerBounce,
                     AI1Bounce, AI2Bounce, AI3Bounce, 0, 0, 0, 0, 0, 0, 0, 0);
         }
