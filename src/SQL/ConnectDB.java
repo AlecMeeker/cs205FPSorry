@@ -239,7 +239,7 @@ public class ConnectDB {
     }
 
     /**
-     * This method gets info for all games stored in the database
+     * This method gets info for all games stored in the database (currently removed stats involving pawns in home and start
      * @return  An array that contains column headers and all of the info from the database
      */
     public static String[][] getAllGameInfo() {

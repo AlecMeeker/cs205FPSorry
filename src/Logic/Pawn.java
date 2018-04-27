@@ -14,6 +14,11 @@ public class Pawn {
 
     public Board thisBoard;
 
+    /**
+     * Constructor for a pawn that sets the board where the pawn is played and the player the pawn belongs to
+     * @param inBoard   board to be played on
+     * @param inPlayer  player the pawn belongs to
+     */
     public Pawn(Board inBoard, Player inPlayer) {
         thisBoard = inBoard;
         this.color = inPlayer.color;
@@ -28,6 +33,12 @@ public class Pawn {
 
     }
 
+    /**
+     * Constructor for a pawn that gives the pawn a board, player, and starting location
+     * @param inBoard       board to be played on
+     * @param inPlayer      player the pawn belongs to
+     * @param currentBlock  block the pawn is to be initialized to
+     */
     public Pawn(Board inBoard, Player inPlayer, Block currentBlock) {
         thisBoard = inBoard;
         this.color = inPlayer.color;
@@ -44,6 +55,9 @@ public class Pawn {
         }
     }
 
+    /**
+     * sets the start and home location for this pawn based on its color
+     */
     public void setTargets() {
         System.out.println("Setting targets");
 
@@ -52,8 +66,8 @@ public class Pawn {
 
     }
 
-    /*
-    returns this pawn to its home location based on its color
+    /**
+     * returns this pawn to its home location based on its color
      */
     public void getBounced() {
         this.move(thisBoard.getStartLocation(color));
@@ -61,6 +75,11 @@ public class Pawn {
         System.out.println(myPlayer.getName() + "'s pawn got bounced home lol");
     }
 
+    /**
+     * This method checks to see if this pawn can move the given number of spaces
+     * @param spaces    the number of spaces ahead to check
+     * @return          whether or not the pawn can move there
+     */
     public boolean canMoveHere(int spaces) {
 
         if (getDistanceFromHome() >= spaces) {
@@ -87,14 +106,26 @@ public class Pawn {
 
     }
 
-
+    /**
+     * Gets the color this pawn belongs to
+     * @return  what color the pawn is
+     */
     public Color getColor() {
         return color;
     }
+
+    /**
+     * sets color of pawn
+     * @param color the color this pawn belongs to
+     */
     public void setColor(Color color) {
         this.color = color;
     }
 
+    /**
+     * Gets the current block the pawn is on
+     * @return  block where pawn is located
+     */
     public Block getCurrentBlock() {
         return locationArray[0];
     }

@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player {
-    public Card getCurrentDraw() {
-        return currentDraw;
-    }
 
     protected Card currentDraw;
 
@@ -46,6 +43,12 @@ public abstract class Player {
 	public Player(){
 
 	}
+
+    /**
+     * Constructs a player with a color and a board
+     * @param inColor   color for player
+     * @param thisBoard board the player will play on
+     */
 	protected Player(Color inColor, Board thisBoard) {
 
 		startPawnList = new ArrayList<>();
@@ -60,6 +63,14 @@ public abstract class Player {
 			startPawnList.add(new Pawn(thisBoard, this));
 		}
 	}
+
+    /**
+     * Retruns the card the player just drew
+     * @return  card the player just drew
+     */
+    public Card getCurrentDraw() {
+        return currentDraw;
+    }
 
 	/**
 	 * generates a player with pawns at given locations. Used to load a game
@@ -281,6 +292,9 @@ public abstract class Player {
 
 	public abstract String getName();
 
+    /**
+     * TODO
+     */
 	public void refreshHighlight() {
 		for (Move m : potentialMovesList.get(0)) {
 			m.p.highlighted = true;
@@ -290,10 +304,18 @@ public abstract class Player {
 		}
 	}
 
+    /**
+     * Gets the pawns in home
+     * @return  number of pawns in home
+     */
 	public int getPawnsInHome() {
 		return finishedPawnList.size();
 	}
 
+    /**
+     * Gets the pawns in start
+     * @return  number of pawns in start
+     */
 	public int getPawnsInStart() {
 		return startPawnList.size();
 	}
