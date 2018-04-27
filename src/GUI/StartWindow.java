@@ -8,8 +8,7 @@ import utils.ImagePanel;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -26,6 +25,11 @@ public class StartWindow extends JFrame {
     private JButton statBtn;
     private JButton instructionBtn;
     private JLabel gameLogo;
+    private final int buttonWidth = 210;
+    private final int buttonHeight = 60;
+    private final int buttonFontSize = 28;
+    private final String buttonFontName = "Broadway";
+    private final java.awt.Color buttonBGColor = new java.awt.Color(127,255,212,1);
 
     //some
     private String gameLogoImgPath= "/src/imgs/sorry_start.jpg";
@@ -102,11 +106,28 @@ public class StartWindow extends JFrame {
         //this.setVisible(true);
     }
 
+    private void configButton(JButton button){
+        button.setBackground(buttonBGColor);
+        button.setFont(new Font(buttonFontName, Font.BOLD, buttonFontSize));
+        button.setBorder(null);
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+    }
+
     private void initGuiComponents(){
         newGameBtn = new JButton("New Game");
+        configButton(newGameBtn);
+
         loadGameBtn = new JButton("Load Game");
+        configButton(loadGameBtn);
+
         statBtn = new JButton("Statistic");
+        configButton(statBtn);
+
         instructionBtn = new JButton("Instruction");
+        configButton(instructionBtn);
+
         try {
             Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+gameLogoImgPath));
             basicImage = basicImage.getScaledInstance(Constants.gameLogoWidth, Constants.gameLogoHeight, Image.SCALE_SMOOTH);
@@ -119,13 +140,13 @@ public class StartWindow extends JFrame {
     }
 
     private void setGuiComponents(){
-        newGameBtn.setBounds(980, 240, 120, 40);
+        newGameBtn.setBounds(980, 200, buttonWidth, buttonHeight);
         this.add(newGameBtn);
-        loadGameBtn.setBounds(980, 320, 120, 40);
+        loadGameBtn.setBounds(980, 300, buttonWidth, buttonHeight);
         this.add(loadGameBtn);
-        statBtn.setBounds(980, 400, 120, 40);
+        statBtn.setBounds(980, 400, buttonWidth, buttonHeight);
         this.add(statBtn);
-        instructionBtn.setBounds(980, 480, 120, 40);
+        instructionBtn.setBounds(980, 500, buttonWidth, buttonHeight);
         this.add(instructionBtn);
 
         gameLogo.setBounds(Constants.gameLogoStartX,Constants.gameLogoStartY,Constants.gameLogoWidth,Constants.gameLogoHeight);
@@ -166,16 +187,36 @@ public class StartWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                JTextArea instructionTextArea = new JTextArea();
-                instructionTextArea.setLineWrap(true);
-                instructionTextArea.setText(instructionString);
-                instructionTextArea.setFont(instructionTextArea.getFont().deriveFont(16f));
-                JScrollPane scroll = new JScrollPane(instructionTextArea);
-                scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
+                //JFrame
                 JFrame instructionWindow= new JFrame();
                 instructionWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 instructionWindow.setBounds(50,50,1000,800);
+                instructionWindow.setResizable(false);
+                try{
+                    BufferedImage myImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath + "woodDesktop.jpg"));
+                    instructionWindow.setContentPane(new ImagePanel(myImage));
+                }
+                catch(Exception ex){
+                    System.out.println("load window background failed" + ex.toString());
+                }
+
+
+                JTextArea instructionTextArea = new JTextArea();
+                instructionTextArea.setLineWrap(true);
+                instructionTextArea.setEditable(false);
+                instructionTextArea.setText(instructionString);
+                instructionTextArea.setFont(instructionTextArea.getFont().deriveFont(16f));
+                instructionTextArea.setBounds(10,10,1000,800);
+                instructionTextArea.setOpaque(false);
+
+                JScrollPane scroll = new JScrollPane(instructionTextArea);
+                scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+                scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+                scroll.setBounds(20,100,960,600);
+                scroll.setOpaque(false);
+                scroll.getViewport().setOpaque(false);
+
+                
                 instructionWindow.add(scroll);
                 instructionWindow.setVisible(true);
             }
@@ -295,4 +336,6 @@ public class StartWindow extends JFrame {
                 return Color.NULL;
         }
     }
+
+
 }
