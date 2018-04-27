@@ -2,6 +2,7 @@ package Logic;
 
 import SQL.ConnectDB;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.util.ArrayList;
 
 public class Game {
@@ -18,10 +19,18 @@ public class Game {
     public Board gameBoard;
     public ArrayList<Pawn> everyPawn;
     public ArrayList<Player> allPlayers;
+    public HumanPlayer you;
 
+    private int numPlayers;
+    private Color playerColor;
     public Game(Color playerColor, int numPlayers, ArrayList<Integer> aiDifficulties) {
         this.gameBoard = new Board();
-        initGame(aiDifficulties.size());
+        this.numPlayers = numPlayers;
+        this.playerColor = playerColor;
+        initGame(numPlayers-1);
+
+        System.out.print("difficulties size : " + aiDifficulties.size());
+
     }
 
     public void initGame(int numAI) {
@@ -32,8 +41,7 @@ public class Game {
 
         //USE THIS FOR TESTING ONLY
         String name = "test";
-        Color youColor = Color.RED;
-        HumanPlayer you = new HumanPlayer(name, youColor, gameBoard, this);
+         you = new HumanPlayer(name, playerColor, gameBoard, this);
 
         //turn this off to pit AI against each other
         //players.add(you);
@@ -49,18 +57,17 @@ public class Game {
             name3 = generateName();
         }
 
-        Color yourColor = Color.RED;
         Color firstColor = generateColor();
         Color secondColor = generateColor();
         Color thirdColor = generateColor();
 
-        while (firstColor == youColor) {
+        while (firstColor == playerColor) {
             firstColor = generateColor();
         }
-        while (secondColor == firstColor || secondColor == youColor) {
+        while (secondColor == firstColor || secondColor == playerColor) {
             secondColor = generateColor();
         }
-        while (thirdColor == firstColor || thirdColor == secondColor || thirdColor == youColor) {
+        while (thirdColor == firstColor || thirdColor == secondColor || thirdColor == playerColor) {
             thirdColor = generateColor();
         }
 

@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player {
-	protected Card currentDraw;
+    public Card getCurrentDraw() {
+        return currentDraw;
+    }
+
+    protected Card currentDraw;
 
 	protected int bounces;
 	protected Color color;

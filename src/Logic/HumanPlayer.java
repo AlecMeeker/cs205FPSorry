@@ -4,6 +4,7 @@ public class HumanPlayer extends Player {
     private String name;
     private Game thisGame;
 
+
     public HumanPlayer(){
 
     }
@@ -19,7 +20,7 @@ public class HumanPlayer extends Player {
     }
 
     public void drawStep() {
-        int choice = 0;
+        int choice = 1;
         switch (choice) {
             case 0:
                 thisGame.quitGame();

@@ -170,7 +170,6 @@ public class StartWindow extends JFrame {
     {
         public TableDisplay()
         {
-
             JTable table = ConnectDB.getAsJTable(ConnectDB.getAllGameInfo());
             table.setPreferredScrollableViewportSize(table.getPreferredSize());
             table.setFillsViewportHeight(true);
@@ -184,8 +183,6 @@ public class StartWindow extends JFrame {
             this.pack();
             this.setVisible(true);
         }
-
-
     }
 
     private void newGameDialog(){
@@ -217,9 +214,7 @@ public class StartWindow extends JFrame {
                 computerDifficulties3,
 
         };
-        Object[] possibilities = {"ham", "spam", "yam"};
 
-        //JOptionPane.showInputDialog(null, inputs, "My custom dialog", JOptionPane.PLAIN_MESSAGE);
         int result = JOptionPane.showConfirmDialog(null, inputs, "My custom dialog", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
 
@@ -229,8 +224,6 @@ public class StartWindow extends JFrame {
                     computerDifficulties1.getSelectedItem().toString() + ", " +
                     computerDifficulties2.getSelectedItem().toString() + ", " +
                     computerDifficulties3.getSelectedItem().toString());
-
-            //gw.setNumOfPlayers(Integer.getInteger(numPlayers.getSelectedItem().toString()));
 
             numPlayer = Integer.parseInt(numPlayers.getSelectedItem().toString());
             ArrayList<Integer> aiDifficulties = new ArrayList<>();
@@ -248,13 +241,15 @@ public class StartWindow extends JFrame {
             aiDifficulties.add(getOptionFromString(computerDifficulties2.getSelectedItem().toString()));
             aiDifficulties.add(getOptionFromString(computerDifficulties3.getSelectedItem().toString()));
 
-
             Game newGame = new Game(getColorFromString(playerColorSelect.getSelectedItem().toString()), numPlayer, aiDifficulties);
 
             GameWindow gw = GameWindow.getInstance();
             gw.loadConfig(numPlayer);
             gw.loadGameStuff(newGame.everyPawn,newGame);
+
             gw.setVisible(true);
+            newGame.nextTurn();
+            gw.refreshBoard(newGame.everyPawn,newGame.allPlayers);
         } else {
             System.out.println("User canceled / closed the dialog, result = " + result);
         }
