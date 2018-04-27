@@ -43,10 +43,20 @@ public class Game {
         }
 
 
-             for (int ii = 0; ii < aiDifficulties.size(); ii++) {
-                 allPlayers.add(new AI(generateColor(), gameBoard, aiPairs.get(ii).getKey(), aiPairs.get(ii).getValue(), generateName() ));
-             }
-             this.currentMove = currentMove;
+        for (int ii = 0; ii < aiDifficulties.size(); ii++) {
+            Color AIColor;
+            boolean distinctColor;
+            //ensure distinct colors
+            do {
+                AIColor = generateColor();
+                distinctColor = false;
+                for (int iii = 0; iii < ii+1; iii++) {
+                    distinctColor = distinctColor || (AIColor == allPlayers.get(iii).color);
+                }
+            } while (distinctColor);
+            allPlayers.add(new AI(AIColor, gameBoard, aiPairs.get(ii).getKey(), aiPairs.get(ii).getValue(), generateName() ));
+        }
+        this.currentMove = currentMove;
 
 
          //for each player
