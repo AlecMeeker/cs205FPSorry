@@ -646,12 +646,12 @@ public class GameWindow extends JFrame{
      * Using for load game configuration
      * @param numOfPlayers
      */
-    public void loadConfig(int numOfPlayers,String playerColor){
+    public void loadConfig(int numOfPlayers){
 
         this.pawns = new ArrayList<>();
         this.numOfPlayers = numOfPlayers;
         this.numOfPawns = 4 * (numOfPlayers);
-        this.humanPlayerColor = playerColor.toLowerCase();
+        this.humanPlayerColor = currentGame.human.getColor().toString().toLowerCase();
         pawns = new ArrayList<>();
         for(int i = 0; i < numOfPawns; i++){
             pawns.add(new JLabel());
@@ -663,7 +663,9 @@ public class GameWindow extends JFrame{
      *@param newGame   the current Game instance
      */
     public void loadGameStuff(Game newGame){
+
         currentGame = newGame;
+        loadConfig(newGame.allPlayers.size());
         ArrayList<Pawn> everyPawn = currentGame.everyPawn;
         this.boardGui = currentGame.gameBoard;
         linkBlockToBackEnd();

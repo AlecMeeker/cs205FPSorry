@@ -177,7 +177,6 @@ public class Game {
     //example: 5;BLUE;-1:4:1:59,40,3;2:5:2:4,6;
     //example explained: currentTurn; playerColor; then, for each player, difficulty: bounces: # pawns in home: pawn1Location, pawn2location, pawn3location;
 
-
     public static Game loadFromState(String inState) {
         String[] gameParams = inState.split(";");
         int currentMove = Integer.parseInt(gameParams[0]);

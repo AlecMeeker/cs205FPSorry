@@ -145,7 +145,11 @@ public class StartWindow extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-
+//                Game newGame = Game.loadFromState();
+//                GameWindow gw = GameWindow.getInstance();
+//                gw.loadGameStuff(newGame);
+//                gw.setVisible(true);
+//                gw.refreshBoard();
             }
         });
 
@@ -253,9 +257,7 @@ public class StartWindow extends JFrame {
             Game newGame = new Game(getColorFromString(playerColorSelect.getSelectedItem().toString()), aiDifficulties);
 
             GameWindow gw = GameWindow.getInstance();
-            gw.loadConfig(numPlayer,playerColorSelect.getSelectedItem().toString());
             gw.loadGameStuff(newGame);
-
             gw.setVisible(true);
             gw.refreshBoard();
         } else {
