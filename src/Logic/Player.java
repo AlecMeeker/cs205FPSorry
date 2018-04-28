@@ -166,7 +166,6 @@ public abstract class Player {
 					}
 				}
 				for (Pawn pp : movablePawnList) {
-
 					if (pp.canMoveHere(draw.num)) {
 						potentialMovesList.get(0).add(new Move(pp, draw.num));
 					}

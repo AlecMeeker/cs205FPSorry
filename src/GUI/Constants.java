@@ -31,20 +31,20 @@ public final class Constants {   // this class use for define some constants for
     public final static int windowWidth = 1400;
     public final static int windowHeight = 1020;
 
-    private Constants(){
+    private Constants() {
 
     }
 
-    public static Constants getInstance(){ //Thread safe singleton model
+    public static Constants getInstance() { //Thread safe singleton model
         Constants result = instance;
-            if(result == null){
-                synchronized (mutex){
-                    result = instance;
-                    if(result == null){
-                        instance = result = new Constants();
-                    }
+        if (result == null) {
+            synchronized (mutex) {
+                result = instance;
+                if (result == null) {
+                    instance = result = new Constants();
                 }
             }
+        }
         return result;
     }
 }

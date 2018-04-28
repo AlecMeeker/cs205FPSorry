@@ -457,10 +457,14 @@ public class GameWindow extends JFrame{
                     isDrawn = true;
                 }
 
+                //if the human's potential move size is 0, go to next turn automatically
+                if (currentGame.human.potentialMovesList.get(0).size() == 0) {
+                    currentGame.nextTurn();
+                }
             }
         });
 
-        //block mouse listener
+
         boardPanel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {

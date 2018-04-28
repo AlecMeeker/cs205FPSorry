@@ -26,6 +26,12 @@ public class Game {
     public ArrayList<Player> allPlayers;
     public HumanPlayer you;
 
+    /**
+     * TODO
+     *
+     * @param playerColor
+     * @param aiDifficulties
+     */
     public Game(Color playerColor, ArrayList<Integer> aiDifficulties) {
         this.gameBoard = new Board();
 
@@ -33,6 +39,17 @@ public class Game {
     }
 
     //example: 5;BLUE;-1:4:1:59,40,3;2:5:2:4,6; current turn; player color; difficulty : bounces : startList size : loc1, loc2, loc3
+
+    /**
+     * TODO
+     *
+     * @param playerColor
+     * @param aiDifficulties
+     * @param startLists
+     * @param locations
+     * @param bounces
+     * @param currentMove
+     */
     public Game(Color playerColor, ArrayList<Integer> aiDifficulties, ArrayList<Integer> startLists, ArrayList<ArrayList<Integer>> locations, ArrayList<Integer> bounces, int currentMove) {
 
         //This block creates all the players
@@ -177,7 +194,7 @@ public class Game {
         return saveState;
     }
     //example: 5;BLUE;-1:4:1:59,40,3;2:5:2:4,6;
-    //example explained: currentTurn; playerColor; then, for each player, difficulty: bounces: # pawns in start: pawn1Location, pawn2location, pawn3location;
+    //example explained: currentTurn; playerColor; then, for each player, difficulty: bounces: # pawns in home: pawn1Location, pawn2location, pawn3location;
 
     public static Game loadFromState() {
         ConnectDB cdb = new ConnectDB();
@@ -198,13 +215,13 @@ public class Game {
         int numPlayers = gameParams.length - 2;
         ArrayList<Integer> difficulties = new ArrayList<>(numPlayers);
         ArrayList<Integer> bounces = new ArrayList<>(numPlayers);
-        ArrayList<Integer> numPawnsStart = new ArrayList<>(numPlayers);
+        ArrayList<Integer> numPawnsHome = new ArrayList<>(numPlayers);
         ArrayList<ArrayList<Integer>> allPawnLocations = new ArrayList<>(numPlayers);
         for (int i = 2; i < gameParams.length; i++) {
             String playerParams[] = gameParams[i].split(":");
             difficulties.add(Integer.parseInt(playerParams[0]));
             bounces.add(Integer.parseInt(playerParams[1]));
-            numPawnsStart.add(Integer.parseInt(playerParams[2]));
+            numPawnsHome.add(Integer.parseInt(playerParams[2]));
             String pawnIndexes[] = playerParams[3].split(",");
             ArrayList<Integer> pawnLocations = new ArrayList<>(pawnIndexes.length);
             for (String index: pawnIndexes) {
@@ -212,9 +229,14 @@ public class Game {
             }
             allPawnLocations.add(pawnLocations);
         }
-        return new Game(playerColor, difficulties, numPawnsStart, allPawnLocations, bounces, currentMove);
+        return new Game(playerColor, difficulties, numPawnsHome, allPawnLocations, bounces, currentMove);
     }
 
+    /**
+     * generates a random russian name from a list
+     *
+     * @return a name
+     */
     public static String generateName() {
         ArrayList<String> nameList = new ArrayList<>();
         nameList.add("Alexei");
@@ -249,6 +271,11 @@ public class Game {
         return nameList.get(nameIndex);
     }
 
+    /**
+     * generates a random color
+     *
+     * @return a color
+     */
     public static Color generateColor() {
         int cIndex = (int) (Math.random() * 4);
         switch (cIndex) {
@@ -333,6 +360,9 @@ public class Game {
 
     }
 
+    /**
+     * prints out game information
+     */
     public void printData() {
         System.out.print("Turn " + currentMove + "\n");
         System.out.print("All pawns: ");
@@ -352,6 +382,9 @@ public class Game {
         System.out.println("\n*****************");
     }
 
+    /**
+     * clears all highlights and selects
+     */
     public void clearHighlightAndSelect() {
         for (Block b : gameBoard.everyBlock) {
             b.highlighted = false;
@@ -365,6 +398,7 @@ public class Game {
 
     /**
      * returns a HashMap<boolean smart, boolean cruel> from the given difficulty int
+     *
      * @param optInt - int given as difficulty representation
      * @return that hashmap
      */
