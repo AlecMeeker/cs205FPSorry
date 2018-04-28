@@ -4,6 +4,7 @@ import Logic.Game;
 import SQL.ConnectDB;
 import Logic.Color;
 import utils.ImagePanel;
+import utils.TransparencyUtil;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -130,6 +131,7 @@ public class StartWindow extends JFrame {
 
         try {
             Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+gameLogoImgPath));
+            basicImage = TransparencyUtil.makeColorTransparent(basicImage,java.awt.Color.WHITE);
             basicImage = basicImage.getScaledInstance(Constants.gameLogoWidth, Constants.gameLogoHeight, Image.SCALE_SMOOTH);
             ImageIcon gameLogoimg = new ImageIcon(basicImage);
             gameLogo = new JLabel(gameLogoimg);
@@ -137,6 +139,7 @@ public class StartWindow extends JFrame {
             // handle exception...
             System.out.println("loadPawns failed \n" + ex.toString());
         }
+        gameLogo.setOpaque(false);
     }
 
     private void setGuiComponents(){
@@ -336,6 +339,5 @@ public class StartWindow extends JFrame {
                 return Color.NULL;
         }
     }
-
 
 }
