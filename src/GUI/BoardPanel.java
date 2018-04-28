@@ -13,11 +13,12 @@ public class BoardPanel extends JPanel {
     private ArrayList<JButton> Pawns;
 
     private final static String imagePath = "/src/imgs/sorry_board.jpg";
+
     public BoardPanel() {
 
         this.setLayout(null);
         try {
-            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+imagePath));
+            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir") + imagePath));
             BoardImage = basicImage.getScaledInstance(Constants.boardWidth, Constants.boardHeight, Image.SCALE_SMOOTH);
         } catch (IOException ex) {
             // handle exception...

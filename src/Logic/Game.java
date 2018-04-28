@@ -8,6 +8,8 @@ import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static SQL.ConnectDB.loadGameData;
+
 public class Game {
     private int gameID = -1;
     private long startTimeStamp = System.currentTimeMillis();
@@ -24,6 +26,12 @@ public class Game {
     public ArrayList<Player> allPlayers;
     public HumanPlayer you;
 
+    /**
+     * TODO
+     *
+     * @param playerColor
+     * @param aiDifficulties
+     */
     public Game(Color playerColor, ArrayList<Integer> aiDifficulties) {
         this.gameBoard = new Board();
 
@@ -31,6 +39,17 @@ public class Game {
     }
 
     //example: 5;BLUE;-1:4:1:59,40,3;2:5:2:4,6; current turn; player color; difficulty : bounces : startList size : loc1, loc2, loc3
+
+    /**
+     * TODO
+     *
+     * @param playerColor
+     * @param aiDifficulties
+     * @param startLists
+     * @param locations
+     * @param bounces
+     * @param currentMove
+     */
     public Game(Color playerColor, ArrayList<Integer> aiDifficulties, ArrayList<Integer> startLists, ArrayList<ArrayList<Integer>> locations, ArrayList<Integer> bounces, int currentMove) {
 
         //This block creates all the players
@@ -43,20 +62,10 @@ public class Game {
         }
 
 
-        for (int ii = 0; ii < aiDifficulties.size(); ii++) {
-            Color AIColor;
-            boolean distinctColor;
-            //ensure distinct colors
-            do {
-                AIColor = generateColor();
-                distinctColor = false;
-                for (int iii = 0; iii < ii+1; iii++) {
-                    distinctColor = distinctColor || (AIColor == allPlayers.get(iii).color);
-                }
-            } while (distinctColor);
-            allPlayers.add(new AI(AIColor, gameBoard, aiPairs.get(ii).getKey(), aiPairs.get(ii).getValue(), generateName() ));
-        }
-        this.currentMove = currentMove;
+             for (int ii = 0; ii < aiDifficulties.size(); ii++) {
+                 allPlayers.add(new AI(generateColor(), gameBoard, aiPairs.get(ii).getKey(), aiPairs.get(ii).getValue(), generateName() ));
+             }
+             this.currentMove = currentMove;
 
 
          //for each player
@@ -187,7 +196,12 @@ public class Game {
     //example: 5;BLUE;-1:4:1:59,40,3;2:5:2:4,6;
     //example explained: currentTurn; playerColor; then, for each player, difficulty: bounces: # pawns in home: pawn1Location, pawn2location, pawn3location;
 
-    public static Game loadFromState(String inState) {
+    public static Game loadFromState() {
+        ConnectDB cdb = new ConnectDB();
+        return loadFromState(loadGameData()[1]);
+    }
+
+    private static Game loadFromState(String inState) {
         String[] gameParams = inState.split(";");
         int currentMove = Integer.parseInt(gameParams[0]);
         Color playerColor;
@@ -218,6 +232,11 @@ public class Game {
         return new Game(playerColor, difficulties, numPawnsHome, allPawnLocations, bounces, currentMove);
     }
 
+    /**
+     * generates a random russian name from a list
+     *
+     * @return a name
+     */
     public static String generateName() {
         ArrayList<String> nameList = new ArrayList<>();
         nameList.add("Alexei");
@@ -252,6 +271,11 @@ public class Game {
         return nameList.get(nameIndex);
     }
 
+    /**
+     * generates a random color
+     *
+     * @return a color
+     */
     public static Color generateColor() {
         int cIndex = (int) (Math.random() * 4);
         switch (cIndex) {
@@ -336,6 +360,9 @@ public class Game {
 
     }
 
+    /**
+     * prints out game information
+     */
     public void printData() {
         System.out.print("Turn " + currentMove + "\n");
         System.out.print("All pawns: ");
@@ -355,6 +382,9 @@ public class Game {
         System.out.println("\n*****************");
     }
 
+    /**
+     * clears all highlights and selects
+     */
     public void clearHighlightAndSelect() {
         for (Block b : gameBoard.everyBlock) {
             b.highlighted = false;
@@ -368,6 +398,7 @@ public class Game {
 
     /**
      * returns a HashMap<boolean smart, boolean cruel> from the given difficulty int
+     *
      * @param optInt - int given as difficulty representation
      * @return that hashmap
      */

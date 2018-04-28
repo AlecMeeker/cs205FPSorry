@@ -23,10 +23,11 @@ public class Move {
     /**
      * computes a move based purely on the integer number rather than the card itself
      * used in case you draw a 7, and split that into 1/6. The 1 doesn't count as a 1 to move out
-     * @param thisPawn  the pawn being moved
-     * @param spaces    the spaces the pawn will be moved
+     *
+     * @param thisPawn the pawn being moved
+     * @param spaces   the spaces the pawn will be moved
      */
-    public Move (Pawn thisPawn, int spaces) {
+    public Move(Pawn thisPawn, int spaces) {
         System.out.println("move generated");
         this.p = thisPawn;
         origin = thisPawn.getCurrentBlock();
@@ -45,10 +46,11 @@ public class Move {
 
     /**
      * Moves a pawn directly to a target pawn???
-     * @param thisPawn      pawn being moved
-     * @param targetPawn    target pawn
+     *
+     * @param thisPawn   pawn being moved
+     * @param targetPawn target pawn
      */
-    public Move (Pawn thisPawn, Pawn targetPawn) {
+    public Move(Pawn thisPawn, Pawn targetPawn) {
         origin = thisPawn.getCurrentBlock();
         this.p = thisPawn;
         whomBounced = new ArrayList<>();
@@ -60,18 +62,18 @@ public class Move {
 
     /**
      * helper method to iterate through the board
-     * @param spaces    number of spaces to move
-     * @return          the block where the spaces will take the pawn
+     *
+     * @param spaces number of spaces to move
+     * @return the block where the spaces will take the pawn
      */
     private Block move(int spaces) {
 
         Block currentBlock = p.getCurrentBlock();
         if (spaces > 0) {
-            for (int i = 0 ; i < spaces; i++) {
+            for (int i = 0; i < spaces; i++) {
                 currentBlock = currentBlock.getNextBlock(p.getColor());
             }
-        }
-        else {
+        } else {
             for (int i = 0; i < -spaces; i++) {
                 currentBlock = currentBlock.getPreviousBlock();
             }
@@ -82,9 +84,10 @@ public class Move {
 
     /**
      * helper method to account for special moves within the testMove method
-     * @param thisPawn      the pawn being moved
-     * @param startBlock    where the pawn will be moved to (does not include slide)
-     * @return              where the pawn will be moved to (includes slide)
+     *
+     * @param thisPawn   the pawn being moved
+     * @param startBlock where the pawn will be moved to (does not include slide)
+     * @return where the pawn will be moved to (includes slide)
      */
     private Block trySpecialMove(Pawn thisPawn, Block startBlock) {
         Block currentBlock = startBlock;
@@ -132,7 +135,8 @@ public class Move {
 
     /**
      * get the 10 pawns in front of where this pawn will land
-     * @return  number of pawns (up to 10) in front of current block
+     *
+     * @return number of pawns (up to 10) in front of current block
      */
     private int getFrontPawns() {
         int pawnsInFront = 0;
@@ -150,6 +154,7 @@ public class Move {
 
     /**
      * get the 10 pawns behind where the pawn will land
+     *
      * @return number of pawns (up to 10) behind the current block
      */
     private int getBackPawns() {
@@ -184,14 +189,11 @@ public class Move {
         //report cool or important stuff
         if (slid) {
             System.out.println(p.myPlayer.getName() + "'s pawn chutes down the path.");
-        }
-        else if (leftStart) {
+        } else if (leftStart) {
             System.out.println(p.myPlayer.getName() + "'s pawn begins its solemn journey.\n");
-        }
-        else if (gotSafe) {
+        } else if (gotSafe) {
             System.out.println(p.myPlayer.getName() + "'s pawn has reached safety, but can it find what it needs to win?.");
-        }
-        else {
+        } else {
             System.out.println(p.myPlayer.getName() + "'s pawn moved from id:" + origin.id + " to " + blockReached.id + "\n");
         }
     }

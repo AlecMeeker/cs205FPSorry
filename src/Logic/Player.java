@@ -291,12 +291,22 @@ public abstract class Player {
 	public abstract void selectSecondPawnStep();
 	public abstract void selectSecondEndBlockStep();
 
-	public abstract String getName();
+	/**
+	 * Gets the name of the player
+	 *
+	 * @return name of player
+	 */
+	public String getName() {
+		return name;
+	}
 
     /**
      * TODO
      */
 	public void refreshHighlight() {
+		for (Block b : thisBoard.everyBlock) {
+			b.highlighted =false;
+		}
 		for (Move m : potentialMovesList.get(0)) {
 			m.p.highlighted = true;
 			if (m.p.selected) {

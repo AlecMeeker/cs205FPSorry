@@ -16,12 +16,8 @@ public class Board {
     public Pawn[] pieces;
 
 
-    public Board(boolean in){
-
-    }
-
-    /*
-    Creates a board of 60 squares, with some safety zones and homes, and links them all, then adds slides
+    /**
+     * Creates a board of 60 squares, with some safety zones and homes, and links them all, then adds slides
      */
     public Board() {
         everyBlock = new ArrayList<>();
@@ -63,18 +59,17 @@ public class Board {
         }
         //now link all the blocks in the square
         for (int i = 0; i < 60; i++) {
-            if (i == 59){
+            if (i == 59) {
                 linkBlocks(outerRing[i], outerRing[0]);
-            }
-            else {
-                linkBlocks(outerRing[i], outerRing[i+1]);
+            } else {
+                linkBlocks(outerRing[i], outerRing[i + 1]);
             }
         }
         //this sets up and links the start blocks
         //stored [0] BLUE [1] RED [2] YELLOW [3] GREEN
         START_ARRAY = new Block[]{new Block(Color.RED, -10, false), new Block(Color.BLUE, -10, false), new Block(Color.YELLOW, -10, false), new Block(Color.GREEN, -10, false)};
         for (int z = 0; z < START_ARRAY.length; z++) {
-            START_ARRAY[z].setNextBlock(outerRing[4 + (15*z)]);
+            START_ARRAY[z].setNextBlock(outerRing[4 + (15 * z)]);
         }
 
         //implement the sliding bits on the board
@@ -91,28 +86,40 @@ public class Board {
 
     }
 
-    //creates a safety zone of length 6 that are all linked and the appropriate color
-    private Block[] generateSafetyZone(Color safetyColor){
+    /**
+     * creates a safety zone of length 6 that are all linked and the appropriate color
+     *
+     * @param safetyColor color of the safety zone being created
+     * @return the zone that was created
+     */
+    private Block[] generateSafetyZone(Color safetyColor) {
         System.out.println("Safety zone " + safetyColor.toString() + " generated.");
         Block[] newSafetyZone = new Block[6];
         for (int i = 0; i < 5; i++) {
-            newSafetyZone[i] = new Block(safetyColor, -(i +1), false);
+            newSafetyZone[i] = new Block(safetyColor, -(i + 1), false);
         }
         newSafetyZone[5] = new Block(safetyColor, -6, true);
         for (int i = 0; i < 5; i++) {
-            linkBlocks(newSafetyZone[i], newSafetyZone[i+1]);
+            linkBlocks(newSafetyZone[i], newSafetyZone[i + 1]);
         }
         return newSafetyZone;
     }
 
-    //helper method to thoroughly link two blocks
-    private void linkBlocks(Block frontBlock, Block backBlock){
+    /**
+     * helper method to thoroughly link two blocks
+     *
+     * @param frontBlock the block in front
+     * @param backBlock  the block in back
+     */
+    private void linkBlocks(Block frontBlock, Block backBlock) {
         frontBlock.setNextBlock(backBlock);
         backBlock.setPreviousBlock(frontBlock);
     }
 
-    /*
-    Generates the sliding features of certain blocks
+    /**
+     * Generates the sliding features of certain blocks
+     *
+     * @param slideStartIndex stating index of slide
      */
     private void generateSlides(int slideStartIndex) {
         System.out.println("Slides generated.");
@@ -128,33 +135,63 @@ public class Board {
 
     }
 
-
+    /**
+     * Gets the start block for the given color
+     *
+     * @param color color of player
+     * @return start block
+     */
     public Block getStartLocation(Color color) {
         switch (color) {
-            case RED: return START_ARRAY[0];
-            case BLUE: return START_ARRAY[1];
-            case YELLOW: return START_ARRAY[2];
-            case GREEN: return START_ARRAY[3];
-        }
-        return outerRing[0];
-    }
-    public Block getGoalLocation(Color color) {
-        switch (color) {
-            case RED: return redSafeZone[5];
-            case BLUE: return blueSafeZone[5];
-            case YELLOW: return yellowSafeZone[5];
-            case GREEN: return greenSafeZone[5];
+            case RED:
+                return START_ARRAY[0];
+            case BLUE:
+                return START_ARRAY[1];
+            case YELLOW:
+                return START_ARRAY[2];
+            case GREEN:
+                return START_ARRAY[3];
         }
         return outerRing[0];
     }
 
-    /*
-    Allows pawns to be placed on a block
+    /**
+     * Gets home block for given color
+     *
+     * @param color color of player
+     * @return home block
+     */
+    public Block getGoalLocation(Color color) {
+        switch (color) {
+            case RED:
+                return redSafeZone[5];
+            case BLUE:
+                return blueSafeZone[5];
+            case YELLOW:
+                return yellowSafeZone[5];
+            case GREEN:
+                return greenSafeZone[5];
+        }
+        return outerRing[0];
+    }
+
+    /**
+     * Allows pawns to be placed on a block
+     *
+     * @param whereTo  which block the pawn is to be placed on
+     * @param thisPawn the pawn being placed
      */
     public void place(Block whereTo, Pawn thisPawn) {
         whereTo.place(thisPawn);
     }
 
+    /**
+     * TODO
+     *
+     * @param id
+     * @param color
+     * @return
+     */
     public Block getSafeBlock(int id, Color color) {
         if (id < 1 || id > -6) {
             switch (color) {
@@ -171,25 +208,44 @@ public class Board {
         return null;
     }
 
+    /**
+     * TODO
+     *
+     * @return
+     */
+    public Block getRedHome() {
+        return START_ARRAY[0];
+    }
 
-    public Block getRedHome(){
-        return START_ARRAY[0]; }
     public Block getBlueHome() {
-        return START_ARRAY[1]; }
-    public Block getYellowHome() {
-        return START_ARRAY[2]; }
-    public Block getGreenHome() {
-        return START_ARRAY[3]; }
+        return START_ARRAY[1];
+    }
 
+    public Block getYellowHome() {
+        return START_ARRAY[2];
+    }
+
+    public Block getGreenHome() {
+        return START_ARRAY[3];
+    }
+
+    /**
+     * TODO
+     *
+     * @return
+     */
     public Block getRedGoal() {
         return redSafeZone[5];
     }
+
     public Block getBlueGoal() {
         return blueSafeZone[5];
     }
+
     public Block getYellowGoal() {
         return yellowSafeZone[5];
     }
+
     public Block getGreenGoal() {
         return greenSafeZone[5];
     }
