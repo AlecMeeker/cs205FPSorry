@@ -458,10 +458,6 @@ public class GameWindow extends JFrame{
                 }
                 isMovedThisTurn = false;
 
-                if(!canMoveThisTurn()){
-                    currentGame.nextTurn();
-                    refreshBoard();
-                }
 
                 //Backend human player draw card
                 currentGame.human.drawStep();
@@ -681,16 +677,7 @@ public class GameWindow extends JFrame{
             boardPanel.remove(HLLabel);
         }
     }
-
-    private boolean canMoveThisTurn(){
-        for(Block block: allBlocks){
-            if(block.highlighted == true){
-                return true;
-            }
-        }
-        return false;
-    }
-
+    
     /* Public function */
 
     /**
