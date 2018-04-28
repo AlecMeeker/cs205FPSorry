@@ -221,7 +221,7 @@ public class Game {
                         repeat = true;
                     }
                 }
-                if (!repeat) {
+                if (!repeat && p.movablePawnList.get(i).getCurrentBlock().id != -6) {
                     saveState += Integer.toString(p.movablePawnList.get(i).getCurrentBlock().id) + ",";
                 }
             }
