@@ -41,6 +41,7 @@ public class GameWindow extends JFrame{
     private JLabel drawnCard;
     private JTextArea cardInfoReminder;
 
+
     private ArrayList<JLabel> numOfPawnsOnStart;
     private ArrayList<JLabel> numOfPawnsOnHome;
     private ArrayList<JLabel> highlightBlocks;
@@ -93,9 +94,10 @@ public class GameWindow extends JFrame{
     public Deck deck;
     private StartWindow startWindow = StartWindow.getInstance();
     private Board boardGui;
+
     /* Boolean variables for button click */
-    private boolean isDrawn;
-    private boolean isMovedThisTurn;
+    private boolean isDrawn;        // Is drawn this turn?
+    private boolean isMovedThisTurn; // is moved this turn?
 
     private GameWindow(){
         initWindow();
@@ -116,9 +118,8 @@ public class GameWindow extends JFrame{
 
     private void initWindow(){
 
-
         try{
-            BufferedImage myImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath + "woodDesktop.jpg"));
+            BufferedImage myImage = ImageIO.read(new File(ImagePath + "woodDesktop.jpg"));
             this.setContentPane(new ImagePanel(myImage));
         }
         catch(Exception ex){
@@ -193,7 +194,7 @@ public class GameWindow extends JFrame{
 
     private ImageIcon loadPawnIcon( String color){
         try {
-            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+color+"_pawn.jpg"));
+            Image basicImage = ImageIO.read(new File(ImagePath+color+"_pawn.jpg"));
             basicImage = TransparencyUtil.makeColorTransparent(basicImage,java.awt.Color.WHITE);
             Image BoardImage = basicImage.getScaledInstance(Constants.pawnWidth-10, Constants.pawnHeight, Image.SCALE_SMOOTH);
             ImageIcon pawnImage = new ImageIcon(BoardImage);
@@ -208,7 +209,7 @@ public class GameWindow extends JFrame{
 
     private ImageIcon loadLabelIcon(String FileName){
         try {
-            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+FileName));
+            Image basicImage = ImageIO.read(new File(ImagePath+FileName));
             basicImage = TransparencyUtil.makeColorTransparent(basicImage,java.awt.Color.WHITE);
             Image BoardImage = basicImage.getScaledInstance(Constants.pawnWidth, Constants.pawnHeight, Image.SCALE_SMOOTH);
             ImageIcon pawnImage = new ImageIcon(BoardImage);
@@ -372,7 +373,7 @@ public class GameWindow extends JFrame{
 
 
 
-        cardInfoReminder.setBounds(980,300,400,300);
+        cardInfoReminder.setBounds(980,160,400,300);
         cardInfoReminder.setFont(cardInfoReminder.getFont().deriveFont(20f));
         cardInfoReminder.setEditable(false);
         setTextAreaTran(cardInfoReminder);
@@ -436,10 +437,13 @@ public class GameWindow extends JFrame{
                 isMovedThisTurn = false;
                 currentGame.nextTurn();
                 currentGame.human.selectEndBlockStep();
-                selectedLabel = null;
+                if(selectedLabel != null){
+                    selectedLabel.setOpaque(false);
+                    selectedLabel.repaint();
+                    selectedLabel = null;
+                }
                 removeAllHighlight();
                 refreshBoard();
-
             }
         });
 
@@ -453,6 +457,12 @@ public class GameWindow extends JFrame{
                     return;
                 }
                 isMovedThisTurn = false;
+
+                if(!canMoveThisTurn()){
+                    currentGame.nextTurn();
+                    refreshBoard();
+                }
+
                 //Backend human player draw card
                 currentGame.human.drawStep();
                 curCard = currentGame.human.getCurrentDraw();
@@ -495,7 +505,7 @@ public class GameWindow extends JFrame{
 
                 System.out.println("mouse pos: "+e.getX()+" , "+e.getY());
                 refreshBoard();
-                if(isMovedThisTurn){
+                if(isMovedThisTurn && selectedLabel!=null){
                     selectedLabel.setOpaque(false);
                     selectedLabel.repaint();
                     return;
@@ -671,6 +681,16 @@ public class GameWindow extends JFrame{
             boardPanel.remove(HLLabel);
         }
     }
+
+    private boolean canMoveThisTurn(){
+        for(Block block: allBlocks){
+            if(block.highlighted == true){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /* Public function */
 
     /**
@@ -747,7 +767,7 @@ public class GameWindow extends JFrame{
                                 //if clicked, pawn is now selected in backend
                                 selectedPawn.selected = true;
                                 //if a card has been drawn
-                                if (curCard != null) {
+                                if (curCard != null && !isMovedThisTurn) {
                                     currentGame.human.selectPawnStep();
                                     refreshBoard();
                                 }
@@ -814,7 +834,7 @@ public class GameWindow extends JFrame{
 
         for(Block block: allBlocks){
 
-            if(block.highlighted == true){
+            if(block.highlighted == true && !isMovedThisTurn){
                 Point tmpP = boardToBackend.get(block);
 
                 JLabel tmpLabel = new JLabel(loadLabelIcon(humanPlayerColor+"_hl.jpg"));

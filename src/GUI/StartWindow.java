@@ -26,6 +26,8 @@ public class StartWindow extends JFrame {
     private JButton statBtn;
     private JButton instructionBtn;
     private JLabel gameLogo;
+
+
     private final int buttonWidth = 210;
     private final int buttonHeight = 60;
     private final int buttonFontSize = 28;
@@ -203,23 +205,34 @@ public class StartWindow extends JFrame {
                     System.out.println("load window background failed" + ex.toString());
                 }
 
+                JTextField title = new JTextField("Instruction");
+                title.setFont(new Font("Verdana", Font.BOLD, 40));
+                title.setEditable(false);
+                title.setForeground(java.awt.Color.white);
+                title.setBounds(350,10,500,80);
+                title.setOpaque(false);
+                title.setBorder(null);
 
+                //textArea setting
                 JTextArea instructionTextArea = new JTextArea();
                 instructionTextArea.setLineWrap(true);
                 instructionTextArea.setEditable(false);
                 instructionTextArea.setText(instructionString);
-                instructionTextArea.setFont(instructionTextArea.getFont().deriveFont(16f));
+                instructionTextArea.setFont(new Font("Verdana", Font.BOLD, 20));
+                instructionTextArea.setForeground(java.awt.Color.white);
                 instructionTextArea.setBounds(10,10,1000,800);
                 instructionTextArea.setOpaque(false);
 
+                //make textArea scrollable
                 JScrollPane scroll = new JScrollPane(instructionTextArea);
-                scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-                scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+                scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+                scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
                 scroll.setBounds(20,100,960,600);
                 scroll.setOpaque(false);
                 scroll.getViewport().setOpaque(false);
+                scroll.setBorder(null);
 
-
+                instructionWindow.add(title);
                 instructionWindow.add(scroll);
                 instructionWindow.setVisible(true);
             }
@@ -232,16 +245,21 @@ public class StartWindow extends JFrame {
         public TableDisplay()
         {
             JTable table = ConnectDB.getAsJTable(ConnectDB.getAllGameInfo());
+            table.setFont(new Font("Serif", Font.BOLD, 16));
             table.setPreferredScrollableViewportSize(table.getPreferredSize());
             table.setFillsViewportHeight(true);
             //add the table to the frame
-            this.add(new JScrollPane(table));
+            JScrollPane tableScroll = new JScrollPane(table);
+            tableScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+            tableScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+            tableScroll.setBounds(0,100,800,600);
 
+            this.add(tableScroll);
             this.setTitle("Statistics");
             this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            this.setBounds(100,100,800,800);
+            this.setBounds(100,100,1000,800);
             this.setResizable(false);
-            this.pack();
+
             this.setVisible(true);
         }
     }
