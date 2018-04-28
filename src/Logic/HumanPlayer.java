@@ -1,7 +1,6 @@
 package Logic;
 
 public class HumanPlayer extends Player {
-    private String name;
     private Game thisGame;
     public int difficulty;
 

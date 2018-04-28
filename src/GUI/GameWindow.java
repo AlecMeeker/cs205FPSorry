@@ -41,7 +41,6 @@ public class GameWindow extends JFrame{
     private JLabel drawnCard;
     private JTextArea cardInfoReminder;
 
-
     private ArrayList<JLabel> numOfPawnsOnStart;
     private ArrayList<JLabel> numOfPawnsOnHome;
     private ArrayList<JLabel> highlightBlocks;
@@ -94,7 +93,6 @@ public class GameWindow extends JFrame{
     public Deck deck;
     private StartWindow startWindow = StartWindow.getInstance();
     private Board boardGui;
-
     /* Boolean variables for button click */
     private boolean isDrawn;        // Is drawn this turn?
     private boolean isMovedThisTurn; // is moved this turn?
@@ -117,6 +115,7 @@ public class GameWindow extends JFrame{
     }
 
     private void initWindow(){
+
 
         try{
             BufferedImage myImage = ImageIO.read(new File(ImagePath + "woodDesktop.jpg"));
@@ -373,7 +372,7 @@ public class GameWindow extends JFrame{
 
 
 
-        cardInfoReminder.setBounds(980,160,400,300);
+        cardInfoReminder.setBounds(980,300,400,300);
         cardInfoReminder.setFont(cardInfoReminder.getFont().deriveFont(20f));
         cardInfoReminder.setEditable(false);
         setTextAreaTran(cardInfoReminder);
@@ -444,6 +443,7 @@ public class GameWindow extends JFrame{
                 }
                 removeAllHighlight();
                 refreshBoard();
+
             }
         });
 
@@ -767,7 +767,7 @@ public class GameWindow extends JFrame{
                                 //if clicked, pawn is now selected in backend
                                 selectedPawn.selected = true;
                                 //if a card has been drawn
-                                if (curCard != null && !isMovedThisTurn) {
+                                if (curCard != null) {
                                     currentGame.human.selectPawnStep();
                                     refreshBoard();
                                 }
