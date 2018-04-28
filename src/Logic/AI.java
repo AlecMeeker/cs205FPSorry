@@ -8,7 +8,6 @@ public class AI extends Player {
     public Boolean cruel; //cruel or nice ai
     public String demeanor; //string used to interface with the database
     public String name; //the name
-    public int difficulty;
 
     /**
      * basic constructor for simply getting the class type AI by the gameWindow during gamePlay

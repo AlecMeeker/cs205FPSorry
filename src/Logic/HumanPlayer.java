@@ -2,7 +2,6 @@ package Logic;
 
 public class HumanPlayer extends Player {
     private Game thisGame;
-    public int difficulty;
 
     /**
      * Default constructor
