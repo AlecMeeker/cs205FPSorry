@@ -118,7 +118,7 @@ public class GameWindow extends JFrame{
 
 
         try{
-            BufferedImage myImage = ImageIO.read(new File(ImagePath + "woodDesktop.jpg"));
+            BufferedImage myImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath + "woodDesktop.jpg"));
             this.setContentPane(new ImagePanel(myImage));
         }
         catch(Exception ex){
@@ -193,7 +193,7 @@ public class GameWindow extends JFrame{
 
     private ImageIcon loadPawnIcon( String color){
         try {
-            Image basicImage = ImageIO.read(new File(ImagePath+color+"_pawn.jpg"));
+            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+color+"_pawn.jpg"));
             basicImage = TransparencyUtil.makeColorTransparent(basicImage,java.awt.Color.WHITE);
             Image BoardImage = basicImage.getScaledInstance(Constants.pawnWidth-10, Constants.pawnHeight, Image.SCALE_SMOOTH);
             ImageIcon pawnImage = new ImageIcon(BoardImage);
@@ -208,7 +208,7 @@ public class GameWindow extends JFrame{
 
     private ImageIcon loadLabelIcon(String FileName){
         try {
-            Image basicImage = ImageIO.read(new File(ImagePath+FileName));
+            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+FileName));
             basicImage = TransparencyUtil.makeColorTransparent(basicImage,java.awt.Color.WHITE);
             Image BoardImage = basicImage.getScaledInstance(Constants.pawnWidth, Constants.pawnHeight, Image.SCALE_SMOOTH);
             ImageIcon pawnImage = new ImageIcon(BoardImage);
