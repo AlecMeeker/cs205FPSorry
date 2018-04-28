@@ -457,14 +457,10 @@ public class GameWindow extends JFrame{
                     isDrawn = true;
                 }
 
-                //if the human's potential move size is 0, go to next turn automatically
-                if (currentGame.human.potentialMovesList.get(0).size() == 0) {
-                    currentGame.nextTurn();
-                }
             }
         });
 
-
+        //block mouse listener
         boardPanel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -490,14 +486,22 @@ public class GameWindow extends JFrame{
                             Point blockPt = boardToBackend.get(block);
                             if(blockPt.equals(pos)){
                                 block.selected = true;
+                                currentGame.human.refreshHighlight();
                             }
                         }
 
                         currentGame.human.selectEndBlockStep();
+                        currentGame.clearHighlightAndSelect();
+                        refreshBoard();
+
 
                         isMovedThisTurn = true;
                         System.out.println("selectedLabel pos: "+pos.x+" , "+pos.y);
                         break;
+                    }
+                    else {
+                        currentGame.clearHighlightAndSelect();
+                        refreshBoard();
                     }
                 }
                 if(selectedLabel != null) {
@@ -707,6 +711,8 @@ public class GameWindow extends JFrame{
                     pawnL.addMouseListener(new MouseListener() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
+                            currentGame.human.refreshHighlight();
+                            refreshBoard();
 
                             if (selectedLabel == null) {
                                 selectedLabel = (JLabel) e.getComponent();

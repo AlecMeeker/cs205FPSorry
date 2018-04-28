@@ -8,6 +8,8 @@ import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static SQL.ConnectDB.loadGameData;
+
 public class Game {
     private int gameID = -1;
     private long startTimeStamp = System.currentTimeMillis();
@@ -175,9 +177,14 @@ public class Game {
         return saveState;
     }
     //example: 5;BLUE;-1:4:1:59,40,3;2:5:2:4,6;
-    //example explained: currentTurn; playerColor; then, for each player, difficulty: bounces: # pawns in home: pawn1Location, pawn2location, pawn3location;
+    //example explained: currentTurn; playerColor; then, for each player, difficulty: bounces: # pawns in start: pawn1Location, pawn2location, pawn3location;
 
-    public static Game loadFromState(String inState) {
+    public static Game loadFromState() {
+        ConnectDB cdb = new ConnectDB();
+        return loadFromState(loadGameData()[1]);
+    }
+
+    private static Game loadFromState(String inState) {
         String[] gameParams = inState.split(";");
         int currentMove = Integer.parseInt(gameParams[0]);
         Color playerColor;
@@ -191,13 +198,13 @@ public class Game {
         int numPlayers = gameParams.length - 2;
         ArrayList<Integer> difficulties = new ArrayList<>(numPlayers);
         ArrayList<Integer> bounces = new ArrayList<>(numPlayers);
-        ArrayList<Integer> numPawnsHome = new ArrayList<>(numPlayers);
+        ArrayList<Integer> numPawnsStart = new ArrayList<>(numPlayers);
         ArrayList<ArrayList<Integer>> allPawnLocations = new ArrayList<>(numPlayers);
         for (int i = 2; i < gameParams.length; i++) {
             String playerParams[] = gameParams[i].split(":");
             difficulties.add(Integer.parseInt(playerParams[0]));
             bounces.add(Integer.parseInt(playerParams[1]));
-            numPawnsHome.add(Integer.parseInt(playerParams[2]));
+            numPawnsStart.add(Integer.parseInt(playerParams[2]));
             String pawnIndexes[] = playerParams[3].split(",");
             ArrayList<Integer> pawnLocations = new ArrayList<>(pawnIndexes.length);
             for (String index: pawnIndexes) {
@@ -205,7 +212,7 @@ public class Game {
             }
             allPawnLocations.add(pawnLocations);
         }
-        return new Game(playerColor, difficulties, numPawnsHome, allPawnLocations, bounces, currentMove);
+        return new Game(playerColor, difficulties, numPawnsStart, allPawnLocations, bounces, currentMove);
     }
 
     public static String generateName() {

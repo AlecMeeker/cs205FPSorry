@@ -166,6 +166,7 @@ public abstract class Player {
 					}
 				}
 				for (Pawn pp : movablePawnList) {
+
 					if (pp.canMoveHere(draw.num)) {
 						potentialMovesList.get(0).add(new Move(pp, draw.num));
 					}
@@ -297,6 +298,9 @@ public abstract class Player {
      * TODO
      */
 	public void refreshHighlight() {
+		for (Block b : thisBoard.everyBlock) {
+			b.highlighted =false;
+		}
 		for (Move m : potentialMovesList.get(0)) {
 			m.p.highlighted = true;
 			if (m.p.selected) {
