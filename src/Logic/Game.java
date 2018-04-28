@@ -82,10 +82,12 @@ public class Game {
 
         //for each player
         for (int i = 0; i < startLists.size(); i++) {
+            //remove already created pawns
+            allPlayers.get(i).startPawnList.clear();
             //set each player's bounces
             allPlayers.get(i).bounces = bounces.get(i);
             //add that many new pawns for each player's # of pawns in start
-            for (int j = 0; j < startLists.size(); j++) {
+            for (int j = 0; j < startLists.get(i); j++) {
                 Pawn newPawn = new Pawn(gameBoard, allPlayers.get(i));
                 allPlayers.get(i).startPawnList.add(newPawn);
                 everyPawn.add(newPawn);
@@ -193,20 +195,24 @@ public class Game {
     public void saveGame() {
         insertGameStats();
         String saveState = "";
-        saveState += currentMove + ";";
+        saveState += Integer.toString(currentMove) + ";";
         saveState += this.human.color.toString() + ";";
         for (Player p : allPlayers) {
-            saveState += p.difficulty + ":";
-            saveState += p.bounces + ":";
-            saveState += p.startPawnList.size();
-            if (p.movablePawnList.size() != 0) {
-                saveState += ":";
+            saveState += Integer.toString(p.difficulty) + ":";
+            saveState += Integer.toString(p.bounces) + ":";
+            saveState += Integer.toString(p.startPawnList.size()) + ":";
+            if (p.movablePawnList.size() == 0) {
+                saveState = saveState.substring(0,saveState.length()-1);
             }
             for (Pawn myPawn : p.movablePawnList) {
-                saveState += myPawn.getCurrentBlock().id + ",";
+                saveState += Integer.toString(myPawn.getCurrentBlock().id) + ",";
+            }
+            if (p.movablePawnList.size() != 0) {
+                saveState = saveState.substring(0, saveState.length() - 1);
             }
             saveState += ";";
         }
+        saveState = saveState.substring(0,saveState.length()-1);
         System.out.print("Save state string: ");
         System.out.println(saveState);
         ConnectDB.saveGameData(gameID, saveState);
@@ -257,7 +263,9 @@ public class Game {
         ArrayList<ArrayList<Integer>> allPawnLocations = new ArrayList<>(numPlayers);
         for (int i = 2; i < gameParams.length; i++) {
             String playerParams[] = gameParams[i].split(":");
-            difficulties.add(Integer.parseInt(playerParams[0]));
+            if (Integer.parseInt(playerParams[0]) != -1) {
+                difficulties.add(Integer.parseInt(playerParams[0]));
+            }
             bounces.add(Integer.parseInt(playerParams[1]));
             numPawnsStart.add(Integer.parseInt(playerParams[2]));
             if (Integer.parseInt(playerParams[2]) == 4) {
