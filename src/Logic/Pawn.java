@@ -46,6 +46,7 @@ public class Pawn {
         this.color = inPlayer.color;
         this.myPlayer = inPlayer;
         locationArray = new Block[3];
+        this.setTargets();
 
         this.setCurrentBlock(currentBlock);
         if (currentBlock == inBoard.getStartLocation(this.color)) {
@@ -95,6 +96,9 @@ public class Pawn {
             while (moveSpaces < 0) {
                 targetBlock = targetBlock.getPreviousBlock();
                 moveSpaces++;
+            }
+            if (targetBlock == null) {
+                return  false;
             }
             if (targetBlock.getPawn() != null) {
                 if (targetBlock.getPawn().getColor() == color && !targetBlock.isHome) {
