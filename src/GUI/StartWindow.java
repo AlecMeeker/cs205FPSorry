@@ -4,6 +4,7 @@ import Logic.Game;
 import SQL.ConnectDB;
 import Logic.Color;
 import utils.ImagePanel;
+import utils.TransparencyUtil;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
