@@ -8,8 +8,6 @@ import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static SQL.ConnectDB.loadGameData;
-
 public class Game {
     private int gameID = -1;
     private long startTimeStamp = System.currentTimeMillis();
@@ -50,8 +48,9 @@ public class Game {
      * @param bounces
      * @param currentMove
      */
-    public Game(Color playerColor, ArrayList<Integer> aiDifficulties, ArrayList<Integer> startLists, ArrayList<ArrayList<Integer>> locations, ArrayList<Integer> bounces, int currentMove) {
+    public Game(Color playerColor, ArrayList<Integer> aiDifficulties, ArrayList<Integer> startLists, ArrayList<ArrayList<Integer>> locations, ArrayList<Integer> bounces, int currentMove, int gameID) {
 
+        this.gameID = gameID;
         //This block creates all the players
         allPlayers = new ArrayList<>();
         allPlayers.add(new HumanPlayer(generateName(), playerColor, gameBoard, this));
@@ -197,11 +196,17 @@ public class Game {
     //example explained: currentTurn; playerColor; then, for each player, difficulty: bounces: # pawns in home: pawn1Location, pawn2location, pawn3location;
 
     public static Game loadFromState() {
-        ConnectDB cdb = new ConnectDB();
-        return loadFromState(loadGameData()[1]);
+        String gameData[] = ConnectDB.loadGameData();
+        return loadFromState(Integer.parseInt(gameData[0]), gameData[1]);
     }
 
-    private static Game loadFromState(String inState) {
+    /**
+     * unpacks a save state string then creates a game object from said string
+     *
+     * @param inState save state string
+     * @return a new game
+     */
+    private static Game loadFromState(int gameID, String inState) {
         String[] gameParams = inState.split(";");
         int currentMove = Integer.parseInt(gameParams[0]);
         Color playerColor;
@@ -229,7 +234,7 @@ public class Game {
             }
             allPawnLocations.add(pawnLocations);
         }
-        return new Game(playerColor, difficulties, numPawnsHome, allPawnLocations, bounces, currentMove);
+        return new Game(playerColor, difficulties, numPawnsHome, allPawnLocations, bounces, currentMove, gameID);
     }
 
     /**
@@ -292,7 +297,9 @@ public class Game {
         }
     }
 
-
+    /**
+     * quits the game
+     */
     public void quitGame() {
         whilePlaying = false;
         this.saveGame();
@@ -338,8 +345,8 @@ public class Game {
         }
     }
 
-    /*
-    the new play() function. Called on click of the next turn button in the gamewindow
+    /**
+     * the new play() function. Called on click of the next turn button in the gamewindow
      */
     public void nextTurn() {
         clearHighlightAndSelect();
