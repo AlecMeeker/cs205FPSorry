@@ -372,7 +372,7 @@ public class GameWindow extends JFrame{
 
 
 
-        cardInfoReminder.setBounds(980,300,400,300);
+        cardInfoReminder.setBounds(980,200,400,300);
         cardInfoReminder.setFont(cardInfoReminder.getFont().deriveFont(20f));
         cardInfoReminder.setEditable(false);
         setTextAreaTran(cardInfoReminder);
@@ -432,18 +432,14 @@ public class GameWindow extends JFrame{
         nextBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                isDrawn = false;
-                isMovedThisTurn = false;
-                currentGame.nextTurn();
+                nextTurnAndInitialVars();
                 currentGame.human.selectEndBlockStep();
                 if(selectedLabel != null){
                     selectedLabel.setOpaque(false);
                     selectedLabel.repaint();
                     selectedLabel = null;
                 }
-                removeAllHighlight();
                 refreshBoard();
-
             }
         });
 
@@ -482,13 +478,42 @@ public class GameWindow extends JFrame{
                 cardInfoReminder.setText(curCard.reminderText);
                 boardPanel.add(drawnCard);
                 drawnCard.setBounds(Constants.cardStartX,Constants.cardStartY, Constants.cardWidth,Constants.cardHeight);
-                if(curCard.num != 2){
-                    isDrawn = true;
-                }
+                isDrawn = true;
 
                 //if the human's potential move size is 0, go to next turn automatically
                 if (currentGame.human.potentialMovesList.get(0).size() == 0) {
-                    currentGame.nextTurn();
+
+                    //next turn
+                    nextTurnAndInitialVars();
+                    Timer timer = new Timer(2000, new ActionListener() {
+
+                        @Override
+                        public void actionPerformed(ActionEvent arg0) {
+                            try {
+
+                                Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+"card_back.png"));
+
+                                basicImage = basicImage.getScaledInstance(Constants.cardWidth, Constants.cardHeight, Image.SCALE_SMOOTH);
+                                ImageIcon cardImg = new ImageIcon(basicImage);
+                                if(drawnCard == null){
+                                    drawnCard = new JLabel(cardImg);
+                                }
+                                else{
+                                    drawnCard.setIcon(cardImg);
+                                }
+                                System.out.println(System.getProperty("user.dir")+ImagePath+curCard.num);
+                                System.out.println("\n\n\n  in timer \n\n\n");
+                            } catch (Exception ex) {
+                                // handle exception...
+                                System.out.println("loadCards failed \n" + ex.toString());
+                                return;
+                            }
+                        }
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
+
+                    refreshBoard();
                 }
             }
         });
@@ -507,6 +532,7 @@ public class GameWindow extends JFrame{
                     return;
                 }
 
+                //if the mouse clicked the highlight blocks.
                 for (JLabel HLBlock : highlightBlocks) {
                     // ...
                     Point pos = HLBlock.getLocation();
@@ -527,27 +553,37 @@ public class GameWindow extends JFrame{
                         currentGame.clearHighlightAndSelect();
                         refreshBoard();
 
-
                         isMovedThisTurn = true;
+
+                        if(curCard.equals(Card.TWO)){
+                            isDrawn = false;
+                            isMovedThisTurn = false;
+                            refreshBoard();
+                        }
+
                         System.out.println("selectedLabel pos: "+pos.x+" , "+pos.y);
                         break;
                     }
                     else {
-                        currentGame.clearHighlightAndSelect();
                         refreshBoard();
                     }
                 }
                 if(selectedLabel != null) {
                     Pawn selectedPawn = pawnsFrontToBack.get(selectedLabel);
                     selectedPawn.selected = false;
+                    currentGame.clearHighlightAndSelect();
                     selectedLabel.setOpaque(false);
                     selectedLabel.repaint();
                     Pawn tmpPawn = pawnsFrontToBack.get(selectedLabel);
                     tmpPawn.selected = false;
                 }
 
-                removeAllHighlight();
+                refreshBoard();
                 selectedLabel = null;
+
+                if(isMovedThisTurn && isDrawn){
+                    nextTurnAndInitialVars();
+                }
             }
 
             @Override
@@ -586,6 +622,10 @@ public class GameWindow extends JFrame{
                 currentGame.saveGame();
             }
         } );
+
+    }
+
+    private void loadCardLabelIcon(){
 
     }
 
@@ -677,9 +717,47 @@ public class GameWindow extends JFrame{
             boardPanel.remove(HLLabel);
         }
     }
-    
-    /* Public function */
 
+    private void nextTurnAndInitialVars(){
+
+        //in new turn the human player did not draw card or move pawn
+        isDrawn = false;
+        isMovedThisTurn = false;
+
+        //deck should show the card back. Still working on.
+        drawnCard = null;
+
+        //remove highlight block's label
+        removeAllHighlight();
+
+        //try to end the player move. Still working on card 7
+        currentGame.human.selectEndBlockStep();
+
+        //clear the selectedLabel
+        if(selectedLabel != null){
+            selectedLabel.setOpaque(false);
+            selectedLabel.repaint();
+            selectedLabel = null;
+        }
+        currentGame.clearHighlightAndSelect();
+        currentGame.nextTurn();
+
+
+
+        refreshBoard();
+
+
+    }
+
+    private void wonTheGame(){
+        isDrawn = true;
+        isMovedThisTurn = true;
+
+
+    }
+
+
+    /* Public function */
     /**
      * Using for load game configuration
      * @param numOfPlayers
@@ -706,9 +784,16 @@ public class GameWindow extends JFrame{
         loadConfig(newGame.allPlayers.size());
         ArrayList<Pawn> everyPawn = currentGame.everyPawn;
         this.boardGui = currentGame.gameBoard;
+        //link the GUI and backend.
         linkBlockToBackEnd();
         linkPawnTogether(everyPawn);
         this.deck = currentGame.gameBoard.thisDeck;
+
+        //initial human player start game vars
+        isDrawn = false;
+        isMovedThisTurn = false;
+        drawnCard = null;
+
     }
 
     /**
@@ -717,7 +802,6 @@ public class GameWindow extends JFrame{
      */
     public void refreshBoard(){
         long startTime = System.nanoTime();
-
 
         if(currentGame == null) {
             return;
@@ -816,6 +900,10 @@ public class GameWindow extends JFrame{
                     numOfPawnsOnHome.get(3).setText(pawnsOnHome.toString());
 
                     break;
+            }
+
+            if(pawnsOnHome == 4){
+
             }
         }
 

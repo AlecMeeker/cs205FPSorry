@@ -62,6 +62,9 @@ public class HumanPlayer extends Player {
      * TODO
      */
     public void selectEndBlockStep() {
+        if(potentialMovesList==null){
+            return;
+        }
         for (Move m : potentialMovesList.get(0)) {
             if (m.blockReached.selected) {
                 m.enactMove();
