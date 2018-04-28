@@ -495,7 +495,7 @@ public class GameWindow extends JFrame{
 
                 System.out.println("mouse pos: "+e.getX()+" , "+e.getY());
                 refreshBoard();
-                if(isMovedThisTurn){
+                if(isMovedThisTurn && selectedLabel != null){
                     selectedLabel.setOpaque(false);
                     selectedLabel.repaint();
                     return;

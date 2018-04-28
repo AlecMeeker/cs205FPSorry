@@ -169,11 +169,11 @@ public class StartWindow extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-//                Game newGame = Game.loadFromState();
-//                GameWindow gw = GameWindow.getInstance();
-//                gw.loadGameStuff(newGame);
-//                gw.setVisible(true);
-//                gw.refreshBoard();
+                Game newGame = Game.loadFromState();
+                GameWindow gw = GameWindow.getInstance();
+                gw.loadGameStuff(newGame);
+                gw.setVisible(true);
+                gw.refreshBoard();
             }
         });
 
