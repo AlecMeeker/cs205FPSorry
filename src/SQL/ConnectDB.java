@@ -101,13 +101,13 @@ public class ConnectDB {
     }
 
     /**
-     * This method gets the save game data for a the most recent save
+     * This method gets the game ID and save game data for a the most recent save
      *
-     * @return A string that contains the data needed to reinitialize a game, returns an empty string if failed
+     * @return A string array that contains the game ID and data needed to reinitialize a game, returns an empty string if failed
      */
     public static String[] loadGameData() {
         //define query
-        String query = "SELECT fldDate, fldSaveString FROM tblSaveGame WHERE fldDate = (SELECT MAX(fldDate) FROM tblSaveGame)";
+        String query = "SELECT pmkGameID, fldSaveString FROM tblSaveGame WHERE fldDate = (SELECT MAX(fldDate) FROM tblSaveGame)";
 
         //send query and get response
         JsonArray dataArr = null;
