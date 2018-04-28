@@ -4,12 +4,12 @@ import Logic.Game;
 import SQL.ConnectDB;
 import Logic.Color;
 import utils.ImagePanel;
+import utils.TransparencyUtil;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -26,9 +26,14 @@ public class StartWindow extends JFrame {
     private JButton statBtn;
     private JButton instructionBtn;
     private JLabel gameLogo;
+    private final int buttonWidth = 210;
+    private final int buttonHeight = 60;
+    private final int buttonFontSize = 28;
+    private final String buttonFontName = "Broadway";
+    private final java.awt.Color buttonBGColor = new java.awt.Color(127,255,212,1);
 
     //some
-    private String gameLogoImgPath = "/src/imgs/sorry_start.jpg";
+    private String gameLogoImgPath= "/src/imgs/sorry_start.jpg";
     private String ImagePath = "/src/imgs/";
     private String instructionString = "The modern deck contains 45 cards: there are five 1 cards as well as four each of the other cards (Sorry!, 2, 3, 4, 5, 7, 8, 10, 11 and 12). The 6s or 9s are omitted to avoid confusion. The first edition of the game had 44 cards (four of each) and the extra 1 card was soon introduced as an option for quicker play.[5] A 1996 board from Waddingtons had 5 of each card.\n" +
             "\n" +
@@ -44,7 +49,7 @@ public class StartWindow extends JFrame {
             "10\tMove a pawn 10 spaces forward or one space backward. If none of a player's pawns can move forward 10 spaces, then one pawn must move back one space.\n" +
             "11\tMove 11 spaces forward, or switch the places of one of the player's own pawns and an opponent's pawn. A player that cannot move 11 spaces is not forced to switch and instead can forfeit the turn. An 11 cannot be used to switch a pawn that is in a Safety Zone.\n" +
             "12\tMove a pawn 12 spaces forward.\n" +
-            "Sorry! card\tTake any one pawn from Start and move it directly to a square occupied by any opponent's pawn, sending that pawn back to its own Start. A Sorry! card cannot be used on an opponent's pawn in a Safety Zone. If there are no pawns on the player's Start, or no opponent's pawns on any squares outside Safety Zones, the turn is lost." + "Each player chooses four pawns of one color and places them in his or her Start. One player is selected to play first.\n" +
+            "Sorry! card\tTake any one pawn from Start and move it directly to a square occupied by any opponent's pawn, sending that pawn back to its own Start. A Sorry! card cannot be used on an opponent's pawn in a Safety Zone. If there are no pawns on the player's Start, or no opponent's pawns on any squares outside Safety Zones, the turn is lost."+"Each player chooses four pawns of one color and places them in his or her Start. One player is selected to play first.\n" +
             "\n" +
             "Each player in turn draws one card from the deck and follows its instructions. To begin the game, all of a player's four pawns are restricted to Start; a player can only move them out onto the rest of the board if he or she draws a 1 or 2 card. A 1 or a 2 places a pawn on the space directly outside of start (a 2 does not entitle the pawn to move a second space).\n" +
             "\n" +
@@ -58,17 +63,16 @@ public class StartWindow extends JFrame {
             "opponents' pawns as usual until it re-enters the Safety Zone.";
     //
     private int numPlayer;
-
-    private StartWindow() {
+    private StartWindow(){
         initWindow();
     }
 
-    public static StartWindow getInstance() { //Thread safe singleton model
+    public static StartWindow getInstance(){ //Thread safe singleton model
         StartWindow result = instance;
-        if (result == null) {
-            synchronized (mutex) {
+        if(result == null){
+            synchronized (mutex){
                 result = instance;
-                if (result == null) {
+                if(result == null){
                     instance = result = new StartWindow();
                 }
             }
@@ -76,19 +80,20 @@ public class StartWindow extends JFrame {
         return result;
     }
 
-    private void initWindow() {
+    private void initWindow(){
 
         //Set layout
         this.setLayout(null);
         //Setting the window
-        this.setSize(Constants.windowWidth - 100, Constants.windowHeight);
+        this.setSize(Constants.windowWidth-100,Constants.windowHeight);
         this.setTitle("Sorry! The Sweet Revenge board game.");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        try {
-            BufferedImage myImage = ImageIO.read(new File(System.getProperty("user.dir") + ImagePath + "woodDesktop.jpg"));
+        try{
+            BufferedImage myImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath + "woodDesktop.jpg"));
             this.setContentPane(new ImagePanel(myImage));
-        } catch (Exception ex) {
+        }
+        catch(Exception ex){
             System.out.println("load window background failed" + ex.toString());
         }
         this.setResizable(false);
@@ -102,13 +107,31 @@ public class StartWindow extends JFrame {
         //this.setVisible(true);
     }
 
-    private void initGuiComponents() {
+    private void configButton(JButton button){
+        button.setBackground(buttonBGColor);
+        button.setFont(new Font(buttonFontName, Font.BOLD, buttonFontSize));
+        button.setBorder(null);
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+    }
+
+    private void initGuiComponents(){
         newGameBtn = new JButton("New Game");
+        configButton(newGameBtn);
+
         loadGameBtn = new JButton("Load Game");
-        statBtn = new JButton("Statistics");
-        instructionBtn = new JButton("Instructions");
+        configButton(loadGameBtn);
+
+        statBtn = new JButton("Statistic");
+        configButton(statBtn);
+
+        instructionBtn = new JButton("Instruction");
+        configButton(instructionBtn);
+
         try {
-            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir") + gameLogoImgPath));
+            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+gameLogoImgPath));
+            basicImage = TransparencyUtil.makeColorTransparent(basicImage,java.awt.Color.WHITE);
             basicImage = basicImage.getScaledInstance(Constants.gameLogoWidth, Constants.gameLogoHeight, Image.SCALE_SMOOTH);
             ImageIcon gameLogoimg = new ImageIcon(basicImage);
             gameLogo = new JLabel(gameLogoimg);
@@ -116,23 +139,24 @@ public class StartWindow extends JFrame {
             // handle exception...
             System.out.println("loadPawns failed \n" + ex.toString());
         }
+        gameLogo.setOpaque(false);
     }
 
-    private void setGuiComponents() {
-        newGameBtn.setBounds(980, 240, 120, 40);
+    private void setGuiComponents(){
+        newGameBtn.setBounds(980, 200, buttonWidth, buttonHeight);
         this.add(newGameBtn);
-        loadGameBtn.setBounds(980, 320, 120, 40);
+        loadGameBtn.setBounds(980, 300, buttonWidth, buttonHeight);
         this.add(loadGameBtn);
-        statBtn.setBounds(980, 400, 120, 40);
+        statBtn.setBounds(980, 400, buttonWidth, buttonHeight);
         this.add(statBtn);
-        instructionBtn.setBounds(980, 480, 120, 40);
+        instructionBtn.setBounds(980, 500, buttonWidth, buttonHeight);
         this.add(instructionBtn);
 
-        gameLogo.setBounds(Constants.gameLogoStartX, Constants.gameLogoStartY, Constants.gameLogoWidth, Constants.gameLogoHeight);
+        gameLogo.setBounds(Constants.gameLogoStartX,Constants.gameLogoStartY,Constants.gameLogoWidth,Constants.gameLogoHeight);
         this.add(gameLogo);
     }
 
-    private void addEventListenerToComponents() {
+    private void addEventListenerToComponents(){
         newGameBtn.addActionListener(new ActionListener() {
 
             @Override
@@ -145,11 +169,11 @@ public class StartWindow extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Game newGame = Game.loadFromState();
-                GameWindow gw = GameWindow.getInstance();
-                gw.loadGameStuff(newGame);
-                gw.setVisible(true);
-                gw.refreshBoard();
+//                Game newGame = Game.loadFromState();
+//                GameWindow gw = GameWindow.getInstance();
+//                gw.loadGameStuff(newGame);
+//                gw.setVisible(true);
+//                gw.refreshBoard();
             }
         });
 
@@ -166,16 +190,36 @@ public class StartWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                //JFrame
+                JFrame instructionWindow= new JFrame();
+                instructionWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                instructionWindow.setBounds(50,50,1000,800);
+                instructionWindow.setResizable(false);
+                try{
+                    BufferedImage myImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath + "woodDesktop.jpg"));
+                    instructionWindow.setContentPane(new ImagePanel(myImage));
+                }
+                catch(Exception ex){
+                    System.out.println("load window background failed" + ex.toString());
+                }
+
+
                 JTextArea instructionTextArea = new JTextArea();
                 instructionTextArea.setLineWrap(true);
+                instructionTextArea.setEditable(false);
                 instructionTextArea.setText(instructionString);
                 instructionTextArea.setFont(instructionTextArea.getFont().deriveFont(16f));
+                instructionTextArea.setBounds(10,10,1000,800);
+                instructionTextArea.setOpaque(false);
+
                 JScrollPane scroll = new JScrollPane(instructionTextArea);
                 scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+                scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+                scroll.setBounds(20,100,960,600);
+                scroll.setOpaque(false);
+                scroll.getViewport().setOpaque(false);
 
-                JFrame instructionWindow = new JFrame();
-                instructionWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                instructionWindow.setBounds(50, 50, 1000, 800);
+
                 instructionWindow.add(scroll);
                 instructionWindow.setVisible(true);
             }
@@ -183,9 +227,10 @@ public class StartWindow extends JFrame {
 
 
     }
-
-    class TableDisplay extends JFrame {
-        public TableDisplay() {
+    class TableDisplay extends JFrame
+    {
+        public TableDisplay()
+        {
             JTable table = ConnectDB.getAsJTable(ConnectDB.getAllGameInfo());
             table.setPreferredScrollableViewportSize(table.getPreferredSize());
             table.setFillsViewportHeight(true);
@@ -194,30 +239,30 @@ public class StartWindow extends JFrame {
 
             this.setTitle("Statistics");
             this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            this.setBounds(100, 100, 800, 800);
+            this.setBounds(100,100,800,800);
             this.setResizable(false);
             this.pack();
             this.setVisible(true);
         }
     }
 
-    private void newGameDialog() {
+    private void newGameDialog(){
 
         String[] players = {
-                "2", "3", "4"
+                "2","3","4"
         };
         JComboBox<String> numPlayers = new JComboBox<String>(players);
 
-        String[] playerColors = {"blue", "yellow", "green", "red"};
+        String [] playerColors = {"blue","yellow","green","red"};
 
         JComboBox<String> playerColorSelect = new JComboBox<String>(playerColors);
 
-        String[] aiBehaviors = {"Dumb & Nice", "Dumb & Cruel", "Smart & Nice", "Smart & Cruel"};
+        String [] aiBehaviors = {"Dumb & Nice","Dumb & Cruel","Smart & Nice","Smart & Cruel"};
         JComboBox<String> computerDifficulties1 = new JComboBox<String>(aiBehaviors);
         JComboBox<String> computerDifficulties2 = new JComboBox<String>(aiBehaviors);
         JComboBox<String> computerDifficulties3 = new JComboBox<String>(aiBehaviors);
 
-        final JComponent[] inputs = new JComponent[]{
+        final JComponent[] inputs = new JComponent[] {
                 new JLabel("Number of Players"),
                 numPlayers,
                 new JLabel("Player Color"),
@@ -267,30 +312,30 @@ public class StartWindow extends JFrame {
     public int getOptionFromString(String diffString) {
 
         switch (diffString) {
-            case "Dumb & Nice":
+            case "Dumb & Nice" :
                 return 0;
-            case "Dumb & Cruel":
+            case "Dumb & Cruel" :
                 return 1;
-            case "Smart & Nice":
+            case "Smart & Nice" :
                 return 2;
-            case "Smart & Cruel":
+            case "Smart & Cruel" :
                 return 3;
-            default:
+            default :
                 return 5;
         }
     }
 
-    public Color getColorFromString(String colorString) {
+    public Color getColorFromString(String colorString){
         switch (colorString) {
-            case "blue":
+            case "blue" :
                 return Color.BLUE;
-            case "red":
+            case "red" :
                 return Color.RED;
-            case "yellow":
+            case "yellow" :
                 return Color.YELLOW;
-            case "green":
+            case "green" :
                 return Color.GREEN;
-            default:
+            default :
                 return Color.NULL;
         }
     }

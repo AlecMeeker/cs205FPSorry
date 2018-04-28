@@ -32,7 +32,7 @@ public class TransparencyUtil {
             public int markerRGB = color.getRGB() | 0xFF000000;
 
             public final int filterRGB(int x, int y, int rgb) {
-                if ( ( rgb | 0xFF000000 ) == markerRGB ) {
+                if (( rgb | 0xFF000000 ) == markerRGB ) {
                 // Mark the alpha bits as zero - transparent
                     return 0x00FFFFFF & rgb;
                 }

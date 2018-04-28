@@ -45,6 +45,13 @@ public class GameWindow extends JFrame{
     private ArrayList<JLabel> numOfPawnsOnHome;
     private ArrayList<JLabel> highlightBlocks;
 
+    /* Button config */
+    private final int buttonWidth = 210;
+    private final int buttonHeight = 60;
+    private final int buttonFontSize = 28;
+    private final String buttonFontName = "Broadway";
+    private final java.awt.Color buttonBGColor = new java.awt.Color(127,255,212,1);
+
     /* Some board and movement variables */
     private int stepLength = 60;
     public static int safetyZoneSize = 5;
@@ -144,13 +151,27 @@ public class GameWindow extends JFrame{
 
     }
 
+    private void configButton(JButton button){
+        button.setBackground(buttonBGColor);
+        button.setFont(new Font(buttonFontName, Font.BOLD, buttonFontSize));
+        button.setBorder(null);
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+    }
+
     private void initGuiComponents(){
         //Initial the GUI components
         this.boardPanel = new BoardPanel();
         this.nextBtn = new JButton("Next Turn");
+        configButton(nextBtn);
         this.drawCardBtn = new JButton("Draw Card");
+        configButton(drawCardBtn);
         this.quitBtn = new JButton("Quit");
+        configButton(quitBtn);
         this.saveBtn = new JButton("Save Game");
+        configButton(saveBtn);
+
 
         //cardInfoReminder
         this.cardInfoReminder = new JTextArea();
@@ -337,17 +358,19 @@ public class GameWindow extends JFrame{
             setLabelFont(numOfPawnsOnStart.get(i));
         }
 
-        nextBtn.setBounds(1000, 900, 100, 40);
-        this.add(nextBtn);
-
-        drawCardBtn.setBounds(1000, 700, 100, 40);
+        drawCardBtn.setBounds(1080, 500, buttonWidth, buttonHeight);
         this.add(drawCardBtn);
 
-        quitBtn.setBounds(1000, 800, 100, 40);
+        nextBtn.setBounds(1080, 600, buttonWidth, buttonHeight);
+        this.add(nextBtn);
+
+        saveBtn.setBounds(1080, 700, buttonWidth, buttonHeight);
+        this.add(saveBtn);
+
+        quitBtn.setBounds(1080, 800, buttonWidth, buttonHeight);
         this.add(quitBtn);
 
-        saveBtn.setBounds(1000, 200, 100, 40);
-        this.add(saveBtn);
+
 
         cardInfoReminder.setBounds(980,300,400,300);
         cardInfoReminder.setFont(cardInfoReminder.getFont().deriveFont(20f));
