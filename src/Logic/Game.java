@@ -88,16 +88,24 @@ public class Game {
             //iterate through the given location list for each player and make that many pawns in those locations and add them to the movable list
             for (int k = 0; k < locations.get(i).size(); k++) {
                 if (allPlayers.get(i).color == Color.BLUE && locations.get(i).get(k) < 0) {
-                    allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.blueSafeZone[i]));
+                    allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.blueSafeZone[-locations.get(i).get(k)]));
+                    allPlayers.get(i).movablePawnList.get(k).setHasReachedSafeZone(true);
+                    continue;
                 }
                 if (allPlayers.get(i).color == Color.RED && locations.get(i).get(k) < 0) {
-                    allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.redSafeZone[i]));
+                    allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.redSafeZone[-locations.get(i).get(k)]));
+                    allPlayers.get(i).movablePawnList.get(k).setHasReachedSafeZone(true);
+                    continue;
                 }
                 if (allPlayers.get(i).color == Color.GREEN && locations.get(i).get(k) < 0) {
-                    allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.greenSafeZone[i]));
+                    allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.greenSafeZone[-locations.get(i).get(k)]));
+                    allPlayers.get(i).movablePawnList.get(k).setHasReachedSafeZone(true);
+                    continue;
                 }
                 if (allPlayers.get(i).color == Color.YELLOW && locations.get(i).get(k) < 0) {
-                    allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.yellowSafeZone[i]));
+                    allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.yellowSafeZone[-locations.get(i).get(k)]));
+                    allPlayers.get(i).movablePawnList.get(k).setHasReachedSafeZone(true);
+                    continue;
                 }
                 allPlayers.get(i).movablePawnList.add(new Pawn(gameBoard, allPlayers.get(i), gameBoard.everyBlock.get(locations.get(i).get(k))));
             }
