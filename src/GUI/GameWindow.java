@@ -94,8 +94,8 @@ public class GameWindow extends JFrame{
     private StartWindow startWindow = StartWindow.getInstance();
     private Board boardGui;
     /* Boolean variables for button click */
-    private boolean isDrawn;
-    private boolean isMovedThisTurn;
+    private boolean isDrawn;        // Is drawn this turn?
+    private boolean isMovedThisTurn; // is moved this turn?
 
     private GameWindow(){
         initWindow();
@@ -436,7 +436,11 @@ public class GameWindow extends JFrame{
                 isMovedThisTurn = false;
                 currentGame.nextTurn();
                 currentGame.human.selectEndBlockStep();
-                selectedLabel = null;
+                if(selectedLabel != null){
+                    selectedLabel.setOpaque(false);
+                    selectedLabel.repaint();
+                    selectedLabel = null;
+                }
                 removeAllHighlight();
                 refreshBoard();
 
@@ -453,6 +457,12 @@ public class GameWindow extends JFrame{
                     return;
                 }
                 isMovedThisTurn = false;
+
+                if(!canMoveThisTurn()){
+                    currentGame.nextTurn();
+                    refreshBoard();
+                }
+
                 //Backend human player draw card
                 currentGame.human.drawStep();
                 curCard = currentGame.human.getCurrentDraw();
@@ -495,7 +505,7 @@ public class GameWindow extends JFrame{
 
                 System.out.println("mouse pos: "+e.getX()+" , "+e.getY());
                 refreshBoard();
-                if(isMovedThisTurn && selectedLabel != null){
+                if(isMovedThisTurn && selectedLabel!=null){
                     selectedLabel.setOpaque(false);
                     selectedLabel.repaint();
                     return;
@@ -671,6 +681,16 @@ public class GameWindow extends JFrame{
             boardPanel.remove(HLLabel);
         }
     }
+
+    private boolean canMoveThisTurn(){
+        for(Block block: allBlocks){
+            if(block.highlighted == true){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /* Public function */
 
     /**
@@ -814,7 +834,7 @@ public class GameWindow extends JFrame{
 
         for(Block block: allBlocks){
 
-            if(block.highlighted == true){
+            if(block.highlighted == true && !isMovedThisTurn){
                 Point tmpP = boardToBackend.get(block);
 
                 JLabel tmpLabel = new JLabel(loadLabelIcon(humanPlayerColor+"_hl.jpg"));
