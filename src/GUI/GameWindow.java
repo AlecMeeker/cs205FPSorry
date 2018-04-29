@@ -41,6 +41,16 @@ public class GameWindow extends JFrame{
     private JLabel drawnCard;
     private JTextArea cardInfoReminder;
 
+    public JTextArea getgameInfoText() {
+        return gameInfoText;
+    }
+
+    public void setgameInfoText(JTextArea gameInfoText) {
+        gameInfoText = gameInfoText;
+    }
+
+    private JTextArea gameInfoText;  // Game info whose turn, who won the game.
+
     private ArrayList<JLabel> numOfPawnsOnStart;
     private ArrayList<JLabel> numOfPawnsOnHome;
     private ArrayList<JLabel> highlightBlocks;
@@ -96,6 +106,7 @@ public class GameWindow extends JFrame{
     /* Boolean variables for button click */
     private boolean isDrawn;        // Is drawn this turn?
     private boolean isMovedThisTurn; // is moved this turn?
+    private boolean isGameOver;
 
     private GameWindow(){
         initWindow();
@@ -118,7 +129,7 @@ public class GameWindow extends JFrame{
 
 
         try{
-            BufferedImage myImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath + "woodDesktop.jpg"));
+            Image myImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath + "woodDesktop.jpg"));
             this.setContentPane(new ImagePanel(myImage));
         }
         catch(Exception ex){
@@ -175,8 +186,14 @@ public class GameWindow extends JFrame{
 
         //cardInfoReminder
         this.cardInfoReminder = new JTextArea();
+        
+        //init pawns label on the board
         this.pawns = new ArrayList<>();
 
+        //game info text initial
+        this.gameInfoText = new JTextArea();
+        
+        //number label to show how many pawns on start or home
         numOfPawnsOnStart = new ArrayList<>();
         numOfPawnsOnHome = new ArrayList<>();
 
@@ -220,7 +237,6 @@ public class GameWindow extends JFrame{
             return new ImageIcon();
         }
     }
-
 
     private void initBlockToBoardPosition(){
 
@@ -378,6 +394,15 @@ public class GameWindow extends JFrame{
         setTextAreaTran(cardInfoReminder);
         this.add(cardInfoReminder);
 
+
+
+        gameInfoText.setBounds(990,30,400,300);
+        gameInfoText.setText("hello");
+        gameInfoText.setFont(new Font("Broadway",Font.BOLD,36));
+        gameInfoText.setEditable(false);
+        setTextAreaTran(gameInfoText);
+        this.add(gameInfoText);
+
     }
 
     private void setTextAreaTran(JTextArea textArea){
@@ -432,14 +457,9 @@ public class GameWindow extends JFrame{
         nextBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                nextTurnAndInitialVars();
-                currentGame.human.selectEndBlockStep();
-                if(selectedLabel != null){
-                    selectedLabel.setOpaque(false);
-                    selectedLabel.repaint();
-                    selectedLabel = null;
+                for(int i = 0; i < 30;i++) {
+                    nextTurnAndInitialVars();
                 }
-                refreshBoard();
             }
         });
 
@@ -625,8 +645,8 @@ public class GameWindow extends JFrame{
 
     }
 
-    private void loadCardLabelIcon(){
-
+    private ImageIcon loadCardLabelIcon(String filename){
+        return null;
     }
 
     //Connect Backend Function
@@ -696,6 +716,8 @@ public class GameWindow extends JFrame{
         startWindow.setVisible(true);
         removeAllPawns();
         //currentGame.quitGame();
+
+        //dispose the GameWindow
         this.dispose();
         System.out.println("refreshBoard times");
     }
@@ -720,17 +742,22 @@ public class GameWindow extends JFrame{
 
     private void nextTurnAndInitialVars(){
 
+        if(isGameOver){
+            return;
+        }
+
         //in new turn the human player did not draw card or move pawn
         isDrawn = false;
         isMovedThisTurn = false;
 
         //deck should show the card back. Still working on.
-        drawnCard = null;
+        //drawnCard = null;
 
         //remove highlight block's label
         removeAllHighlight();
 
         //try to end the player move. Still working on card 7
+
         currentGame.human.selectEndBlockStep();
 
         //clear the selectedLabel
@@ -742,18 +769,19 @@ public class GameWindow extends JFrame{
         currentGame.clearHighlightAndSelect();
         currentGame.nextTurn();
 
-
-
         refreshBoard();
-
-
     }
 
-    private void wonTheGame(){
+    private void wonTheGame(String winnerColor){
         isDrawn = true;
         isMovedThisTurn = true;
+        isGameOver = true;
+        currentGame.insertGameStats();
 
+        boardPanel.setEnabled(false);
 
+        gameInfoText.setText(winnerColor.toLowerCase() +" Win!");
+        return;
     }
 
 
@@ -793,7 +821,7 @@ public class GameWindow extends JFrame{
         isDrawn = false;
         isMovedThisTurn = false;
         drawnCard = null;
-
+        isGameOver = false;
     }
 
     /**
@@ -812,14 +840,12 @@ public class GameWindow extends JFrame{
         removeAllHighlight();
         highlightBlocks = new ArrayList<>();
 
-
         for(Pawn pawn : everyPawn){
             Point tmpP =  boardToBackend.get(pawn.getCurrentBlock());
             JLabel pawnL = pawnsBackToFront.get(pawn);
 
             pawnL.setIcon(loadPawnIcon(pawn.getColor().toString().toLowerCase()));
             pawnL.setHorizontalAlignment(SwingConstants.CENTER);
-
 
             // If the pawn belong to human player add the click event to it
             HumanPlayer tmpPlayer = new HumanPlayer();
@@ -829,7 +855,7 @@ public class GameWindow extends JFrame{
                     pawnL.addMouseListener(new MouseListener() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            currentGame.human.refreshHighlight();
+                            //currentGame.human.refreshHighlight();
                             refreshBoard();
 
                             if (selectedLabel == null) {
@@ -840,14 +866,16 @@ public class GameWindow extends JFrame{
                                 //if a card has been drawn
                                 if (curCard != null) {
                                     currentGame.human.selectPawnStep();
-                                    refreshBoard();
+
                                 }
                                 System.out.println("null"+"( " + selectedLabel.getX() + " , " + selectedLabel.getY() + " )");
                             }
                             selectedLabel.setOpaque(true);
                             selectedLabel.setBackground(java.awt.Color.YELLOW);
                             selectedLabel.repaint();
+                            refreshBoard();
                             System.out.println(selectedLabel.isOpaque()+"( " + selectedLabel.getX() + " , " + selectedLabel.getY() + " )");
+
                         }
 
                         @Override
@@ -902,8 +930,8 @@ public class GameWindow extends JFrame{
                     break;
             }
 
-            if(pawnsOnHome == 4){
-
+            if(pawnsOnHome >= 4){
+                wonTheGame(player.getColor().toString());
             }
         }
 

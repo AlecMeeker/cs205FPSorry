@@ -61,7 +61,7 @@ public class HumanPlayer extends Player {
      * TODO
      */
     public void selectEndBlockStep() {
-        if(potentialMovesList==null){
+        if(potentialMovesList.size()<1 || potentialMovesList == null){
             return;
         }
         for (Move m : potentialMovesList.get(0)) {
