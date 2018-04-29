@@ -543,7 +543,9 @@ public class GameWindow extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 //move the pieces to the high light point.
-
+                if(isGameOver){
+                    return;
+                }
                 System.out.println("mouse pos: "+e.getX()+" , "+e.getY());
                 refreshBoard();
                 if(isMovedThisTurn && selectedLabel!=null){
@@ -773,14 +775,19 @@ public class GameWindow extends JFrame{
     }
 
     private void wonTheGame(String winnerColor){
+        if(isGameOver){
+            return;
+        }
         isDrawn = true;
         isMovedThisTurn = true;
         isGameOver = true;
-        currentGame.insertGameStats();
+        //currentGame.insertGameStats();
 
         boardPanel.setEnabled(false);
 
         gameInfoText.setText(winnerColor.toLowerCase() +" Win!");
+
+        refreshBoard();
         return;
     }
 
