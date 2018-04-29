@@ -457,9 +457,9 @@ public class GameWindow extends JFrame{
         nextBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for(int i = 0; i < 30;i++) {
-                    nextTurnAndInitialVars();
-                }
+
+                nextTurnAndInitialVars();
+
             }
         });
 
