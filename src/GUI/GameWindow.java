@@ -458,7 +458,7 @@ public class GameWindow extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                nextTurnAndInitialVars();
+                    nextTurnAndInitialVars();
 
             }
         });
@@ -473,7 +473,6 @@ public class GameWindow extends JFrame{
                     return;
                 }
                 isMovedThisTurn = false;
-
 
                 //Backend human player draw card
                 currentGame.human.drawStep();
@@ -499,6 +498,7 @@ public class GameWindow extends JFrame{
                 boardPanel.add(drawnCard);
                 drawnCard.setBounds(Constants.cardStartX,Constants.cardStartY, Constants.cardWidth,Constants.cardHeight);
                 isDrawn = true;
+                gameInfoText.setText("You have drawn a card");
 
                 //if the human's potential move size is 0, go to next turn automatically
                 if (currentGame.human.potentialMovesList.get(0).size() == 0) {
@@ -523,6 +523,7 @@ public class GameWindow extends JFrame{
                                 }
                                 System.out.println(System.getProperty("user.dir")+ImagePath+curCard.num);
                                 System.out.println("\n\n\n  in timer \n\n\n");
+                                gameInfoText.setText("New turn to draw a card");
                             } catch (Exception ex) {
                                 // handle exception...
                                 System.out.println("loadCards failed \n" + ex.toString());
@@ -534,6 +535,17 @@ public class GameWindow extends JFrame{
                     timer.start();
 
                     refreshBoard();
+                }else{
+
+                    Timer timer = new Timer(1000, new ActionListener() {
+
+                        @Override
+                        public void actionPerformed(ActionEvent arg0) {
+                            gameInfoText.setText("Your turn to move a pawn");
+                        }
+                    });
+                    timer.setRepeats(false);
+                    timer.start();
                 }
             }
         });
@@ -580,6 +592,7 @@ public class GameWindow extends JFrame{
                         if(curCard.equals(Card.TWO)){
                             isDrawn = false;
                             isMovedThisTurn = false;
+                            gameInfoText.setText("Draw a new card");
                             refreshBoard();
                         }
 
@@ -604,7 +617,8 @@ public class GameWindow extends JFrame{
                 selectedLabel = null;
 
                 if(isMovedThisTurn && isDrawn){
-                    nextTurnAndInitialVars();
+                    gameInfoText.setText("Pawn has moved clicked next turn");
+                    //nextTurnAndInitialVars();
                 }
             }
 
