@@ -403,6 +403,9 @@ public class GameWindow extends JFrame{
         setTextAreaTran(gameInfoText);
         this.add(gameInfoText);
 
+        //drawnCard = new JLabel();
+
+
     }
 
     private void setTextAreaTran(JTextArea textArea){
@@ -505,30 +508,20 @@ public class GameWindow extends JFrame{
 
                     //next turn
                     nextTurnAndInitialVars();
-                    Timer timer = new Timer(2000, new ActionListener() {
+                    Timer timer = new Timer(1000, new ActionListener() {
 
                         @Override
                         public void actionPerformed(ActionEvent arg0) {
-                            try {
 
-                                Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+"card_back.png"));
+                        if(drawnCard == null){
+                            drawnCard = new JLabel(loadCardLabelIcon("card_back.png"));
+                        }
+                        else{
+                            drawnCard.setIcon(loadCardLabelIcon("card_back.png"));
+                        }
+                            System.out.println("\n\n\n  in timer \n\n\n");
+                            gameInfoText.setText("New turn to draw a card");
 
-                                basicImage = basicImage.getScaledInstance(Constants.cardWidth, Constants.cardHeight, Image.SCALE_SMOOTH);
-                                ImageIcon cardImg = new ImageIcon(basicImage);
-                                if(drawnCard == null){
-                                    drawnCard = new JLabel(cardImg);
-                                }
-                                else{
-                                    drawnCard.setIcon(cardImg);
-                                }
-                                System.out.println(System.getProperty("user.dir")+ImagePath+curCard.num);
-                                System.out.println("\n\n\n  in timer \n\n\n");
-                                gameInfoText.setText("New turn to draw a card");
-                            } catch (Exception ex) {
-                                // handle exception...
-                                System.out.println("loadCards failed \n" + ex.toString());
-                                return;
-                            }
                         }
                     });
                     timer.setRepeats(false);
@@ -662,7 +655,20 @@ public class GameWindow extends JFrame{
     }
 
     private ImageIcon loadCardLabelIcon(String filename){
-        return null;
+
+        try {
+
+            Image basicImage = ImageIO.read(new File(System.getProperty("user.dir")+ImagePath+filename));
+            basicImage = basicImage.getScaledInstance(Constants.cardWidth, Constants.cardHeight, Image.SCALE_SMOOTH);
+            ImageIcon cardImg = new ImageIcon(basicImage);
+
+            return cardImg;
+        } catch (Exception ex) {
+            // handle exception...
+            System.out.println("loadCards failed \n" + ex.toString());
+            return null;
+        }
+
     }
 
     //Connect Backend Function
@@ -731,6 +737,7 @@ public class GameWindow extends JFrame{
     private void quitAndSave(){
         startWindow.setVisible(true);
         removeAllPawns();
+        //quit and save the game
         //currentGame.quitGame();
 
         //dispose the GameWindow
@@ -784,6 +791,27 @@ public class GameWindow extends JFrame{
         }
         currentGame.clearHighlightAndSelect();
         currentGame.nextTurn();
+
+        //new turn
+
+        Timer timer = new Timer(1000, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+
+                if(drawnCard == null){
+                    drawnCard = new JLabel(loadCardLabelIcon("card_back.png"));
+                }
+                else{
+                    drawnCard.setIcon(loadCardLabelIcon("card_back.png"));
+                }
+                System.out.println("\n\n\n  in timer \n\n\n");
+                gameInfoText.setText("New turn to draw a card");
+
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
 
         refreshBoard();
     }

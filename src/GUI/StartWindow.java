@@ -251,7 +251,7 @@ public class StartWindow extends JFrame {
             //add the table to the frame
             JScrollPane tableScroll = new JScrollPane(table);
             tableScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-            tableScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+            tableScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             tableScroll.setBounds(0,100,800,600);
 
             this.add(tableScroll);
@@ -259,7 +259,7 @@ public class StartWindow extends JFrame {
             this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             this.setBounds(100,100,1000,800);
             this.setResizable(false);
-
+            this.pack();
             this.setVisible(true);
         }
     }
@@ -274,7 +274,6 @@ public class StartWindow extends JFrame {
         String [] playerColors = {"blue","yellow","green","red"};
 
         JComboBox<String> playerColorSelect = new JComboBox<String>(playerColors);
-
         String [] aiBehaviors = {"Dumb & Nice","Dumb & Cruel","Smart & Nice","Smart & Cruel"};
         JComboBox<String> computerDifficulties1 = new JComboBox<String>(aiBehaviors);
         JComboBox<String> computerDifficulties2 = new JComboBox<String>(aiBehaviors);
